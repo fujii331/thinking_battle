@@ -1,0 +1,14 @@
+{
+  "title": "謎解きの王様",
+  "sub_title": "一人用水平思考クイズ",
+  "play": "遊ぶ",
+  "play_method": "遊び方",
+  "list_title": "問",
+  "after_subject": "は",
+  "subject": "主語",
+  "related_word": "関連語",
+  "question_button": "質問！",
+  "questioned_word": "質問をすることで、ここに聞いた質問と返答が追加されていきます。",
+  "answer_title": "今までの質問から導かれた\n解答を実行",
+  "answer_button": "解答！"
+}
