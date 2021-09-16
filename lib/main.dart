@@ -1,115 +1,169 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:thinking_battle/screens/game_finish.screen.dart';
+import 'package:thinking_battle/screens/game_playing.screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thinking_battle/screens/game_start.screen.dart';
+
+import './screens/title.screen.dart';
+import './screens/mode_select.screen.dart';
+
+import 'package:thinking_battle/providers/common.provider.dart';
+import 'package:thinking_battle/providers/game.provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  // WidgetsFlutterBinding.ensureInitialized();
+  // MobileAds.instance.initialize();
+
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+useWidgetLifecycleObserver(BuildContext context) {
+  return use(_WidgetObserver(
+    context,
+  ));
+}
 
-  // This widget is the root of your application.
+class _WidgetObserver extends Hook<void> {
+  final BuildContext context;
+
+  _WidgetObserver(
+    this.context,
+  );
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+  HookState<void, Hook<void>> createState() {
+    return _WidgetObserverState(
+      context,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class _WidgetObserverState extends HookState<void, _WidgetObserver>
+    with WidgetsBindingObserver {
+  @override
+  final BuildContext context;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  _WidgetObserverState(
+    this.context,
+  );
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  void build(BuildContext context) {}
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  @override
+  void initHook() {
+    super.initHook();
+    Future(() async {
+      context.read(bgmProvider).state =
+          await context.read(soundEffectProvider).state.loop(
+                'sounds/title.mp3',
+                isNotification: true,
+                volume: 0,
+              );
     });
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
+  void dispose() {
+    // 現在のライフを時間に変換して、現在時刻にその分を足して渡す
+    print('閉じました');
+    Future(() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      // 現在のライフ回復残り時間を秒数に変換
+      DateTime recoveryTime = context.read(recoveryTimeProvider).state;
+
+      int recoveryTimeSeconds = recoveryTime.minute * 60 + recoveryTime.second;
+
+      // 現在のライフを分数に変換
+      int lifeToMinutes = context.read(lifePointProvider).state * 15;
+
+      DateTime saveTime = DateTime.now().add(
+          Duration(seconds: lifeToMinutes * 60 + recoveryTimeSeconds) * -1);
+
+      prefs.setString('saveTime', saveTime.toString());
+    });
+    // timerを止める
+    context.read(timerCancelFlgProvider).state = true;
+
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      context.read(bgmProvider).state.pause();
+      // context.read(subTimeStopFlgProvider).state = true;
+    } else if (state == AppLifecycleState.resumed) {
+      context.read(bgmProvider).state.resume();
+      // context.read(subTimeStopFlgProvider).state = false;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+}
+
+class MyApp extends HookWidget {
+  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    useWidgetLifecycleObserver(
+      context,
+    );
+
+    return MaterialApp(
+      title: 'VS水平思考',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        canvasColor: Colors.grey.shade100,
+        fontFamily: 'KiwiMaru',
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          },
         ),
+        textTheme: ThemeData.light().textTheme.copyWith(
+              bodyText1: const TextStyle(
+                fontSize: 17.0,
+                color: Colors.black,
+                // fontFamily: 'NotoSerifJP',
+              ),
+              bodyText2: const TextStyle(
+                fontSize: 15.5,
+                color: Colors.black,
+                // fontFamily: 'NotoSerifJP',
+              ),
+              button: const TextStyle(
+                fontSize: 19.0,
+              ),
+            ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      initialRoute: '/',
+      routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) => const TitleScreen(),
+        ModeSelectScreen.routeName: (BuildContext context) =>
+            const ModeSelectScreen(),
+        GameStartScreen.routeName: (BuildContext context) =>
+            const GameStartScreen(),
+        GamePlayingScreen.routeName: (BuildContext context) =>
+            const GamePlayingScreen(),
+        GameFinishScreen.routeName: (BuildContext context) =>
+            const GameFinishScreen(),
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (ctx) => TitleScreen(),
+        );
+      },
     );
   }
 }
