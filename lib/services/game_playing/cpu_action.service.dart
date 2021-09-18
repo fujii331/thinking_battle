@@ -9,10 +9,10 @@ import 'package:thinking_battle/models/send_content.model.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
 import 'package:thinking_battle/models/quiz.model.dart';
-import 'package:thinking_battle/services/common_action.service.dart';
-import 'package:thinking_battle/services/get_nice_question.service.dart';
+import 'package:thinking_battle/services/game_playing/common_action.service.dart';
+import 'package:thinking_battle/services/game_playing/get_nice_question.service.dart';
 
-import 'package:thinking_battle/skills.dart';
+import 'package:thinking_battle/data/skills.dart';
 
 Future cpuAction(
   BuildContext context,
@@ -120,7 +120,7 @@ Future cpuAction(
           skillIds: [2],
         );
       } else {
-        questions = getQuestion(
+        questions = getCpuQuestion(
           context,
           cpuTurn,
         );
@@ -138,7 +138,7 @@ Future cpuAction(
         skillIds: [],
       );
     } else {
-      questions = getQuestion(
+      questions = getCpuQuestion(
         context,
         cpuTurn,
       );
@@ -153,7 +153,7 @@ Future cpuAction(
       );
     }
   } else {
-    questions = getQuestion(
+    questions = getCpuQuestion(
       context,
       cpuTurn,
     );
@@ -180,7 +180,7 @@ Future cpuAction(
   );
 }
 
-List<Question> getQuestion(
+List<Question> getCpuQuestion(
   BuildContext context,
   int cpuTurn,
 ) {

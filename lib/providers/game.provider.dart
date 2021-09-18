@@ -17,10 +17,15 @@ final turnCountProvider = StateProvider((ref) => 0);
 final trainingProvider = StateProvider((ref) => false);
 final sumImportanceProvider = StateProvider((ref) => 0);
 final rivalInfoProvider = StateProvider((ref) => dummyPlayerInfo);
-final rivalColorProvider = StateProvider((ref) => Colors.blue);
 
-const dummyPlayerInfo =
-    PlayerInfo(name: '', rate: 0, maxRate: 0, imageNumber: 0, skillList: []);
+const dummyPlayerInfo = PlayerInfo(
+  name: '',
+  rate: 0,
+  maxRate: 0,
+  imageNumber: 0,
+  skillList: [],
+  color: Colors.blue,
+);
 
 final alreadyseenQuestionsProvider = StateProvider((ref) => <Question>[]);
 
@@ -44,7 +49,9 @@ final displayQuestionResearchProvider = StateProvider((ref) => false);
 final animationQuestionResearchProvider = StateProvider((ref) => false);
 final spChargeTurnProvider = StateProvider((ref) => 0);
 
-final rateProvider = StateProvider((ref) => 500.0);
-final maxRateProvider = StateProvider((ref) => 500.0);
+final rateProvider = StateProvider((ref) => 1500.0);
+final maxRateProvider = StateProvider((ref) => 1500.0);
 final colorProvider = StateProvider((ref) => Colors.blue);
 final mySkillIdsListProvider = StateProvider((ref) => <int>[1, 2, 3]);
+final matchCountProvider = StateProvider((ref) => 0);
+final winCountProvider = StateProvider((ref) => 0);

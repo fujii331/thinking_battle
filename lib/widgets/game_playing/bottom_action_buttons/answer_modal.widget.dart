@@ -3,12 +3,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
+
 import 'package:thinking_battle/models/send_content.model.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
-import 'package:thinking_battle/screens/mode_select.screen.dart';
-import 'package:thinking_battle/services/common_action.service.dart';
+import 'package:thinking_battle/services/game_playing/common_action.service.dart';
 
 class AnswerModal extends HookWidget {
   final ScrollController scrollController;
@@ -141,7 +141,7 @@ class AnswerModal extends HookWidget {
                       soundEffect.play(
                         'sounds/tap.mp3',
                         isNotification: true,
-                        volume: 0.5,
+                        volume: seVolume,
                       );
 
                       context.read(myTurnFlgProvider).state = false;

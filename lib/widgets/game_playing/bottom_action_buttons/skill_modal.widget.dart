@@ -7,7 +7,8 @@ import 'package:thinking_battle/models/skill.model.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
-import 'package:thinking_battle/skills.dart';
+import 'package:thinking_battle/data/skills.dart';
+import 'package:thinking_battle/widgets/common/skill_tooltip.widget.dart';
 
 class SkillModal extends HookWidget {
   final List<int> selectSkillIdsList;
@@ -188,33 +189,7 @@ class SkillModal extends HookWidget {
                     ),
                   ],
                 ),
-          Tooltip(
-            message: skill.skillExplanation,
-            child: Text(
-              skill.skillName,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color: Colors.white,
-              border: Border.all(
-                color: Colors.black,
-                width: 2,
-              ),
-            ),
-            height: 50,
-            excludeFromSemantics: true,
-            padding: const EdgeInsets.all(8.0),
-            preferBelow: false,
-            textStyle: const TextStyle(
-              fontSize: 18,
-            ),
-            showDuration: const Duration(milliseconds: 1),
-            waitDuration: const Duration(milliseconds: 1),
-          ),
+          SkillTooltip(skill),
         ],
       ),
     );

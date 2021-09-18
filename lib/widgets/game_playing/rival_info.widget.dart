@@ -3,10 +3,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:thinking_battle/models/player_info.model.dart';
-import 'package:thinking_battle/models/skill.model.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
-import 'package:thinking_battle/skills.dart';
+import 'package:thinking_battle/data/skills.dart';
+import 'package:thinking_battle/widgets/common/skill_tooltip.widget.dart';
 
 class RivalInfo extends HookWidget {
   const RivalInfo({Key? key}) : super(key: key);
@@ -14,7 +14,6 @@ class RivalInfo extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
-    final MaterialColor rivalColor = useProvider(rivalColorProvider).state;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -37,7 +36,7 @@ class RivalInfo extends HookWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
-                      color: rivalColor,
+                      color: rivalInfo.color,
                       width: 4,
                     ),
                     borderRadius: const BorderRadius.all(
@@ -105,9 +104,12 @@ class RivalInfo extends HookWidget {
                           ),
                         ),
                       ),
-                      _skillItem(skillSettings[rivalInfo.skillList[0] - 1]),
-                      _skillItem(skillSettings[rivalInfo.skillList[1] - 1]),
-                      _skillItem(skillSettings[rivalInfo.skillList[2] - 1]),
+                      const SizedBox(height: 8),
+                      SkillTooltip(skillSettings[rivalInfo.skillList[0] - 1]),
+                      const SizedBox(height: 8),
+                      SkillTooltip(skillSettings[rivalInfo.skillList[1] - 1]),
+                      const SizedBox(height: 8),
+                      SkillTooltip(skillSettings[rivalInfo.skillList[2] - 1]),
                     ],
                   ),
                 ),
@@ -115,44 +117,6 @@ class RivalInfo extends HookWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _skillItem(
-    Skill skill,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Tooltip(
-        message: skill.skillExplanation,
-        child: SizedBox(
-          width: 200,
-          child: Text(
-            skill.skillName,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-            ),
-          ),
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.black,
-            width: 2,
-          ),
-        ),
-        height: 50,
-        excludeFromSemantics: true,
-        padding: const EdgeInsets.all(8.0),
-        preferBelow: false,
-        textStyle: const TextStyle(
-          fontSize: 18,
-        ),
-        showDuration: const Duration(milliseconds: 1),
-        waitDuration: const Duration(milliseconds: 1),
       ),
     );
   }

@@ -7,7 +7,7 @@ import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/models/quiz.model.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
-import 'package:thinking_battle/quiz_data.dart';
+import 'package:thinking_battle/data/quiz_data.dart';
 
 String commonInitialAction(
   BuildContext context,
@@ -47,13 +47,12 @@ void trainingInitialAction(
 
   context.read(rivalInfoProvider).state = PlayerInfo(
     name: 'CPU',
-    rate: 500.0,
-    maxRate: 500.0,
+    rate: 1500.0,
+    maxRate: 1500.0,
     imageNumber: 9,
     skillList: skillList,
+    color: Colors.blue,
   );
-
-  context.read(rivalColorProvider).state = Colors.blue;
 
   // マッチング時の処理
   //   final PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;

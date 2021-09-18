@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../providers/common.provider.dart';
+import 'package:thinking_battle/providers/common.provider.dart';
 
 class SoundMode extends HookWidget {
   const SoundMode({Key? key}) : super(key: key);
@@ -101,31 +101,31 @@ class SoundMode extends HookWidget {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 15,
-            ),
-            child: ElevatedButton(
-              onPressed: () => {
-                soundEffect.play(
-                  'sounds/cancel.mp3',
-                  isNotification: true,
-                  volume: seVolume,
-                ),
-                Navigator.pop(context),
-              },
-              child: const Text(
-                '閉じる',
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-                textStyle: Theme.of(context).textTheme.button,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(
+          //     top: 15,
+          //   ),
+          //   child: ElevatedButton(
+          //     onPressed: () => {
+          //       soundEffect.play(
+          //         'sounds/cancel.mp3',
+          //         isNotification: true,
+          //         volume: seVolume,
+          //       ),
+          //       Navigator.pop(context),
+          //     },
+          //     child: const Text(
+          //       '閉じる',
+          //     ),
+          //     style: ElevatedButton.styleFrom(
+          //       primary: Colors.red,
+          //       textStyle: Theme.of(context).textTheme.button,
+          //       shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(10),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

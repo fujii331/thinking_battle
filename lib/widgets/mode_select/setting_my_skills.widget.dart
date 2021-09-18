@@ -9,13 +9,14 @@ import 'package:thinking_battle/providers/game.provider.dart';
 
 import 'package:thinking_battle/models/skill.model.dart';
 
-import 'package:thinking_battle/skills.dart';
+import 'package:thinking_battle/data/skills.dart';
+import 'package:thinking_battle/widgets/common/skill_tooltip.widget.dart';
 
-class SelectSkills extends HookWidget {
+class SettingMySkills extends HookWidget {
   final List<int> selectingSkillList;
 
   // ignore: use_key_in_widget_constructors
-  const SelectSkills(
+  const SettingMySkills(
     this.selectingSkillList,
   );
 
@@ -45,6 +46,7 @@ class SelectSkills extends HookWidget {
               '3つのスキルを選択',
               style: TextStyle(
                 fontSize: 20.0,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -54,13 +56,13 @@ class SelectSkills extends HookWidget {
               top: 5,
               bottom: 9,
             ),
-            height: 50,
-            child: const Text(
+            height: 70,
+            child: Text(
               'スキル名を長押しすると説明が出てきます',
               style: TextStyle(
                 height: 1.3,
                 fontSize: 17.0,
-                color: Colors.black,
+                color: Colors.blueGrey.shade800,
               ),
             ),
           ),
@@ -169,33 +171,7 @@ class SelectSkills extends HookWidget {
               judgeFlgState.value = !judgeFlgState.value;
             },
           ),
-          Tooltip(
-            message: skill.skillExplanation,
-            child: Text(
-              skill.skillName,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color: Colors.white,
-              border: Border.all(
-                color: Colors.black,
-                width: 2,
-              ),
-            ),
-            height: 50,
-            excludeFromSemantics: true,
-            padding: const EdgeInsets.all(8.0),
-            preferBelow: false,
-            textStyle: const TextStyle(
-              fontSize: 18,
-            ),
-            showDuration: const Duration(milliseconds: 1),
-            waitDuration: const Duration(milliseconds: 1),
-          ),
+          SkillTooltip(skill),
         ],
       ),
     );

@@ -2,20 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
+import 'package:thinking_battle/providers/game.provider.dart';
 
 class EditImage extends HookWidget {
-  final ValueNotifier<int> imageNumberState;
-
-  // ignore: use_key_in_widget_constructors
-  const EditImage(
-    this.imageNumberState,
-  );
+  const EditImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
+    final double seVolume = useProvider(seVolumeProvider).state;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -42,21 +40,21 @@ class EditImage extends HookWidget {
           ),
           _imageSelectRow(
             context,
-            imageNumberState,
             1,
             soundEffect,
+            seVolume,
           ),
           _imageSelectRow(
             context,
-            imageNumberState,
             2,
             soundEffect,
+            seVolume,
           ),
           _imageSelectRow(
             context,
-            imageNumberState,
             3,
             soundEffect,
+            seVolume,
           ),
         ],
       ),
@@ -65,9 +63,9 @@ class EditImage extends HookWidget {
 
   Widget _imageSelectRow(
     BuildContext context,
-    ValueNotifier<int> imageNumberState,
     int rowNumber,
     AudioCache soundEffect,
+    double seVolume,
   ) {
     return Padding(
       padding: const EdgeInsets.only(
@@ -78,21 +76,21 @@ class EditImage extends HookWidget {
         children: [
           _imageSelect(
             context,
-            imageNumberState,
             3 * (rowNumber - 1) + 1,
             soundEffect,
+            seVolume,
           ),
           _imageSelect(
             context,
-            imageNumberState,
             3 * (rowNumber - 1) + 2,
             soundEffect,
+            seVolume,
           ),
           _imageSelect(
             context,
-            imageNumberState,
             3 * (rowNumber - 1) + 3,
             soundEffect,
+            seVolume,
           ),
         ],
       ),
@@ -101,18 +99,20 @@ class EditImage extends HookWidget {
 
   Widget _imageSelect(
     BuildContext context,
-    ValueNotifier<int> imageNumberState,
     int imageNumber,
     AudioCache soundEffect,
+    double seVolume,
   ) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
         soundEffect.play(
           'sounds/tap.mp3',
           isNotification: true,
-          volume: 0.5,
+          volume: seVolume,
         );
-        imageNumberState.value = imageNumber;
+        context.read(imageNumberProvider).state = imageNumber;
+        prefs.setInt('imageNumber', imageNumber);
         Navigator.pop(context);
       },
       child: Container(

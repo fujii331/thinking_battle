@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../providers/common.provider.dart';
+import 'package:thinking_battle/providers/common.provider.dart';
 
 class TimeLimit extends HookWidget {
   const TimeLimit({Key? key}) : super(key: key);

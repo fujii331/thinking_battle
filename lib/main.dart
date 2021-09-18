@@ -6,6 +6,7 @@ import 'package:thinking_battle/screens/game_finish.screen.dart';
 import 'package:thinking_battle/screens/game_playing.screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/screens/game_start.screen.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import './screens/title.screen.dart';
 import './screens/mode_select.screen.dart';
@@ -122,6 +123,7 @@ class MyApp extends HookWidget {
     return MaterialApp(
       title: 'VS水平思考',
       debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(),
       theme: ThemeData(
         canvasColor: Colors.grey.shade100,
         fontFamily: 'KiwiMaru',

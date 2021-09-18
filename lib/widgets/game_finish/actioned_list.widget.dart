@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:thinking_battle/background.widget.dart';
+import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
-import 'package:thinking_battle/skills.dart';
+import 'package:thinking_battle/data/skills.dart';
 
 class ActionedList extends HookWidget {
   const ActionedList({Key? key}) : super(key: key);
@@ -20,7 +20,6 @@ class ActionedList extends HookWidget {
     final List<String> correctAnswers =
         useProvider(correctAnswersProvider).state;
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
-    final MaterialColor rivalColor = useProvider(rivalColorProvider).state;
 
     return Stack(
       children: <Widget>[
@@ -89,7 +88,7 @@ class ActionedList extends HookWidget {
                                 context,
                                 targetContent,
                                 rivalInfo.imageNumber,
-                                rivalColor,
+                                rivalInfo.color,
                               ),
                             ],
                           ),

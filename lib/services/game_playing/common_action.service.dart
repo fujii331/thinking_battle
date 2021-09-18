@@ -1,19 +1,16 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'dart:math';
 
 import 'package:thinking_battle/models/display_content.model.dart';
-import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/models/send_content.model.dart';
 
-import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
 import 'package:thinking_battle/models/quiz.model.dart';
 import 'package:thinking_battle/screens/game_finish.screen.dart';
-
-import 'package:thinking_battle/skills.dart';
 
 Future turnAction(
   BuildContext context,
@@ -439,9 +436,6 @@ Future initializeAction(
     context.read(myTurnTimeProvider).state =
         DateTime(2020, 1, 1, 1, 1).add(const Duration(seconds: 30));
 
-    // 自分のターンの表示
-    context.read(displayMyturnSetFlgProvider).state = true;
-
     // 値を初期化
     context.read(inputAnswerProvider).state = '';
     context.read(selectQuestionIdProvider).state = 0;
@@ -488,6 +482,30 @@ Future initializeAction(
       volume: seVolume,
     );
     context.read(myTurnFlgProvider).state = true;
+
+    EasyLoading.showToast(
+      'あなたのターンです',
+      duration: const Duration(milliseconds: 1000),
+      toastPosition: EasyLoadingToastPosition.center,
+      dismissOnTap: true,
+    );
+
+    // EasyLoading.instance
+    //   ..displayDuration = const Duration(milliseconds: 2000)
+    //   ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    //   ..loadingStyle = EasyLoadingStyle.dark
+    //   ..indicatorSize = 45.0
+    //   ..radius = 10.0
+    //   ..progressColor = Colors.yellow
+    //   ..backgroundColor = null
+    //   ..indicatorColor = Colors.yellow
+    //   ..textColor = Colors.yellow
+    //   ..maskColor = Colors.blue.withOpacity(0.5)
+    //   ..userInteractions = true
+    //   ..dismissOnTap = true;
+
+    // 自分のターンの表示
+    context.read(displayMyturnSetFlgProvider).state = true;
   } else {
     // 相手のターンの表示
     context.read(displayRivalturnSetFlgProvider).state = true;

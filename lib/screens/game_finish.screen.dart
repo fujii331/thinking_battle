@@ -2,10 +2,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
+import 'package:thinking_battle/providers/game.provider.dart';
 
-import 'package:thinking_battle/widgets/quiz_finish/actioned_list.widget.dart';
-import 'package:thinking_battle/widgets/quiz_finish/result.widget.dart';
+import 'package:thinking_battle/widgets/game_finish/actioned_list.widget.dart';
+import 'package:thinking_battle/widgets/game_finish/result.widget.dart';
 
 class GameFinishScreen extends HookWidget {
   const GameFinishScreen({Key? key}) : super(key: key);
@@ -27,6 +29,14 @@ class GameFinishScreen extends HookWidget {
         await Future.delayed(
           const Duration(milliseconds: 500),
         );
+
+        if (winFlg == true) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          // 勝利数
+          context.read(winCountProvider).state += 1;
+          prefs.setInt('winCount', context.read(winCountProvider).state);
+        }
+
         context.read(bgmProvider).state = await soundEffect.loop(
           'sounds/title.mp3',
           volume: bgmVolume,

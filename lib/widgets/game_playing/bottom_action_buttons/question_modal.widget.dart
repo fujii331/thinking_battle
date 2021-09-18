@@ -8,12 +8,11 @@ import 'package:thinking_battle/models/send_content.model.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
-import 'package:thinking_battle/screens/mode_select.screen.dart';
-import 'package:thinking_battle/services/common_action.service.dart';
-import 'package:thinking_battle/services/get_nice_question.service.dart';
+import 'package:thinking_battle/services/game_playing/common_action.service.dart';
+import 'package:thinking_battle/services/game_playing/get_nice_question.service.dart';
 
-import 'package:thinking_battle/skills.dart';
-import 'package:thinking_battle/widgets/modal/skill_modal.widget.dart';
+import 'package:thinking_battle/data/skills.dart';
+import 'package:thinking_battle/widgets/game_playing/bottom_action_buttons/skill_modal.widget.dart';
 
 class QuestionModal extends HookWidget {
   final ScrollController scrollController;
@@ -128,18 +127,19 @@ class QuestionModal extends HookWidget {
                           );
 
                           showModalBottomSheet(
-                              context: context,
-                              isScrollControlled:
-                                  true, //trueにしないと、Containerのheightが反映されない
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(15)),
-                              ),
-                              builder: (BuildContext context) {
-                                return SkillModal([
-                                  ...context.read(selectSkillIdsProvider).state
-                                ]);
-                              });
+                            context: context,
+                            isScrollControlled:
+                                true, //trueにしないと、Containerのheightが反映されない
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(15)),
+                            ),
+                            builder: (BuildContext context) {
+                              return SkillModal(
+                                [...context.read(selectSkillIdsProvider).state],
+                              );
+                            },
+                          );
                         }
                       : () {},
                 ),
