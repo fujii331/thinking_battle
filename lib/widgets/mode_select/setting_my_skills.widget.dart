@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
 import 'package:thinking_battle/models/skill.model.dart';
@@ -14,24 +13,26 @@ import 'package:thinking_battle/widgets/common/skill_tooltip.widget.dart';
 
 class SettingMySkills extends HookWidget {
   final List<int> selectingSkillList;
+  final AudioCache soundEffect;
+  final double seVolume;
 
   // ignore: use_key_in_widget_constructors
   const SettingMySkills(
     this.selectingSkillList,
+    this.soundEffect,
+    this.seVolume,
   );
 
   @override
   Widget build(BuildContext context) {
-    final AudioCache soundEffect = useProvider(soundEffectProvider).state;
-    final double seVolume = useProvider(seVolumeProvider).state;
-
     final judgeFlgState = useState(true);
 
     return Padding(
       padding: const EdgeInsets.only(
+        top: 15,
         left: 20,
         right: 20,
-        bottom: 25,
+        bottom: 23,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -39,8 +40,8 @@ class SettingMySkills extends HookWidget {
         children: <Widget>[
           const Padding(
             padding: EdgeInsets.only(
-              top: 15,
-              bottom: 10,
+              top: 10,
+              bottom: 12,
             ),
             child: Text(
               '3つのスキルを選択',
@@ -51,21 +52,16 @@ class SettingMySkills extends HookWidget {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(
-              top: 5,
-              bottom: 9,
-            ),
-            height: 70,
-            child: Text(
-              'スキル名を長押しすると説明が出てきます',
-              style: TextStyle(
-                height: 1.3,
-                fontSize: 17.0,
-                color: Colors.blueGrey.shade800,
-              ),
+          const SizedBox(height: 5),
+          Text(
+            'スキル名を長押しすると説明が表示されます',
+            style: TextStyle(
+              height: 1.3,
+              fontSize: 17.0,
+              color: Colors.blueGrey.shade800,
             ),
           ),
+          const SizedBox(height: 15),
           _skillRow(
             context,
             selectingSkillList,
@@ -106,37 +102,43 @@ class SettingMySkills extends HookWidget {
             padding: const EdgeInsets.only(
               top: 15,
             ),
-            child: ElevatedButton(
-              onPressed: selectingSkillList.length == 3
-                  ? () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      soundEffect.play(
-                        'sounds/change.mp3',
-                        isNotification: true,
-                        volume: seVolume,
-                      );
-                      // スキル
-                      context.read(mySkillIdsListProvider).state =
-                          selectingSkillList;
-                      prefs.setStringList(
-                          'skillList',
-                          selectingSkillList
-                              .map((skill) => skill.toString())
-                              .toList());
-                      Navigator.pop(context);
-                    }
-                  : () {},
-              child: const Text(
-                '更新',
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: selectingSkillList.length == 3
-                    ? Colors.orange
-                    : Colors.orange.shade200,
-                textStyle: Theme.of(context).textTheme.button,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            child: SizedBox(
+              width: 90,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: selectingSkillList.length == 3
+                    ? () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        soundEffect.play(
+                          'sounds/change.mp3',
+                          isNotification: true,
+                          volume: seVolume,
+                        );
+                        // スキル
+                        context.read(mySkillIdsListProvider).state =
+                            selectingSkillList;
+                        prefs.setStringList(
+                            'skillList',
+                            selectingSkillList
+                                .map((skill) => skill.toString())
+                                .toList());
+                        Navigator.pop(context);
+                      }
+                    : () {},
+                child: const Text('更新'),
+                style: ElevatedButton.styleFrom(
+                  primary: selectingSkillList.length == 3
+                      ? Colors.orange
+                      : Colors.orange.shade200,
+                  padding: const EdgeInsets.only(
+                    bottom: 3,
+                  ),
+                  shape: const StadiumBorder(),
+                  side: BorderSide(
+                    width: 2,
+                    color: Colors.orange.shade600,
+                  ),
                 ),
               ),
             ),
@@ -155,7 +157,7 @@ class SettingMySkills extends HookWidget {
     int skillNumber = skill.id;
 
     return SizedBox(
-      height: 35,
+      height: 40,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -171,7 +173,11 @@ class SettingMySkills extends HookWidget {
               judgeFlgState.value = !judgeFlgState.value;
             },
           ),
-          SkillTooltip(skill),
+          SkillTooltip(
+            skill,
+            Colors.black,
+            18,
+          ),
         ],
       ),
     );

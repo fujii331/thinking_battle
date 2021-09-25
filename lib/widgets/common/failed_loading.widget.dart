@@ -15,29 +15,33 @@ class FaildLoading extends HookWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
+        top: 15,
         left: 20,
         right: 20,
-        bottom: 15,
+        bottom: 23,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: 10,
-            ),
-            child: Text(
-              'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
-              style: TextStyle(
-                fontSize: 22.0,
-              ),
+          const Text(
+            '読み込み失敗！',
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: 15,
+          const SizedBox(height: 20),
+          const Text(
+            'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
+            style: TextStyle(
+              fontSize: 18.0,
+              fontFamily: 'Stick',
             ),
+          ),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: 90,
+            height: 40,
             child: ElevatedButton(
               onPressed: () => {
                 soundEffect.play(
@@ -50,9 +54,13 @@ class FaildLoading extends HookWidget {
               child: const Text('閉じる'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.red.shade400,
-                textStyle: Theme.of(context).textTheme.button,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                padding: const EdgeInsets.only(
+                  bottom: 3,
+                ),
+                shape: const StadiumBorder(),
+                side: BorderSide(
+                  width: 2,
+                  color: Colors.red.shade700,
                 ),
               ),
             ),

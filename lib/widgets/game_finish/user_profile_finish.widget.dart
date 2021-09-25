@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class UserProfileFinish extends StatelessWidget {
   final MaterialColor userColor;
   final int imageNumber;
+  final int matchedCount;
   final String userName;
   final double userRate;
   final bool myDataFlg;
@@ -13,6 +14,7 @@ class UserProfileFinish extends StatelessWidget {
   const UserProfileFinish(
     this.userColor,
     this.imageNumber,
+    this.matchedCount,
     this.userName,
     this.userRate,
     this.myDataFlg,
@@ -22,46 +24,121 @@ class UserProfileFinish extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      color: Colors.white,
-      width: MediaQuery.of(context).size.width * 0.8 > 600.0
-          ? 600.0
-          : MediaQuery.of(context).size.width * 0.8,
-      height: 200,
-      child: myDataFlg
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _playerIcon(
-                  userColor,
-                  imageNumber,
-                ),
-                const SizedBox(width: 30),
-                _playerData(
-                  userName,
-                  userRate,
-                  winFlg,
-                  trainingFlg,
-                ),
+    return Stack(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 5,
+            top: 10,
+            bottom: 10,
+          ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: FractionalOffset.topLeft,
+              end: FractionalOffset.bottomRight,
+              colors: myDataFlg
+                  ? [
+                      Colors.deepPurple.shade900,
+                      Colors.blue.shade900,
+                      Colors.indigo.shade900,
+                    ]
+                  : [
+                      Colors.pink.shade900,
+                      const Color.fromRGBO(195, 10, 127, 0.6),
+                      const Color.fromRGBO(255, 90, 87, 0.5),
+                    ],
+              stops: const [
+                0.2,
+                0.6,
+                0.9,
               ],
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            ),
+            border: Border.all(
+              color: myDataFlg ? Colors.indigo.shade800 : Colors.pink.shade800,
+              width: 3,
+            ),
+          ),
+          width: 235,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _playerIcon(
+                userColor,
+                imageNumber,
+              ),
+              const SizedBox(width: 45),
+              _playerData(
+                userRate,
+                matchedCount,
+                winFlg,
+                trainingFlg,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 4.0,
+            top: 13,
+          ),
+          child: Container(
+            padding: const EdgeInsets.only(
+              left: 5,
+            ),
+            height: 32,
+            width: 125,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: FractionalOffset.topLeft,
+                end: FractionalOffset.bottomRight,
+                colors: myDataFlg
+                    ? [
+                        Colors.blue.shade900,
+                        Colors.indigo.shade500,
+                      ]
+                    : [
+                        Colors.red.shade900,
+                        Colors.pink.shade800,
+                      ],
+                stops: const [
+                  0.6,
+                  0.9,
+                ],
+              ),
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(50),
+                bottomRight: Radius.circular(50),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _playerData(
-                  userName,
-                  userRate,
-                  winFlg == null ? null : !winFlg!,
-                  trainingFlg,
+                const SizedBox(height: 2),
+                SizedBox(
+                  height: 9,
+                  child: Text(
+                    'name',
+                    style: TextStyle(
+                      color: Colors.blueGrey.shade200,
+                      fontSize: 10,
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 30),
-                _playerIcon(
-                  userColor,
-                  imageNumber,
+                Text(
+                  userName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'KaiseiOpti',
+                    fontSize: 13.8,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -69,92 +146,103 @@ class UserProfileFinish extends StatelessWidget {
     MaterialColor playerColor,
     int imageNumber,
   ) {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: playerColor,
-          width: 4,
+    return Padding(
+      padding: const EdgeInsets.only(top: 40),
+      child: Container(
+        width: 75,
+        height: 75,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          border: Border.all(
+            color: playerColor,
+            width: 4,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(10),
+          ),
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(2),
-        child: Image.asset(
-          'assets/images/' + imageNumber.toString() + '.png',
+        child: Padding(
+          padding: const EdgeInsets.all(2),
+          child: imageNumber == 0
+              ? Container()
+              : Image.asset(
+                  'assets/images/' + imageNumber.toString() + '.png',
+                ),
         ),
       ),
     );
   }
 
   Widget _playerData(
-    String playerName,
     double playerRate,
+    int matchedCount,
     bool? winFlg,
     bool trainingFlg,
   ) {
-    return SizedBox(
-      width: 150,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 15,
-            child: Text(
-              'name',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 15,
+          child: Text(
+            'match',
+            style: TextStyle(
+              color: Colors.blueGrey.shade200,
+              fontSize: 13,
             ),
           ),
-          Text(
-            playerName,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
+        ),
+        Text(
+          (matchedCount + (trainingFlg ? 0 : 1)).toString() + ' 回',
+          style: const TextStyle(
+            color: Colors.white,
+            fontFamily: 'KaiseiOpti',
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 15,
+          child: Text(
+            'rate',
+            style: TextStyle(
+              color: Colors.blueGrey.shade200,
+              fontSize: 13,
             ),
           ),
-          const SizedBox(
-            height: 15,
-            child: Text(
-              'rate',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-              ),
-            ),
-          ),
-          Row(
+        ),
+        SizedBox(
+          width: 82,
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 playerRate.toString(),
                 style: TextStyle(
                   color: trainingFlg || winFlg == null
-                      ? Colors.black
+                      ? Colors.white
                       : winFlg
-                          ? Colors.blue
-                          : Colors.red,
+                          ? Colors.blue.shade200
+                          : Colors.red.shade200,
                   fontSize: 18,
+                  fontFamily: 'KaiseiOpti',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(width: 15),
+              const SizedBox(width: 5),
               trainingFlg || winFlg == null
                   ? Container()
                   : Icon(
                       winFlg ? Icons.arrow_upward : Icons.arrow_downward,
-                      color: winFlg ? Colors.blue : Colors.red,
+                      color:
+                          winFlg ? Colors.blue.shade200 : Colors.red.shade200,
                       size: 17,
                     ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

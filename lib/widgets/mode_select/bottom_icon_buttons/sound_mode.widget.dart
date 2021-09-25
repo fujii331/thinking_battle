@@ -7,30 +7,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 
 class SoundMode extends HookWidget {
-  const SoundMode({Key? key}) : super(key: key);
+  final AudioCache soundEffect;
+
+  // ignore: use_key_in_widget_constructors
+  const SoundMode(
+    this.soundEffect,
+  );
 
   @override
   Widget build(BuildContext context) {
-    final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
 
     return Padding(
       padding: const EdgeInsets.only(
+        top: 15,
         left: 20,
         right: 20,
-        bottom: 25,
+        bottom: 23,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           const Padding(
             padding: EdgeInsets.only(
-              top: 15,
+              top: 10,
               bottom: 25,
             ),
             child: Text(
-              'スライドして音量を調節',
+              'スライドして音量調節',
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -69,7 +74,7 @@ class SoundMode extends HookWidget {
               },
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 25,
@@ -101,31 +106,33 @@ class SoundMode extends HookWidget {
               },
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(
-          //     top: 15,
-          //   ),
-          //   child: ElevatedButton(
-          //     onPressed: () => {
-          //       soundEffect.play(
-          //         'sounds/cancel.mp3',
-          //         isNotification: true,
-          //         volume: seVolume,
-          //       ),
-          //       Navigator.pop(context),
-          //     },
-          //     child: const Text(
-          //       '閉じる',
-          //     ),
-          //     style: ElevatedButton.styleFrom(
-          //       primary: Colors.red,
-          //       textStyle: Theme.of(context).textTheme.button,
-          //       shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(10),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          const SizedBox(height: 25),
+          SizedBox(
+            width: 90,
+            height: 40,
+            child: ElevatedButton(
+              onPressed: () => {
+                soundEffect.play(
+                  'sounds/cancel.mp3',
+                  isNotification: true,
+                  volume: seVolume,
+                ),
+                Navigator.pop(context),
+              },
+              child: const Text('閉じる'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red.shade400,
+                padding: const EdgeInsets.only(
+                  bottom: 3,
+                ),
+                shape: const StadiumBorder(),
+                side: BorderSide(
+                  width: 2,
+                  color: Colors.red.shade700,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

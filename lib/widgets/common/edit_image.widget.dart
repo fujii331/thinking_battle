@@ -17,6 +17,7 @@ class EditImage extends HookWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
+        top: 10,
         left: 20,
         right: 20,
         bottom: 25,
@@ -31,7 +32,7 @@ class EditImage extends HookWidget {
               bottom: 25,
             ),
             child: Text(
-              'アイコンにしたい画像をタップ',
+              'アイコンにしたい画像をタップ！',
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -119,7 +120,7 @@ class EditImage extends HookWidget {
         width: 60,
         height: 60,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.grey.shade50,
           border: Border.all(
             color: Colors.black,
             width: 1,

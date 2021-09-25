@@ -46,6 +46,7 @@ Future updateLate(
     rate: newRivalRate,
     maxRate: rivalInfo.maxRate,
     imageNumber: rivalInfo.imageNumber,
+    matchedCount: rivalInfo.matchedCount,
     skillList: rivalInfo.skillList,
     color: rivalColor,
   );
@@ -75,6 +76,5 @@ double getNewRate(
   final double winPercent = 1 / (1 + pow(10, (rateDifference / 400)));
 
   final int winCount = winFlg ? 1 : 0;
-
-  return myRate + adjustedValue * (winCount - winPercent);
+  return ((myRate + adjustedValue * (winCount - winPercent)) * 10).round() / 10;
 }

@@ -3,22 +3,28 @@ import 'dart:math';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/screens/mode_select.screen.dart';
 import 'package:thinking_battle/widgets/common/failed_loading.widget.dart';
+import 'package:thinking_battle/widgets/common/loading_modal.widget.dart';
 
 Future signUp(
   BuildContext context,
 ) async {
-  EasyLoading.show(status: 'loading...');
+  showDialog<int>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return const LoadingModal();
+    },
+  );
 
   try {
     // メール/パスワードでユーザー登録
     final FirebaseAuth auth = FirebaseAuth.instance;
 
-    final String email = randomString(16);
+    final String email = randomString(16) + '@example.com';
     final String password = randomString(16);
 
     await auth.createUserWithEmailAndPassword(
@@ -32,11 +38,14 @@ Future signUp(
     prefs.setString('email', email);
     prefs.setString('password', password);
 
+    Navigator.pop(context);
+
     // TODO 遊び方にとぶ
     await Navigator.of(context).pushNamed(
       ModeSelectScreen.routeName,
     );
   } catch (e) {
+    Navigator.pop(context);
     // ユーザー登録に失敗した場合
     AwesomeDialog(
       context: context,
@@ -50,7 +59,6 @@ Future signUp(
       body: const FaildLoading(),
     ).show();
   }
-  EasyLoading.dismiss();
 }
 
 Future login(

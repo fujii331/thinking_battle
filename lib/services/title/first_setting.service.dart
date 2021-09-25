@@ -39,15 +39,18 @@ void firstSetting(BuildContext context) async {
     'sounds/open_advertise.mp3',
     'sounds/question_research.mp3',
     'sounds/ready.mp3',
+    'sounds/reply.mp3',
     'sounds/skill.mp3',
     'sounds/start.mp3',
     'sounds/tap.mp3',
     'sounds/waiting_answer.mp3',
-    'sounds/wrong_answer.mp3',
+    'sounds/fault.mp3',
   ]);
 
   // プレイヤー名
   context.read(playerNameProvider).state = prefs.getString('playerName') ?? '';
+  // ログインID
+  context.read(loginIdProvider).state = prefs.getString('email') ?? '';
   // 画像番号
   context.read(imageNumberProvider).state = prefs.getInt('imageNumber') ?? 1;
   // レート
@@ -68,30 +71,30 @@ void firstSetting(BuildContext context) async {
           : [1, 2, 3];
 
   // 対戦数
-  context.read(matchCountProvider).state = prefs.getInt('matchCount') ?? 0;
+  context.read(matchedCountProvider).state = prefs.getInt('matchCount') ?? 0;
   // 勝利数
   context.read(winCountProvider).state = prefs.getInt('winCount') ?? 0;
 
   // ライフ
-  if (prefs.getString('saveTime') != null) {
-    // ライフ1つあたりの時間
-    const int lifeCaluculateTime = 60 * 15;
+  // if (prefs.getString('saveTime') != null) {
+  //   // ライフ1つあたりの時間
+  //   const int lifeCaluculateTime = 60 * 15;
 
-    final DateTime savedTime = DateTime.parse(prefs.getString('saveTime')!);
-    final Duration difference = DateTime.now().difference(savedTime);
-    final int sec = difference.inSeconds;
-    if (sec >= lifeCaluculateTime * 5) {
-      context.read(lifePointProvider).state = 5;
-    } else {
-      final int lifePoint = (sec / lifeCaluculateTime).floor();
-      context.read(lifePointProvider).state = lifePoint;
+  //   final DateTime savedTime = DateTime.parse(prefs.getString('saveTime')!);
+  //   final Duration difference = DateTime.now().difference(savedTime);
+  //   final int sec = difference.inSeconds;
+  //   if (sec >= lifeCaluculateTime * 5) {
+  //     context.read(lifePointProvider).state = 5;
+  //   } else {
+  //     final int lifePoint = (sec / lifeCaluculateTime).floor();
+  //     context.read(lifePointProvider).state = lifePoint;
 
-      final int remainSec = sec - lifePoint * lifeCaluculateTime;
-      final int recoveryTimeMinutes = (remainSec / 60).floor();
-      final int recoveryTimeSeconds = remainSec - recoveryTimeMinutes * 60;
+  //     final int remainSec = sec - lifePoint * lifeCaluculateTime;
+  //     final int recoveryTimeMinutes = (remainSec / 60).floor();
+  //     final int recoveryTimeSeconds = remainSec - recoveryTimeMinutes * 60;
 
-      context.read(recoveryTimeProvider).state =
-          DateTime(2020, 1, 1, 1, recoveryTimeMinutes, recoveryTimeSeconds);
-    }
-  }
+  //     context.read(recoveryTimeProvider).state =
+  //         DateTime(2020, 1, 1, 1, recoveryTimeMinutes, recoveryTimeSeconds);
+  //   }
+  // }
 }

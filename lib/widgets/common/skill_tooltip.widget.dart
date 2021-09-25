@@ -4,43 +4,51 @@ import 'package:thinking_battle/models/skill.model.dart';
 
 class SkillTooltip extends StatelessWidget {
   final Skill skill;
+  final Color textColor;
+  final double fontSize;
 
   // ignore: use_key_in_widget_constructors
   const SkillTooltip(
     this.skill,
+    this.textColor,
+    this.fontSize,
   );
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: skill.skillExplanation,
-      child: SizedBox(
-        width: 200,
+    return SizedBox(
+      child: Tooltip(
+        message: skill.skillExplanation,
         child: Text(
           skill.skillName,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
+          style: TextStyle(
+            color: textColor,
+            fontSize: fontSize,
           ),
         ),
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.black,
-          width: 2,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          color: Colors.grey.shade900,
+          border: Border.all(
+            color: Colors.grey,
+            width: 2,
+          ),
         ),
+        excludeFromSemantics: true,
+        padding: const EdgeInsets.only(
+          left: 15,
+          right: 15,
+          top: 7,
+          bottom: 9,
+        ),
+        preferBelow: false,
+        textStyle: const TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+        ),
+        showDuration: const Duration(seconds: 100),
+        // waitDuration: const Duration(milliseconds: 1),
       ),
-      height: 50,
-      excludeFromSemantics: true,
-      padding: const EdgeInsets.all(8.0),
-      preferBelow: false,
-      textStyle: const TextStyle(
-        fontSize: 18,
-      ),
-      showDuration: const Duration(milliseconds: 1),
-      waitDuration: const Duration(milliseconds: 1),
     );
   }
 }

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.github.naoto613.thinking_battle">
    <application
-        android:label="VS水平思考"
+        android:label="水平思考対戦"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

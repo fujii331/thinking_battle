@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -14,8 +15,9 @@ import './screens/mode_select.screen.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   // MobileAds.instance.initialize();
 
   runApp(
@@ -74,24 +76,6 @@ class _WidgetObserverState extends HookState<void, _WidgetObserver>
 
   @override
   void dispose() {
-    // 現在のライフを時間に変換して、現在時刻にその分を足して渡す
-    print('閉じました');
-    Future(() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      // 現在のライフ回復残り時間を秒数に変換
-      DateTime recoveryTime = context.read(recoveryTimeProvider).state;
-
-      int recoveryTimeSeconds = recoveryTime.minute * 60 + recoveryTime.second;
-
-      // 現在のライフを分数に変換
-      int lifeToMinutes = context.read(lifePointProvider).state * 15;
-
-      DateTime saveTime = DateTime.now().add(
-          Duration(seconds: lifeToMinutes * 60 + recoveryTimeSeconds) * -1);
-
-      prefs.setString('saveTime', saveTime.toString());
-    });
     // timerを止める
     context.read(timerCancelFlgProvider).state = true;
 
@@ -121,7 +105,7 @@ class MyApp extends HookWidget {
     );
 
     return MaterialApp(
-      title: 'VS水平思考',
+      title: '水平思考対戦',
       debugShowCheckedModeBanner: false,
       builder: EasyLoading.init(),
       theme: ThemeData(
@@ -134,18 +118,9 @@ class MyApp extends HookWidget {
           },
         ),
         textTheme: ThemeData.light().textTheme.copyWith(
-              bodyText1: const TextStyle(
-                fontSize: 17.0,
-                color: Colors.black,
-                // fontFamily: 'NotoSerifJP',
-              ),
-              bodyText2: const TextStyle(
-                fontSize: 15.5,
-                color: Colors.black,
-                // fontFamily: 'NotoSerifJP',
-              ),
               button: const TextStyle(
-                fontSize: 19.0,
+                fontSize: 20,
+                color: Colors.white,
               ),
             ),
       ),

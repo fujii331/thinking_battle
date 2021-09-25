@@ -9,32 +9,6 @@ class TitleWord extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
         vertical: 7,
       ),
-      width: 265,
-      height: 110,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.blue.shade900,
-          width: 1,
-        ),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(15),
-          topRight: Radius.zero,
-          bottomRight: Radius.circular(15),
-          bottomLeft: Radius.zero,
-        ),
-        gradient: LinearGradient(
-          begin: FractionalOffset.topLeft,
-          end: FractionalOffset.bottomRight,
-          colors: [
-            const Color(0xff494132).withOpacity(0.6),
-            const Color(0xff9941d8).withOpacity(0.6),
-          ],
-          stops: const [
-            0.0,
-            1.0,
-          ],
-        ),
-      ),
       child: Column(
         children: [
           Text(
@@ -42,21 +16,47 @@ class TitleWord extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               height: 1.2,
-              fontSize: 42,
+              fontSize: 45,
               fontFamily: 'KaiseiOpti',
-              fontWeight: FontWeight.w800,
-              color: Colors.orange.shade200,
+              fontWeight: FontWeight.bold,
+              color: Colors.amber.shade600,
+              shadows: [
+                Shadow(
+                  color: Colors.grey.shade800,
+                  offset: const Offset(0.0, 5.0),
+                  blurRadius: 1,
+                ),
+              ],
             ),
           ),
-          Text(
-            'どっちが先に思いつく？',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.red.shade50,
-              fontSize: 20,
-              fontFamily: 'Stick',
-              fontWeight: FontWeight.bold,
-            ),
+          const SizedBox(height: 5),
+          Stack(
+            children: <Widget>[
+              Text(
+                'どっちが先に思いつく？',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'KaiseiOpti',
+                  fontSize: 23.5,
+                  foreground: Paint()
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 10
+                    ..color = Colors.grey.shade900,
+                ),
+              ),
+              Text(
+                'どっちが先に思いつく？',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'KaiseiOpti',
+                  fontSize: 23.0,
+                  foreground: Paint()
+                    // ..style = PaintingStyle.stroke
+                    // ..strokeWidth = 2
+                    ..color = Colors.white,
+                ),
+              )
+            ],
           ),
         ],
       ),

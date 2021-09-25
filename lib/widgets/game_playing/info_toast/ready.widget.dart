@@ -1,38 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:thinking_battle/models/player_info.model.dart';
-import 'package:thinking_battle/providers/game.provider.dart';
-
-import 'package:thinking_battle/providers/common.provider.dart';
 
 class Ready extends HookWidget {
   final bool precedingFlg;
   final String thema;
+  final AudioCache soundEffect;
+  final double seVolume;
 
   // ignore: use_key_in_widget_constructors
   const Ready(
     this.precedingFlg,
     this.thema,
+    this.soundEffect,
+    this.seVolume,
   );
 
   @override
   Widget build(BuildContext context) {
-    final AudioCache soundEffect = useProvider(soundEffectProvider).state;
-    final double seVolume = useProvider(seVolumeProvider).state;
-
-    final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
-
     final displayFlg1 = useState<bool>(false);
     final displayFlg2 = useState<bool>(false);
-    final displayFlg3 = useState<bool>(false);
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         await Future.delayed(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 700),
         );
         displayFlg1.value = true;
         soundEffect.play(
@@ -41,15 +33,11 @@ class Ready extends HookWidget {
           volume: seVolume,
         );
         await Future.delayed(
-          const Duration(milliseconds: 1500),
+          const Duration(milliseconds: 1600),
         );
         displayFlg2.value = true;
         await Future.delayed(
-          const Duration(milliseconds: 1500),
-        );
-        displayFlg3.value = true;
-        await Future.delayed(
-          const Duration(milliseconds: 1500),
+          const Duration(milliseconds: 2000),
         );
         Navigator.pop(context);
       });
@@ -65,6 +53,7 @@ class Ready extends HookWidget {
           children: <Widget>[
             Center(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
@@ -72,21 +61,23 @@ class Ready extends HookWidget {
                     child: Text(
                       'テーマ：' + thema,
                       style: TextStyle(
-                        fontSize: 28.0,
+                        fontSize: 26.0,
                         color: Colors.blueGrey.shade100,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
+                  const SizedBox(height: 50),
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
                     opacity: displayFlg2.value ? 1 : 0,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           'あなたは',
                           style: TextStyle(
-                            fontSize: 28.0,
+                            fontSize: 26.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.blueGrey.shade100,
                           ),
@@ -104,24 +95,12 @@ class Ready extends HookWidget {
                         Text(
                           'です',
                           style: TextStyle(
-                            fontSize: 28.0,
+                            fontSize: 26.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.blueGrey.shade100,
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  AnimatedOpacity(
-                    duration: const Duration(milliseconds: 500),
-                    opacity: displayFlg3.value ? 1 : 0,
-                    child: Text(
-                      rivalInfo.name + 'との対戦開始！',
-                      style: TextStyle(
-                        fontSize: 28.0,
-                        color: Colors.blueGrey.shade100,
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
                   ),
                 ],

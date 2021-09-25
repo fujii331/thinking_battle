@@ -34,7 +34,7 @@ class ProfileUpdateArea extends HookWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -62,10 +62,10 @@ class ProfileUpdateArea extends HookWidget {
                       ).show();
                     },
                     child: Container(
-                      width: 85,
-                      height: 85,
+                      width: 72,
+                      height: 72,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey.shade50,
                         border: Border.all(
                           color: color,
                           width: 4,
@@ -83,83 +83,110 @@ class ProfileUpdateArea extends HookWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 5),
                   Text(
-                    '↑タップで変更',
+                    '↑ タップ！',
                     style: TextStyle(
-                      color: Colors.orange.shade700,
-                      fontSize: 14,
+                      color: Colors.orange.shade800,
+                      fontSize: 12,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(width: 30),
+              const SizedBox(width: 25),
               Column(
                 children: [
-                  const SizedBox(
-                    height: 15,
-                    child: Text(
-                      'name',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 160,
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'タップして入力',
-                      ),
-                      controller: playerNameController,
-                      inputFormatters: <TextInputFormatter>[
-                        LengthLimitingTextInputFormatter(
-                          8,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 13,
+                        child: Text(
+                          'name',
+                          style: TextStyle(
+                            color: Colors.blueGrey.shade800,
+                            fontSize: 13,
+                          ),
                         ),
-                      ],
+                      ),
+                      SizedBox(
+                        width: 120,
+                        height: 40,
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'タップして入力',
+                          ),
+                          style: const TextStyle(
+                            fontFamily: 'KaiseiOpti',
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          controller: playerNameController,
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(
+                              8,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 75,
+                    height: firstSettingFlg ? 36 : 32,
+                    child: ElevatedButton(
+                      onPressed: playerNameController.text != '' &&
+                              context.read(playerNameProvider).state !=
+                                  playerNameController.text
+                          ? () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              soundEffect.play(
+                                'sounds/tap.mp3',
+                                isNotification: true,
+                                volume: seVolume,
+                              );
+                              // プレイヤー名
+                              context.read(playerNameProvider).state =
+                                  playerNameController.text;
+                              prefs.setString(
+                                  'playerName', playerNameController.text);
+
+                              if (firstSettingFlg) {
+                                // ユーザー登録を行う
+                                signUp(context);
+                              }
+                            }
+                          : () {},
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(top: firstSettingFlg ? 0 : 1.5),
+                        child: Text(
+                          firstSettingFlg ? '進む' : '名前更新',
+                          style: TextStyle(
+                            fontSize: firstSettingFlg ? null : 15,
+                          ),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: playerNameController.text != '' &&
+                                context.read(playerNameProvider).state !=
+                                    playerNameController.text
+                            ? Colors.blue
+                            : Colors.blue.shade200,
+                        padding: const EdgeInsets.only(
+                          bottom: 3,
+                        ),
+                        shape: const StadiumBorder(),
+                        side: BorderSide(
+                          width: 2,
+                          color: Colors.blue.shade600,
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15,
-                ),
-                child: ElevatedButton(
-                  onPressed: playerNameController.text != ''
-                      ? () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          soundEffect.play(
-                            'sounds/tap.mp3',
-                            isNotification: true,
-                            volume: seVolume,
-                          );
-                          // プレイヤー名
-                          context.read(playerNameProvider).state =
-                              playerNameController.text;
-                          prefs.setString(
-                              'playerName', playerNameController.text);
-
-                          if (firstSettingFlg) {
-                            // ユーザー登録を行う
-                            signUp(context);
-                          }
-                        }
-                      : () {},
-                  child: Text(
-                    firstSettingFlg ? '進む' : '更新',
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: playerNameController.text != ''
-                        ? Colors.blue
-                        : Colors.blue.shade200,
-                    textStyle: Theme.of(context).textTheme.button,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
               ),
             ],
           ),

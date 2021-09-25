@@ -15,7 +15,7 @@ String commonInitialAction(
   final Quiz quiz = quizData[Random().nextInt(quizData.length)];
   // 初期化
   context.read(bgmProvider).state.stop();
-  context.read(currentSkillPointProvider).state = 3;
+  context.read(currentSkillPointProvider).state = 5;
   context.read(alreadyseenQuestionsProvider).state = [];
   context.read(selectableQuestionsProvider).state = [];
   context.read(displayContentListProvider).state = [];
@@ -34,14 +34,16 @@ String commonInitialAction(
 void trainingInitialAction(
   BuildContext context,
 ) {
-  context.read(enemySkillPointProvider).state = 3;
-  context.read(sumImportanceProvider).state = 0;
+  context.read(enemySkillPointProvider).state = 15;
 
   final List<List<int>> skillListData = [
     [1, 2, 3],
+    [1, 2, 4],
+    [1, 2, 5],
     [2, 3, 4],
+    [2, 4, 5],
   ];
-  final List<int> skillList = skillListData[Random().nextInt(3)];
+  final List<int> skillList = skillListData[Random().nextInt(5)];
 
   context.read(enemySkillsProvider).state = skillList;
 
@@ -50,6 +52,7 @@ void trainingInitialAction(
     rate: 1500.0,
     maxRate: 1500.0,
     imageNumber: 9,
+    matchedCount: 0,
     skillList: skillList,
     color: Colors.blue,
   );

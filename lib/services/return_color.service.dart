@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 MaterialColor returnColor(
   double rate,
 ) {
-  return rate >= 1500
+  return rate >= 2500
       ? Colors.purple
-      : rate >= 1250
+      : rate >= 2250
           ? Colors.red
-          : rate >= 1000
+          : rate >= 2000
               ? Colors.orange
-              : rate >= 750
+              : rate >= 1750
                   ? Colors.green
                   : Colors.blue;
 }

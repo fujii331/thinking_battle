@@ -5,6 +5,7 @@ class PlayerInfo {
   final double rate;
   final double maxRate;
   final int imageNumber;
+  final int matchedCount;
   final List<int> skillList;
   final MaterialColor color;
 
@@ -13,6 +14,7 @@ class PlayerInfo {
     required this.rate,
     required this.maxRate,
     required this.imageNumber,
+    required this.matchedCount,
     required this.skillList,
     required this.color,
   });

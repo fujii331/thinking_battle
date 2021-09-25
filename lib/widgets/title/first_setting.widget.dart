@@ -11,8 +11,8 @@ class FirstSetting extends HookWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
+        left: 18,
+        right: 18,
         bottom: 25,
       ),
       child: Column(
@@ -24,7 +24,7 @@ class FirstSetting extends HookWidget {
               bottom: 25,
             ),
             child: Text(
-              '名前とアイコンを設定',
+              '名前とアイコンを設定！',
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -38,10 +38,10 @@ class FirstSetting extends HookWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.only(
-              top: 12,
+              top: 18,
             ),
             child: Text(
-              '※後から変更できます',
+              '※ 後から変更できます',
               style: TextStyle(
                 fontSize: 13,
                 fontFamily: 'SawarabiGothic',

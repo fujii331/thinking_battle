@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:thinking_battle/services/title//first_setting.service.dart';
-import 'package:thinking_battle/services/title//should_update.service.dart';
 import 'package:thinking_battle/services/title//time_start.service.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
@@ -17,14 +16,7 @@ class TitleScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String playerName = useProvider(playerNameProvider).state;
-
-    final int lifePoint = useProvider(lifePointProvider).state;
-    final DateTime recoveryTime = useProvider(recoveryTimeProvider).state;
-    final DateTime myTurnTime = useProvider(myTurnTimeProvider).state;
-    final bool myTurnFlg = useProvider(myTurnFlgProvider).state;
-
-    final bool timerCancelFlg = useProvider(timerCancelFlgProvider).state;
+    final String loginId = useProvider(loginIdProvider).state;
 
     final loadingState = useState(false);
 
@@ -32,14 +24,9 @@ class TitleScreen extends HookWidget {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         // await shouldUpdate(context);
 
-        timeStart(
-          context,
-          recoveryTime,
-          lifePoint,
-          timerCancelFlg,
-          myTurnFlg,
-          myTurnTime,
-        );
+        // timeStart(
+        //   context,
+        // );
       });
       return null;
     }, const []);
@@ -47,20 +34,18 @@ class TitleScreen extends HookWidget {
     firstSetting(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           const TitleBack(),
           Center(
             child: Column(
-              children: <Widget>[
-                const SizedBox(height: 80),
-                const TitleWord(),
-                const Spacer(),
-                TitleButton(
-                  loadingState,
-                  playerName == '',
-                ),
-                const SizedBox(height: 90),
+              children: const <Widget>[
+                SizedBox(height: 80),
+                TitleWord(),
+                Spacer(),
+                TitleButton(),
+                SizedBox(height: 110),
               ],
             ),
           ),

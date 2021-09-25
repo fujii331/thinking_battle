@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'dart:math';
 
 import 'package:thinking_battle/models/display_content.model.dart';
+import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/models/send_content.model.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
@@ -20,7 +21,9 @@ Future cpuAction(
   AudioCache soundEffect,
   double seVolume,
 ) async {
-  final List<Question> allQuestions = context.read(allQuestionsProvider).state;
+  final List<Question> allQuestions = [
+    ...context.read(allQuestionsProvider).state
+  ];
 
   allQuestions.shuffle();
   // 表示リスト
@@ -30,127 +33,126 @@ Future cpuAction(
   int cpuTurn = (displayContentList.length ~/ 2) + 1;
   // スキル
   List<int> enemySkills = context.read(enemySkillsProvider).state;
+  // 的情報
+  PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;
   // スキルポイント
   int enemySkillPoint = context.read(enemySkillPointProvider).state;
   // 重要度
-  int sumImportance = context.read(sumImportanceProvider).state;
+  int sumImportance = 0;
+  // 質問隠しか嘘つきが出たかどうか
+  bool searchFlg = false;
 
-  SendContent sendContent;
+  int returnQuestionId = 0;
+  String returnAnswer = '';
+  List<int> returnSkillIds = [];
+
+  for (DisplayContent displayContent in displayContentList) {
+    if (displayContent.skillIds.contains(4)) {
+      sumImportance -= displayContent.importance;
+      searchFlg = true;
+    } else if (!displayContent.skillIds.contains(1)) {
+      sumImportance +=
+          displayContent.importance * displayContent.importance == 4
+              ? 3
+              : displayContent.importance;
+    } else {
+      searchFlg = true;
+    }
+  }
 
   List<Question> questions = [];
 
-  // スキル用ランダム
-  final int skillRandom = Random().nextInt(3);
-
   bool endFlg = false;
 
-  if (!displayContentList.last.skillIds.contains(3)) {
-    if (Random().nextInt(2) == 0 &&
-        enemySkills[0] == 1 &&
-        enemySkillPoint >=
-            skillSettings[enemySkills[0] - 1].skillPoint +
-                skillSettings[enemySkills[1] - 1].skillPoint) {
-      final List returnValues = getNiceQuestion(
-        context,
-        allQuestions,
-      );
+  // 強制質問されていない場合
+  if (displayContentList.isNotEmpty &&
+      !displayContentList.last.skillIds.contains(3)) {
+    if (sumImportance >= (65 - rivalInfo.rate / 100)) {
+      // 重要度が溜まっていたら解答
+      // 相手のレートによって応える早さが変わる
+      returnAnswer = context.read(correctAnswersProvider).state[0];
+    } else if (Random().nextInt(3) > 0) {
+      // 2/3の確率でスキル使用判断
+      List<int> usingSkills = [];
 
-      // 重要度の合計を更新
-      sumImportance += allQuestions
-          .where((question) => question.id == returnValues[0])
-          .toList()[0]
-          .importance;
+      final List<int> enemySkillsCandidate = enemySkills
+          .where((skillId) => skillId != 6 && (searchFlg || skillId != 5))
+          .toList();
 
-      enemySkillPoint += 1;
+      // 質問候補が2つの場合でナイス質問を含み、質問調査を含まず、スキルポイントが溜まっている場合
+      if (enemySkillsCandidate.length == 2 &&
+          enemySkillsCandidate.contains(2) &&
+          !enemySkillsCandidate.contains(5) &&
+          enemySkillPoint >=
+              skillSettings[enemySkillsCandidate[0] - 1].skillPoint +
+                  skillSettings[enemySkillsCandidate[1] - 1].skillPoint) {
+        usingSkills = enemySkillsCandidate;
+      } else if (enemySkillsCandidate.length == 3) {
+        // 質問候補が3つの場合
+        final int randomNum = Random().nextInt(3);
+        final List<int> skillsCombination = [
+          randomNum == 2
+              ? enemySkillsCandidate[0]
+              : enemySkillsCandidate[randomNum],
+          randomNum == 2
+              ? enemySkillsCandidate[2]
+              : enemySkillsCandidate[randomNum + 1]
+        ];
 
-      endFlg = returnValues[1];
+        // ナイス質問を含み、質問調査を含まず、スキルポイントが溜まっている場合
+        if (skillsCombination.contains(2) &&
+            !skillsCombination.contains(5) &&
+            enemySkillPoint >=
+                skillSettings[skillsCombination[0] - 1].skillPoint +
+                    skillSettings[skillsCombination[1] - 1].skillPoint) {
+          usingSkills = skillsCombination;
+        }
+      }
 
-      sendContent = SendContent(
-        questionId: returnValues[0],
-        answer: '',
-        skillIds: [enemySkills[0], enemySkills[1]],
-      );
-    } else if (Random().nextInt(2) == 0 &&
-        enemySkills[0] == 2 &&
-        enemySkillPoint >=
-            skillSettings[enemySkills[0] - 1].skillPoint +
-                skillSettings[enemySkills[2] - 1].skillPoint) {
-      final List returnValues = getNiceQuestion(
-        context,
-        allQuestions,
-      );
+      // スキルを同時に使わなかった場合、かつ、1/2の確率でスキル単体使用
+      if (usingSkills.isEmpty && Random().nextInt(2) == 0) {
+        final int targetSkillId =
+            enemySkillsCandidate[Random().nextInt(enemySkillsCandidate.length)];
 
-      // 重要度の合計を更新
-      sumImportance += allQuestions
-          .where((question) => question.id == returnValues[0])
-          .toList()[0]
-          .importance;
+        if (enemySkillPoint >= skillSettings[targetSkillId - 1].skillPoint) {
+          usingSkills = [targetSkillId];
+        }
+      }
 
-      enemySkillPoint += 1;
-
-      endFlg = returnValues[1];
-
-      sendContent = SendContent(
-        questionId: returnValues[0],
-        answer: '',
-        skillIds: [enemySkills[0], enemySkills[2]],
-      );
-    } else if (Random().nextInt(3) == 0 &&
-        enemySkillPoint >=
-            skillSettings[enemySkills[skillRandom] - 1].skillPoint) {
-      if (enemySkills[skillRandom] == 2) {
+      // ナイス質問を行なった場合
+      if (usingSkills.contains(2)) {
         final List returnValues = getNiceQuestion(
           context,
           allQuestions,
         );
 
-        // 重要度の合計を更新
-        sumImportance += allQuestions
-            .where((question) => question.id == returnValues[0])
-            .toList()[0]
-            .importance;
-
         endFlg = returnValues[1];
 
-        enemySkillPoint += 1;
-
-        sendContent = SendContent(
-          questionId: returnValues[0],
-          answer: '',
-          skillIds: [2],
-        );
+        returnQuestionId = returnValues[0];
+        returnSkillIds = usingSkills;
       } else {
         questions = getCpuQuestion(
           context,
           cpuTurn,
         );
 
-        sendContent = SendContent(
-          questionId: questions[0].id,
-          answer: '',
-          skillIds: [enemySkills[skillRandom]],
-        );
+        returnQuestionId = questions[0].id;
+        if (!usingSkills.contains(1) ||
+            !usingSkills.contains(3) ||
+            questions[0].importance != 1) {
+          returnSkillIds = usingSkills;
+        }
       }
-    } else if (sumImportance >= 45) {
-      sendContent = SendContent(
-        questionId: 0,
-        answer: context.read(correctAnswersProvider).state[0],
-        skillIds: [],
-      );
+
+      context.read(enemySkillPointProvider).state += 1;
     } else {
       questions = getCpuQuestion(
         context,
         cpuTurn,
       );
 
-      // 重要度の合計を更新
-      sumImportance += questions[0].importance;
-
-      sendContent = SendContent(
-        questionId: questions[0].id,
-        answer: '',
-        skillIds: [],
-      );
+      returnQuestionId = questions[0].id;
+      context.read(enemySkillPointProvider).state += 1;
     }
   } else {
     questions = getCpuQuestion(
@@ -158,15 +160,18 @@ Future cpuAction(
       cpuTurn,
     );
 
-    sendContent = SendContent(
-      questionId: questions[0].id,
-      answer: '',
-      skillIds: [],
-    );
+    returnQuestionId = questions[0].id;
+    context.read(enemySkillPointProvider).state += 1;
   }
 
   await Future.delayed(
-    Duration(seconds: 6 + Random().nextInt(7)),
+    Duration(seconds: 5 + Random().nextInt(6)),
+  );
+
+  final SendContent sendContent = SendContent(
+    questionId: returnQuestionId,
+    answer: returnAnswer,
+    skillIds: returnSkillIds,
   );
 
   turnAction(
@@ -184,10 +189,9 @@ List<Question> getCpuQuestion(
   BuildContext context,
   int cpuTurn,
 ) {
-  // スキルポイント
-  context.read(enemySkillPointProvider).state += 1;
-
-  final List<Question> allQuestions = context.read(allQuestionsProvider).state;
+  final List<Question> allQuestions = [
+    ...context.read(allQuestionsProvider).state
+  ];
 
   allQuestions.shuffle();
 
@@ -210,9 +214,6 @@ List<Question> getCpuQuestion(
     // 完全ランダムで取ってくる
     getQuestions = allQuestions.sublist(0, 3);
 
-    // 重要度の合計を更新
-    context.read(sumImportanceProvider).state += getQuestions[0].importance;
-
     return getQuestions;
   } else {
     getQuestions = getNextQuestions(
@@ -222,9 +223,6 @@ List<Question> getCpuQuestion(
       importance3Questions,
       cpuTurn,
     );
-
-    // 重要度の合計を更新
-    context.read(sumImportanceProvider).state += getQuestions[0].importance;
 
     return getQuestions;
   }

@@ -17,14 +17,15 @@ class MyRoom extends HookWidget {
   Widget build(BuildContext context) {
     final double rate = useProvider(rateProvider).state;
     final double maxRate = useProvider(maxRateProvider).state;
-    final int matchCount = useProvider(matchCountProvider).state;
+    final int matchCount = useProvider(matchedCountProvider).state;
     final int winCount = useProvider(winCountProvider).state;
 
     return Padding(
       padding: const EdgeInsets.only(
+        top: 15,
         left: 20,
         right: 20,
-        bottom: 25,
+        bottom: 23,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -33,7 +34,7 @@ class MyRoom extends HookWidget {
             playerNameController,
             false,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -41,96 +42,24 @@ class MyRoom extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 130,
+                    width: 100,
                     child: Column(
-                      children: const <Widget>[
-                        SizedBox(
-                          height: 35,
-                          child: Text(
-                            'レート',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: Text(
-                            '最大レート',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: Text(
-                            '対戦回数',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: Text(
-                            '勝ち数',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
+                      children: <Widget>[
+                        _itemLabel('レート'),
+                        _itemLabel('最大レート'),
+                        _itemLabel('対戦回数'),
+                        _itemLabel('勝ち数'),
                       ],
                     ),
                   ),
                   SizedBox(
-                    width: 150,
+                    width: 110,
                     child: Column(
                       children: <Widget>[
-                        SizedBox(
-                          height: 35,
-                          child: Text(
-                            rate.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: Text(
-                            maxRate.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: Text(
-                            matchCount.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: Text(
-                            winCount.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
+                        _item(rate.toString()),
+                        _item(maxRate.toString()),
+                        _item(matchCount.toString()),
+                        _item(winCount.toString()),
                       ],
                     ),
                   ),
@@ -139,6 +68,39 @@ class MyRoom extends HookWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _itemLabel(
+    String label,
+  ) {
+    return SizedBox(
+      height: 35,
+      child: Text(
+        label,
+        style: TextStyle(
+          color: Colors.blueGrey.shade900,
+          fontSize: 20,
+          fontFamily: 'KaiseiOpti',
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _item(
+    String item,
+  ) {
+    return SizedBox(
+      height: 35,
+      child: Text(
+        item,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontFamily: 'KaiseiOpti',
+        ),
       ),
     );
   }

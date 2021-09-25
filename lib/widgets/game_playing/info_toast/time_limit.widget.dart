@@ -48,6 +48,7 @@ class TimeLimit extends HookWidget {
           children: <Widget>[
             Center(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
@@ -55,21 +56,36 @@ class TimeLimit extends HookWidget {
                     child: Text(
                       '時間切れ！',
                       style: TextStyle(
-                        fontSize: 28.0,
+                        fontSize: 26.0,
                         color: Colors.blueGrey.shade100,
                         fontWeight: FontWeight.bold,
+                        shadows: <Shadow>[
+                          Shadow(
+                            color: Colors.grey.shade800,
+                            offset: const Offset(3, 3),
+                            blurRadius: 3.0,
+                          ),
+                        ],
                       ),
                     ),
                   ),
+                  const SizedBox(height: 30),
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
                     opacity: displayFlg2.value ? 1 : 0,
                     child: Text(
                       '一番上の質問を実行します',
                       style: TextStyle(
-                        fontSize: 28.0,
+                        fontSize: 22.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.blueGrey.shade100,
+                        shadows: <Shadow>[
+                          Shadow(
+                            color: Colors.grey.shade800,
+                            offset: const Offset(3, 3),
+                            blurRadius: 3.0,
+                          ),
+                        ],
                       ),
                     ),
                   ),
