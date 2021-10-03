@@ -19,7 +19,6 @@ class CenterRowFinish extends HookWidget {
   Widget build(BuildContext context) {
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
-    final bool trainingFlg = useProvider(trainingProvider).state;
 
     return Column(
       children: [
@@ -76,6 +75,8 @@ class CenterRowFinish extends HookWidget {
                       volume: seVolume,
                     );
 
+                    context.read(changedTrainingProvider).state = false;
+
                     Navigator.pop(context);
                   },
                 ),
@@ -105,9 +106,7 @@ class CenterRowFinish extends HookWidget {
                       volume: seVolume,
                     );
 
-                    if (trainingFlg) {
-                      context.read(trainingProvider).state = true;
-                    }
+                    context.read(changedTrainingProvider).state = false;
 
                     Navigator.of(context).pushReplacementNamed(
                       GameStartScreen.routeName,

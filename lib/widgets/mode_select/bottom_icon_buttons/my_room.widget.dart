@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/widgets/common/profile_update_area.widget.dart';
 
 class MyRoom extends HookWidget {
-  final TextEditingController playerNameController;
-
-  // ignore: use_key_in_widget_constructors
-  const MyRoom(
-    this.playerNameController,
-  );
+  const MyRoom({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +14,8 @@ class MyRoom extends HookWidget {
     final double maxRate = useProvider(maxRateProvider).state;
     final int matchCount = useProvider(matchedCountProvider).state;
     final int winCount = useProvider(winCountProvider).state;
+    final int maxContinuousWinCount =
+        useProvider(maxContinuousWinCountProvider).state;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -30,11 +27,8 @@ class MyRoom extends HookWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          ProfileUpdateArea(
-            playerNameController,
-            false,
-          ),
-          const SizedBox(height: 30),
+          const ProfileUpdateArea(false),
+          const SizedBox(height: 25),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -49,6 +43,7 @@ class MyRoom extends HookWidget {
                         _itemLabel('最大レート'),
                         _itemLabel('対戦回数'),
                         _itemLabel('勝ち数'),
+                        _itemLabel('最大連勝数'),
                       ],
                     ),
                   ),
@@ -60,6 +55,7 @@ class MyRoom extends HookWidget {
                         _item(maxRate.toString()),
                         _item(matchCount.toString()),
                         _item(winCount.toString()),
+                        _item(maxContinuousWinCount.toString()),
                       ],
                     ),
                   ),
@@ -76,7 +72,7 @@ class MyRoom extends HookWidget {
     String label,
   ) {
     return SizedBox(
-      height: 35,
+      height: 40,
       child: Text(
         label,
         style: TextStyle(
@@ -93,7 +89,7 @@ class MyRoom extends HookWidget {
     String item,
   ) {
     return SizedBox(
-      height: 35,
+      height: 40,
       child: Text(
         item,
         style: const TextStyle(

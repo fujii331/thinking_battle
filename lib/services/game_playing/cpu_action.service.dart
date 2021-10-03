@@ -62,16 +62,14 @@ Future cpuAction(
 
   List<Question> questions = [];
 
-  bool endFlg = false;
-
   // 強制質問されていない場合
   if (displayContentList.isNotEmpty &&
       !displayContentList.last.skillIds.contains(3)) {
-    if (sumImportance >= (65 - rivalInfo.rate / 100)) {
+    if (sumImportance >= (60 - rivalInfo.rate / 100)) {
       // 重要度が溜まっていたら解答
       // 相手のレートによって応える早さが変わる
       returnAnswer = context.read(correctAnswersProvider).state[0];
-    } else if (Random().nextInt(3) > 0) {
+    } else if (cpuTurn > 4 && Random().nextInt(3) > 0) {
       // 2/3の確率でスキル使用判断
       List<int> usingSkills = [];
 
@@ -121,14 +119,10 @@ Future cpuAction(
 
       // ナイス質問を行なった場合
       if (usingSkills.contains(2)) {
-        final List returnValues = getNiceQuestion(
+        returnQuestionId = getNiceQuestion(
           context,
           allQuestions,
         );
-
-        endFlg = returnValues[1];
-
-        returnQuestionId = returnValues[0];
         returnSkillIds = usingSkills;
       } else {
         questions = getCpuQuestion(
@@ -179,9 +173,9 @@ Future cpuAction(
     sendContent,
     false,
     scrollController,
-    endFlg,
     soundEffect,
     seVolume,
+    null,
   );
 }
 

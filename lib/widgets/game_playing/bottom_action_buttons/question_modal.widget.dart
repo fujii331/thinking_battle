@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,6 +19,8 @@ import 'package:thinking_battle/widgets/game_playing/bottom_action_buttons/skill
 class QuestionModal extends HookWidget {
   final BuildContext screenContext;
   final ScrollController scrollController;
+  final DatabaseReference firebaseRef;
+  final StreamSubscription<Event>? messagesSubscription;
   final AudioCache soundEffect;
   final double seVolume;
   final bool myTurnFlg;
@@ -24,6 +29,8 @@ class QuestionModal extends HookWidget {
   const QuestionModal(
     this.screenContext,
     this.scrollController,
+    this.firebaseRef,
+    this.messagesSubscription,
     this.soundEffect,
     this.seVolume,
     this.myTurnFlg,
@@ -83,11 +90,6 @@ class QuestionModal extends HookWidget {
                     color: Colors.black,
                   ),
                   onPressed: () {
-                    soundEffect.play(
-                      'sounds/cancel.mp3',
-                      isNotification: true,
-                      volume: seVolume,
-                    );
                     Navigator.pop(context);
                   },
                 ),
@@ -197,8 +199,6 @@ class QuestionModal extends HookWidget {
                               );
                               int sendQuestionId = selectQuestionId;
 
-                              bool endFlg = false;
-
                               if (selectSkillIds.contains(2)) {
                                 final List<Question> allQuestions = [
                                   ...context.read(allQuestionsProvider).state
@@ -206,33 +206,46 @@ class QuestionModal extends HookWidget {
 
                                 allQuestions.shuffle();
 
-                                final List returnValues = getNiceQuestion(
+                                sendQuestionId = getNiceQuestion(
                                   context,
                                   allQuestions,
                                 );
-
-                                sendQuestionId = returnValues[0];
-                                endFlg = returnValues[1];
                               }
 
-                              final sendContent = SendContent(
-                                questionId: sendQuestionId,
-                                answer: '',
-                                skillIds: selectSkillIds,
-                              );
+                              if (context.read(matchingRoomIdProvider).state !=
+                                  '') {
+                                firebaseRef.push().set({
+                                  'questionId': sendQuestionId,
+                                  'answer': '',
+                                  'skill1': selectSkillIds.isNotEmpty
+                                      ? selectSkillIds[0]
+                                      : 0,
+                                  'skill2': selectSkillIds.length > 1
+                                      ? selectSkillIds[1]
+                                      : 0,
+                                  'skill3': selectSkillIds.length > 2
+                                      ? selectSkillIds[2]
+                                      : 0,
+                                });
+                              } else {
+                                final sendContent = SendContent(
+                                  questionId: sendQuestionId,
+                                  answer: '',
+                                  skillIds: selectSkillIds,
+                                );
+                                // ターン行動実行
+                                turnAction(
+                                  screenContext,
+                                  sendContent,
+                                  true,
+                                  scrollController,
+                                  soundEffect,
+                                  seVolume,
+                                  messagesSubscription,
+                                );
+                              }
 
                               Navigator.pop(context);
-
-                              // ターン行動実行
-                              turnAction(
-                                screenContext,
-                                sendContent,
-                                true,
-                                scrollController,
-                                endFlg,
-                                soundEffect,
-                                seVolume,
-                              );
                             }
                           : () {},
                     ),

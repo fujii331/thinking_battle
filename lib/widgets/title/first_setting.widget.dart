@@ -7,8 +7,6 @@ class FirstSetting extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playerNameController = useTextEditingController();
-
     return Padding(
       padding: const EdgeInsets.only(
         left: 18,
@@ -31,10 +29,7 @@ class FirstSetting extends HookWidget {
               ),
             ),
           ),
-          ProfileUpdateArea(
-            playerNameController,
-            true,
-          ),
+          const ProfileUpdateArea(true),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.only(

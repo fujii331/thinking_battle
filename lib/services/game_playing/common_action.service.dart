@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,15 +16,16 @@ import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/models/quiz.model.dart';
 import 'package:thinking_battle/screens/game_finish.screen.dart';
 import 'package:thinking_battle/services/game_playing/cpu_action.service.dart';
+import 'package:thinking_battle/services/game_playing/update_rate.service.dart';
 
 Future turnAction(
   BuildContext context,
   SendContent sendContent,
   bool myTurnFlg,
   ScrollController scrollController,
-  bool endFlg,
   AudioCache soundEffect,
   double seVolume,
+  StreamSubscription<Event>? messagesSubscription,
 ) async {
   await Future.delayed(
     const Duration(milliseconds: 500),
@@ -81,6 +85,7 @@ Future turnAction(
 
     // 表示リストに追加する
     displayContentList.add(displayContent);
+    context.read(displayContentListProvider).state = displayContentList;
 
     final List<int> displaySkillIds = sendContent.skillIds
         .where((skill) => (myTurnFlg == true || skill != 4))
@@ -97,12 +102,13 @@ Future turnAction(
       if (myTurnFlg) {
         context.read(currentSkillPointProvider).state -=
             skillSettings[displaySkillIds[i] - 1].skillPoint;
-      } else if (context.read(trainingProvider).state) {
+      } else {
         context.read(enemySkillPointProvider).state -=
             skillSettings[displaySkillIds[i] - 1].skillPoint;
       }
 
       displayContentList.last.displayList.add(0);
+      context.read(displayContentListProvider).state = displayContentList;
 
       scrollToBottom(
         scrollController,
@@ -189,6 +195,8 @@ Future turnAction(
     );
 
     displayContentList.last.displayList.add(0);
+    context.read(displayContentListProvider).state = displayContentList;
+
     scrollToBottom(
       scrollController,
       sendContent.skillIds.isEmpty &&
@@ -209,6 +217,7 @@ Future turnAction(
     );
 
     displayContentList.last.displayList.add(0);
+    context.read(displayContentListProvider).state = displayContentList;
 
     if (myTurnFlg) {
       // 解答禁止状態の場合、解除する
@@ -266,6 +275,8 @@ Future turnAction(
 
     // 表示リストに追加する
     displayContentList.add(displayContent);
+    context.read(displayContentListProvider).state = displayContentList;
+
     scrollToBottom(
       scrollController,
       answerText.length * (fontSize + 1) > restrictWidth ? 138 : 50,
@@ -279,6 +290,7 @@ Future turnAction(
     );
 
     displayContentList.last.displayList.add(0);
+    context.read(displayContentListProvider).state = displayContentList;
 
     await Future.delayed(
       const Duration(milliseconds: 2000),
@@ -305,6 +317,7 @@ Future turnAction(
       } else {
         displayContentList.last.displayList.add(0);
       }
+      context.read(displayContentListProvider).state = displayContentList;
 
       await Future.delayed(
         const Duration(milliseconds: 800),
@@ -335,12 +348,25 @@ Future turnAction(
         importance: 0,
         specialMessage: '',
       );
+      context.read(displayContentListProvider).state = displayContentList;
 
       await Future.delayed(
         const Duration(milliseconds: 1300),
       );
 
-      // TODO レート計算
+      if (!context.read(trainingProvider).state ||
+          context.read(changedTrainingProvider).state) {
+        // レート計算
+        await updateRate(
+          context,
+          myTurnFlg,
+        );
+      }
+
+      if (messagesSubscription != null) {
+        messagesSubscription.cancel();
+      }
+
       Navigator.of(context).pushReplacementNamed(
         GameFinishScreen.routeName,
         arguments: myTurnFlg,
@@ -363,6 +389,7 @@ Future turnAction(
         importance: 0,
         specialMessage: '',
       );
+      context.read(displayContentListProvider).state = displayContentList;
 
       // 次のターンの解答を禁止する
       context.read(answerFailedFlgProvider).state = true;
@@ -373,7 +400,7 @@ Future turnAction(
     const Duration(milliseconds: 1000),
   );
 
-  if (allQuestions.length < 3 || endFlg) {
+  if (allQuestions.length < 3) {
     await Future.delayed(
       const Duration(milliseconds: 1500),
     );
@@ -391,6 +418,7 @@ Future turnAction(
 
     // 表示リストに追加する
     displayContentList.add(displayContent);
+    context.read(displayContentListProvider).state = displayContentList;
 
     // 質問表示
     soundEffect.play(
@@ -404,11 +432,14 @@ Future turnAction(
       50,
     );
 
+    if (messagesSubscription != null) {
+      messagesSubscription.cancel();
+    }
+
     await Future.delayed(
-      const Duration(milliseconds: 3000),
+      const Duration(milliseconds: 2000),
     );
 
-    // TODO レート計算
     Navigator.of(context).pushReplacementNamed(
       GameFinishScreen.routeName,
       arguments: null,
@@ -541,23 +572,12 @@ Future initializeAction(
       dismissOnTap: true,
     );
 
-    // EasyLoading.instance
-    //   ..displayDuration = const Duration(milliseconds: 2000)
-    //   ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    //   ..loadingStyle = EasyLoadingStyle.dark
-    //   ..indicatorSize = 45.0
-    //   ..radius = 10.0
-    //   ..progressColor = Colors.yellow
-    //   ..backgroundColor = null
-    //   ..indicatorColor = Colors.yellow
-    //   ..textColor = Colors.yellow
-    //   ..maskColor = Colors.blue.withOpacity(0.5)
-    //   ..userInteractions = true
-    //   ..dismissOnTap = true;
-
     // 自分のターンの表示
     context.read(displayMyturnSetFlgProvider).state = true;
   } else {
+    // 時間を初期化
+    context.read(rivalTurnTimeProvider).state =
+        DateTime(2020, 1, 1, 1, 1).add(const Duration(seconds: 45));
     // 相手のターンの表示
     context.read(displayRivalturnSetFlgProvider).state = true;
 

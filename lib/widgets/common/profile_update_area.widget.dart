@@ -7,18 +7,16 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
-import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/title/authentication.service.dart';
 
 import 'package:thinking_battle/widgets/common/edit_image.widget.dart';
 
 class ProfileUpdateArea extends HookWidget {
-  final TextEditingController playerNameController;
   final bool firstSettingFlg;
 
   // ignore: use_key_in_widget_constructors
   const ProfileUpdateArea(
-    this.playerNameController,
     this.firstSettingFlg,
   );
 
@@ -28,7 +26,8 @@ class ProfileUpdateArea extends HookWidget {
     final double seVolume = useProvider(seVolumeProvider).state;
 
     final int imageNumber = useProvider(imageNumberProvider).state;
-    final MaterialColor color = useProvider(colorProvider).state;
+    final judgeFlgState = useState(false);
+    final playerNameState = useState('');
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -67,8 +66,8 @@ class ProfileUpdateArea extends HookWidget {
                       decoration: BoxDecoration(
                         color: Colors.grey.shade50,
                         border: Border.all(
-                          color: color,
-                          width: 4,
+                          color: Colors.grey.shade800,
+                          width: 2,
                         ),
                         borderRadius: const BorderRadius.all(
                           Radius.circular(10),
@@ -111,7 +110,7 @@ class ProfileUpdateArea extends HookWidget {
                       ),
                       SizedBox(
                         width: 120,
-                        height: 40,
+                        height: 35,
                         child: TextFormField(
                           decoration: const InputDecoration(
                             hintText: 'タップして入力',
@@ -121,7 +120,12 @@ class ProfileUpdateArea extends HookWidget {
                             fontSize: 14.5,
                             fontWeight: FontWeight.bold,
                           ),
-                          controller: playerNameController,
+                          initialValue: context.read(playerNameProvider).state,
+                          onChanged: (String input) {
+                            playerNameState.value = input;
+                            judgeFlgState.value = input != '' &&
+                                context.read(playerNameProvider).state != input;
+                          },
                           inputFormatters: <TextInputFormatter>[
                             LengthLimitingTextInputFormatter(
                               8,
@@ -131,14 +135,12 @@ class ProfileUpdateArea extends HookWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
                   SizedBox(
                     width: 75,
                     height: firstSettingFlg ? 36 : 32,
                     child: ElevatedButton(
-                      onPressed: playerNameController.text != '' &&
-                              context.read(playerNameProvider).state !=
-                                  playerNameController.text
+                      onPressed: judgeFlgState.value
                           ? () async {
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
@@ -147,11 +149,12 @@ class ProfileUpdateArea extends HookWidget {
                                 isNotification: true,
                                 volume: seVolume,
                               );
+                              judgeFlgState.value = false;
                               // プレイヤー名
                               context.read(playerNameProvider).state =
-                                  playerNameController.text;
+                                  playerNameState.value;
                               prefs.setString(
-                                  'playerName', playerNameController.text);
+                                  'playerName', playerNameState.value);
 
                               if (firstSettingFlg) {
                                 // ユーザー登録を行う
@@ -163,16 +166,14 @@ class ProfileUpdateArea extends HookWidget {
                         padding:
                             EdgeInsets.only(top: firstSettingFlg ? 0 : 1.5),
                         child: Text(
-                          firstSettingFlg ? '進む' : '名前更新',
+                          firstSettingFlg ? '進む' : '名前変更',
                           style: TextStyle(
                             fontSize: firstSettingFlg ? null : 15,
                           ),
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: playerNameController.text != '' &&
-                                context.read(playerNameProvider).state !=
-                                    playerNameController.text
+                        primary: judgeFlgState.value
                             ? Colors.blue
                             : Colors.blue.shade200,
                         padding: const EdgeInsets.only(

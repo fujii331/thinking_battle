@@ -6,6 +6,7 @@ import 'package:thinking_battle/models/skill.model.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 
 import 'package:thinking_battle/data/skills.dart';
 import 'package:thinking_battle/widgets/common/skill_tooltip.widget.dart';
@@ -61,11 +62,6 @@ class SkillModal extends HookWidget {
                     color: Colors.black,
                   ),
                   onPressed: () {
-                    soundEffect.play(
-                      'sounds/cancel.mp3',
-                      isNotification: true,
-                      volume: seVolume,
-                    );
                     Navigator.pop(context);
                   },
                 ),

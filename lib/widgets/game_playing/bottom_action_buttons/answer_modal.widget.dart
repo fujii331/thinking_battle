@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +15,8 @@ import 'package:thinking_battle/services/game_playing/common_action.service.dart
 class AnswerModal extends HookWidget {
   final BuildContext screenContext;
   final ScrollController scrollController;
+  final DatabaseReference firebaseRef;
+  final StreamSubscription<Event>? messagesSubscription;
   final AudioCache soundEffect;
   final double seVolume;
   final bool myTurnFlg;
@@ -20,6 +25,8 @@ class AnswerModal extends HookWidget {
   const AnswerModal(
     this.screenContext,
     this.scrollController,
+    this.firebaseRef,
+    this.messagesSubscription,
     this.soundEffect,
     this.seVolume,
     this.myTurnFlg,
@@ -53,11 +60,6 @@ class AnswerModal extends HookWidget {
                     color: Colors.black,
                   ),
                   onPressed: () {
-                    soundEffect.play(
-                      'sounds/cancel.mp3',
-                      isNotification: true,
-                      volume: seVolume,
-                    );
                     Navigator.pop(context);
                   },
                 ),
@@ -161,22 +163,33 @@ class AnswerModal extends HookWidget {
                           hiraganaState.value = true;
                           context.read(myTurnFlgProvider).state = false;
 
-                          final sendContent = SendContent(
-                            questionId: 0,
-                            answer: inputAnswer,
-                            skillIds: [],
-                          );
+                          if (context.read(matchingRoomIdProvider).state !=
+                              '') {
+                            firebaseRef.push().set({
+                              'questionId': 0,
+                              'answer': inputAnswer,
+                              'skill1': null,
+                              'skill2': null,
+                              'skill3': null,
+                            });
+                          } else {
+                            final sendContent = SendContent(
+                              questionId: 0,
+                              answer: inputAnswer,
+                              skillIds: [],
+                            );
 
-                          // ターン行動実行
-                          turnAction(
-                            screenContext,
-                            sendContent,
-                            true,
-                            scrollController,
-                            false,
-                            soundEffect,
-                            seVolume,
-                          );
+                            // ターン行動実行
+                            turnAction(
+                              screenContext,
+                              sendContent,
+                              true,
+                              scrollController,
+                              soundEffect,
+                              seVolume,
+                              messagesSubscription,
+                            );
+                          }
 
                           Navigator.pop(context);
                         } else {

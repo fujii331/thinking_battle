@@ -5,8 +5,15 @@ import 'package:audioplayers/audioplayers.dart';
 
 import '../../providers/common.provider.dart';
 
-class FaildLoading extends HookWidget {
-  const FaildLoading({Key? key}) : super(key: key);
+class CommentModal extends HookWidget {
+  final String topText;
+  final String secondText;
+
+  // ignore: use_key_in_widget_constructors
+  const CommentModal(
+    this.topText,
+    this.secondText,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +30,17 @@ class FaildLoading extends HookWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const Text(
-            '読み込み失敗！',
-            style: TextStyle(
+          Text(
+            topText,
+            style: const TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
-            style: TextStyle(
+          Text(
+            secondText,
+            style: const TextStyle(
               fontSize: 18.0,
               fontFamily: 'Stick',
             ),

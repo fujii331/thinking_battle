@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/my_room.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/sound_mode.widget.dart';
 
@@ -34,7 +34,7 @@ class BottomIconButtons extends HookWidget {
 
   void toMyRoom(
     BuildContext context,
-    TextEditingController playerNameController,
+    // TextEditingController playerNameController,
   ) =>
       AwesomeDialog(
         context: context,
@@ -45,12 +45,12 @@ class BottomIconButtons extends HookWidget {
         showCloseIcon: true,
         animType: AnimType.SCALE,
         width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
-        body: MyRoom(playerNameController),
+        body: MyRoom(),
       ).show();
 
   @override
   Widget build(BuildContext context) {
-    final playerNameController = useTextEditingController();
+    // final playerNameController = useTextEditingController();
 
     return Container(
       padding: const EdgeInsets.only(bottom: 20),
@@ -65,7 +65,7 @@ class BottomIconButtons extends HookWidget {
             soundEffect,
             1,
             seVolume,
-            playerNameController,
+            // playerNameController,
           ),
           _iconButton(
             context,
@@ -74,7 +74,7 @@ class BottomIconButtons extends HookWidget {
             soundEffect,
             2,
             seVolume,
-            null,
+            // null,
           ),
           _iconButton(
             context,
@@ -83,7 +83,7 @@ class BottomIconButtons extends HookWidget {
             soundEffect,
             3,
             seVolume,
-            null,
+            // null,
           ),
         ],
       ),
@@ -97,7 +97,7 @@ class BottomIconButtons extends HookWidget {
     AudioCache soundEffect,
     int buttonPuttern,
     double seVolume,
-    TextEditingController? playerNameController,
+    // TextEditingController? playerNameController,
   ) {
     return IconButton(
       iconSize: 28,
@@ -112,10 +112,10 @@ class BottomIconButtons extends HookWidget {
           volume: seVolume,
         );
         if (buttonPuttern == 1) {
-          playerNameController!.text = context.read(playerNameProvider).state;
+          // playerNameController!.text = context.read(playerNameProvider).state;
           toMyRoom(
             context,
-            playerNameController,
+            // playerNameController,
           );
         } else if (buttonPuttern == 2) {
           toSoundMode(context);

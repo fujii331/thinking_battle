@@ -23,6 +23,7 @@ String commonInitialAction(
   context.read(forceQuestionFlgProvider).state = false;
   context.read(spChargeTurnProvider).state = 0;
   context.read(turnCountProvider).state = 0;
+  context.read(timerCancelFlgProvider).state = false;
 
   // 問題を設定
   context.read(allQuestionsProvider).state = quiz.questions;
@@ -34,7 +35,10 @@ String commonInitialAction(
 void trainingInitialAction(
   BuildContext context,
 ) {
-  context.read(enemySkillPointProvider).state = 15;
+  context.read(enemySkillPointProvider).state = 5;
+
+  final bool precedingFlg = Random().nextInt(2) == 0 ? true : false;
+  context.read(precedingFlgProvider).state = precedingFlg;
 
   final List<List<int>> skillListData = [
     [1, 2, 3],
@@ -48,25 +52,12 @@ void trainingInitialAction(
   context.read(enemySkillsProvider).state = skillList;
 
   context.read(rivalInfoProvider).state = PlayerInfo(
-    name: 'CPU',
+    name: '坊やくん',
     rate: 1500.0,
     maxRate: 1500.0,
     imageNumber: 9,
     matchedCount: 0,
+    continuousWinCount: 0,
     skillList: skillList,
-    color: Colors.blue,
   );
-
-  // マッチング時の処理
-  //   final PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;
-
-  // context.read(rivalColorProvider).state = rivalInfo.maxRate >= 1500
-  //     ? Colors.purple
-  //     : rivalInfo.maxRate >= 1250
-  //         ? Colors.red
-  //         : rivalInfo.maxRate >= 1000
-  //             ? Colors.orange
-  //             : rivalInfo.maxRate >= 750
-  //                 ? Colors.green
-  //                 : Colors.blue;
 }

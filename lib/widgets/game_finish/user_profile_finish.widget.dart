@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:thinking_battle/services/return_color.service.dart';
 
 class UserProfileFinish extends StatelessWidget {
-  final MaterialColor userColor;
   final int imageNumber;
   final int matchedCount;
+  final int continuousWinCount;
   final String userName;
   final double userRate;
+  final double maxRate;
   final bool myDataFlg;
   final bool? winFlg;
   final bool trainingFlg;
 
   // ignore: use_key_in_widget_constructors
   const UserProfileFinish(
-    this.userColor,
     this.imageNumber,
     this.matchedCount,
+    this.continuousWinCount,
     this.userName,
     this.userRate,
+    this.maxRate,
     this.myDataFlg,
     this.winFlg,
     this.trainingFlg,
@@ -24,6 +27,8 @@ class UserProfileFinish extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List colorSet = returnColor(maxRate);
+
     return Stack(
       children: [
         Container(
@@ -37,17 +42,7 @@ class UserProfileFinish extends StatelessWidget {
             gradient: LinearGradient(
               begin: FractionalOffset.topLeft,
               end: FractionalOffset.bottomRight,
-              colors: myDataFlg
-                  ? [
-                      Colors.deepPurple.shade900,
-                      Colors.blue.shade900,
-                      Colors.indigo.shade900,
-                    ]
-                  : [
-                      Colors.pink.shade900,
-                      const Color.fromRGBO(195, 10, 127, 0.6),
-                      const Color.fromRGBO(255, 90, 87, 0.5),
-                    ],
+              colors: colorSet[0],
               stops: const [
                 0.2,
                 0.6,
@@ -55,7 +50,7 @@ class UserProfileFinish extends StatelessWidget {
               ],
             ),
             border: Border.all(
-              color: myDataFlg ? Colors.indigo.shade800 : Colors.pink.shade800,
+              color: colorSet[2],
               width: 3,
             ),
           ),
@@ -64,7 +59,6 @@ class UserProfileFinish extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _playerIcon(
-                userColor,
                 imageNumber,
               ),
               const SizedBox(width: 45),
@@ -73,6 +67,7 @@ class UserProfileFinish extends StatelessWidget {
                 matchedCount,
                 winFlg,
                 trainingFlg,
+                myDataFlg,
               ),
             ],
           ),
@@ -92,15 +87,7 @@ class UserProfileFinish extends StatelessWidget {
               gradient: LinearGradient(
                 begin: FractionalOffset.topLeft,
                 end: FractionalOffset.bottomRight,
-                colors: myDataFlg
-                    ? [
-                        Colors.blue.shade900,
-                        Colors.indigo.shade500,
-                      ]
-                    : [
-                        Colors.red.shade900,
-                        Colors.pink.shade800,
-                      ],
+                colors: colorSet[1],
                 stops: const [
                   0.6,
                   0.9,
@@ -138,24 +125,38 @@ class UserProfileFinish extends StatelessWidget {
             ),
           ),
         ),
+        continuousWinCount > 1
+            ? Padding(
+                padding: const EdgeInsets.only(left: 60.0, top: 5),
+                child: Text(
+                  continuousWinCount.toString() + ' 連勝中！',
+                  style: TextStyle(
+                    color: Colors.yellow.shade100,
+                    fontFamily: 'KaiseiOpti',
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            : const SizedBox(),
       ],
     );
   }
 
   Widget _playerIcon(
-    MaterialColor playerColor,
     int imageNumber,
   ) {
     return Padding(
       padding: const EdgeInsets.only(top: 40),
       child: Container(
-        width: 75,
-        height: 75,
+        width: 72,
+        height: 72,
         decoration: BoxDecoration(
           color: Colors.grey.shade50,
           border: Border.all(
-            color: playerColor,
-            width: 4,
+            color: Colors.grey.shade800,
+            width: 2,
           ),
           borderRadius: const BorderRadius.all(
             Radius.circular(10),
@@ -178,6 +179,7 @@ class UserProfileFinish extends StatelessWidget {
     int matchedCount,
     bool? winFlg,
     bool trainingFlg,
+    bool myDataFlg,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +195,8 @@ class UserProfileFinish extends StatelessWidget {
           ),
         ),
         Text(
-          (matchedCount + (trainingFlg ? 0 : 1)).toString() + ' 回',
+          (matchedCount + (!trainingFlg && !myDataFlg ? 1 : 0)).toString() +
+              ' 回',
           style: const TextStyle(
             color: Colors.white,
             fontFamily: 'KaiseiOpti',

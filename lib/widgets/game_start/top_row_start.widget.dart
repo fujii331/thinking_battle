@@ -3,12 +3,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class TopRowStart extends StatelessWidget {
   final bool matchingFlg;
-  final bool trainingFlg;
 
   // ignore: use_key_in_widget_constructors
   const TopRowStart(
     this.matchingFlg,
-    this.trainingFlg,
   );
 
   @override
@@ -20,7 +18,7 @@ class TopRowStart extends StatelessWidget {
             ? Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
-                  trainingFlg ? '準備できた！' : 'マッチング！',
+                  '準備完了！',
                   style: TextStyle(
                     color: Colors.yellow.shade100,
                     fontSize: 26,
@@ -44,7 +42,7 @@ class TopRowStart extends StatelessWidget {
                   ),
                   const SizedBox(width: 15),
                   Text(
-                    trainingFlg ? '準備中' : 'マッチング中...',
+                    '待機中...',
                     style: TextStyle(
                       color: Colors.yellow.shade200,
                       fontSize: 26,

@@ -6,15 +6,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
-import 'package:thinking_battle/services/return_color.service.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 
-Future updateLate(
+Future updateRate(
   BuildContext context,
-  double myRate,
-  double rivalRate,
   bool winFlg,
 ) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  final double myRate = context.read(rateProvider).state;
+
+  // 敵のレート
+  final PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;
+  final double rivalRate = rivalInfo.rate;
 
   final double newRate = getNewRate(
     myRate,
@@ -22,44 +25,39 @@ Future updateLate(
     winFlg,
   );
 
-  // レート更新
-  context.read(rateProvider).state = newRate;
-  prefs.setDouble('rate', newRate);
-
-  // 敵のレート更新
-  PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;
-  MaterialColor rivalColor = rivalInfo.color;
-
   final double newRivalRate = getNewRate(
     rivalRate,
     myRate,
     !winFlg,
   );
 
-  if (newRivalRate > rivalInfo.maxRate) {
-    rivalColor = returnColor(newRivalRate);
-  }
+  // レート更新
+  context.read(rateProvider).state = newRate;
+  prefs.setDouble('rate', newRate);
 
   // レート更新
-  rivalInfo = PlayerInfo(
+  context.read(rivalInfoProvider).state = PlayerInfo(
     name: rivalInfo.name,
     rate: newRivalRate,
-    maxRate: rivalInfo.maxRate,
+    maxRate:
+        newRivalRate > rivalInfo.maxRate ? newRivalRate : rivalInfo.maxRate,
     imageNumber: rivalInfo.imageNumber,
     matchedCount: rivalInfo.matchedCount,
+    continuousWinCount: winFlg ? 0 : rivalInfo.continuousWinCount + 1,
     skillList: rivalInfo.skillList,
-    color: rivalColor,
   );
 
-  final double maxRate = context.read(maxRateProvider).state;
+  // 接続が切れた場合のレートを更新
+  prefs.setDouble('failedRate', 0.0);
 
-  // 最大レート更新時
-  if (newRate > maxRate) {
-    context.read(maxRateProvider).state = newRate;
-    prefs.setDouble('maxRate', newRate);
+  if (winFlg) {
+    final double maxRate = context.read(maxRateProvider).state;
 
-    // カラー
-    context.read(colorProvider).state = returnColor(newRate);
+    // 最大レート更新時
+    if (newRate > maxRate) {
+      context.read(maxRateProvider).state = newRate;
+      prefs.setDouble('maxRate', newRate);
+    }
   }
 }
 

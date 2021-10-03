@@ -20,49 +20,77 @@ class PlayGameButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: () async {
-            context.read(rivalInfoProvider).state = dummyPlayerInfo;
-
-            soundEffect.play(
-              'sounds/tap.mp3',
-              isNotification: true,
-              volume: seVolume,
-            );
-
-            context.read(bgmProvider).state.stop();
-
-            context.read(trainingProvider).state = true;
-
-            Navigator.of(context).pushNamed(
-              GameStartScreen.routeName,
-            );
-          },
-          child: const Text(
-            'トレーニング',
-            style: TextStyle(
-              fontSize: 25,
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.lime.shade700,
-            elevation: 8,
-            shadowColor: Colors.blue,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            textStyle: Theme.of(context).textTheme.button,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            side: BorderSide(
-              width: 4,
-              color: Colors.grey.shade800,
-            ),
-          ),
+        _playButton(
+          context,
+          'トレーニング',
+          Colors.lime.shade800,
+          1,
+        ),
+        const SizedBox(height: 25),
+        _playButton(
+          context,
+          'ランダムマッチ',
+          Colors.lightBlue.shade600,
+          2,
         ),
       ],
+    );
+  }
+
+  Widget _playButton(
+    BuildContext context,
+    String text,
+    Color color,
+    int buttonNumber,
+  ) {
+    return SizedBox(
+      width: 210,
+      child: ElevatedButton(
+        onPressed: () async {
+          context.read(rivalInfoProvider).state = dummyPlayerInfo;
+
+          soundEffect.play(
+            'sounds/tap.mp3',
+            isNotification: true,
+            volume: seVolume,
+          );
+
+          context.read(bgmProvider).state.stop();
+
+          if (buttonNumber == 1) {
+            context.read(trainingProvider).state = true;
+          } else {
+            context.read(trainingProvider).state = false;
+          }
+
+          Navigator.of(context).pushNamed(
+            GameStartScreen.routeName,
+          );
+        },
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 24,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: color,
+          elevation: 8,
+          shadowColor: Colors.grey,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 10,
+          ),
+          textStyle: Theme.of(context).textTheme.button,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          side: BorderSide(
+            width: 2,
+            color: Colors.grey.shade800,
+          ),
+        ),
+      ),
     );
   }
 }

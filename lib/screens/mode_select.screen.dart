@@ -55,7 +55,7 @@ class ModeSelectScreen extends HookWidget {
                       soundEffect,
                       seVolume,
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 35),
                     PlayGameButtons(
                       soundEffect,
                       seVolume,

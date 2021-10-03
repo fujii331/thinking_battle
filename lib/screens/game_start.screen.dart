@@ -6,12 +6,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/screens/game_playing.screen.dart';
+import 'package:thinking_battle/services/game_playing/matching_action.service.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/services/game_playing/initialize_game.service.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
+
 import 'package:thinking_battle/widgets/game_start/center_row_start.widget.dart';
 import 'package:thinking_battle/widgets/game_start/top_row_start.widget.dart';
 import 'package:thinking_battle/widgets/game_start/user_profile_start.widget.dart';
@@ -29,18 +32,23 @@ class GameStartScreen extends HookWidget {
 
     final int imageNumber = useProvider(imageNumberProvider).state;
     final int matchedCount = useProvider(matchedCountProvider).state;
+    final int continuousWinCount =
+        useProvider(continuousWinCountProvider).state;
     final String playerName = useProvider(playerNameProvider).state;
     final double rate = useProvider(rateProvider).state;
-    final MaterialColor color = useProvider(colorProvider).state;
+    final double maxRate = useProvider(maxRateProvider).state;
     final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
     final bool trainingFlg = context.read(trainingProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
 
     final matchingQuitFlg = useState(false);
+    final matchingFlg = useState(false);
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         context.read(rivalInfoProvider).state = dummyPlayerInfo;
+        context.read(matchingWaitingIdProvider).state = '';
+        context.read(matchingRoomIdProvider).state = '';
 
         await Future.delayed(
           const Duration(milliseconds: 500),
@@ -61,10 +69,16 @@ class GameStartScreen extends HookWidget {
             );
           }
         } else {
-          // 対戦数
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          context.read(matchedCountProvider).state += 1;
-          prefs.setInt('matchCount', context.read(matchedCountProvider).state);
+          await matchingAction(
+            context,
+            imageNumber,
+            playerName,
+            rate,
+            maxRate,
+            matchedCount,
+            continuousWinCount,
+            mySkillIdsList,
+          );
         }
 
         if (!matchingQuitFlg.value) {
@@ -75,21 +89,22 @@ class GameStartScreen extends HookWidget {
           );
 
           await Future.delayed(
+            const Duration(milliseconds: 100),
+          );
+
+          matchingFlg.value = true;
+
+          await Future.delayed(
             const Duration(milliseconds: 5000),
           );
 
           context.read(bgmProvider).state.stop();
 
-          final bool precedingFlg = Random().nextInt(2) == 0 ? true : false;
-
           final String thema = commonInitialAction(context);
 
           Navigator.of(context).pushReplacementNamed(
             GamePlayingScreen.routeName,
-            arguments: [
-              precedingFlg,
-              thema,
-            ],
+            arguments: thema,
           );
         }
       });
@@ -118,19 +133,26 @@ class GameStartScreen extends HookWidget {
                       // const SizedBox(height: 30),
                       TopRowStart(
                         rivalInfo.skillList.isNotEmpty,
-                        trainingFlg,
                       ),
-
-                      UserProfileStart(
-                        rivalInfo.color,
-                        rivalInfo.imageNumber,
-                        rivalInfo.matchedCount,
-                        rivalInfo.name,
-                        rivalInfo.rate,
-                        rivalInfo.skillList,
-                        false,
-                        true,
-                      ),
+                      rivalInfo.skillList.isNotEmpty
+                          // rivalInfo.skillList.isEmpty
+                          ? AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: matchingFlg.value ? 1 : 0,
+                              child: UserProfileStart(
+                                rivalInfo.imageNumber,
+                                rivalInfo.matchedCount,
+                                rivalInfo.continuousWinCount,
+                                rivalInfo.name,
+                                rivalInfo.rate,
+                                rivalInfo.maxRate,
+                                rivalInfo.skillList,
+                                true,
+                              ),
+                            )
+                          : const SizedBox(
+                              height: 158,
+                            ),
                       CenterRowStart(
                         rivalInfo.skillList.isNotEmpty,
                         trainingFlg,
@@ -139,13 +161,13 @@ class GameStartScreen extends HookWidget {
                         matchingQuitFlg,
                       ),
                       UserProfileStart(
-                        color,
                         imageNumber,
                         matchedCount,
+                        continuousWinCount,
                         playerName,
                         rate,
+                        maxRate,
                         mySkillIdsList,
-                        true,
                         true,
                       ),
                     ],

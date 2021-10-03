@@ -103,7 +103,6 @@ class ContentList extends HookWidget {
                         context,
                         targetContent,
                         rivalInfo.imageNumber,
-                        rivalInfo.color,
                         displayNumber,
                       ),
                     ],
@@ -169,7 +168,6 @@ class ContentList extends HookWidget {
     BuildContext context,
     DisplayContent targetContent,
     int rivalImageNumber,
-    MaterialColor rivalColor,
     int displayNumber,
   ) {
     return targetContent.myTurnFlg
@@ -201,7 +199,7 @@ class ContentList extends HookWidget {
                           decoration: BoxDecoration(
                             color: Colors.grey.shade50,
                             border: Border.all(
-                              color: rivalColor,
+                              color: Colors.grey.shade800,
                               width: 1,
                             ),
                             borderRadius: const BorderRadius.all(

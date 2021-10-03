@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -64,11 +65,21 @@ class _WidgetObserverState extends HookState<void, _WidgetObserver>
   void initHook() {
     super.initHook();
     Future(() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      // 音量設定
+      final double? bgmVolume = prefs.getDouble('bgmVolume');
+
+      if (bgmVolume != null) {
+        context.read(bgmVolumeProvider).state = bgmVolume;
+      } else {
+        prefs.setDouble('bgmVolume', 0.2);
+      }
+
       context.read(bgmProvider).state =
           await context.read(soundEffectProvider).state.loop(
                 'sounds/title.mp3',
                 isNotification: true,
-                volume: 0,
+                volume: context.read(bgmVolumeProvider).state,
               );
     });
     WidgetsBinding.instance!.addObserver(this);
@@ -78,6 +89,18 @@ class _WidgetObserverState extends HookState<void, _WidgetObserver>
   void dispose() {
     // timerを止める
     context.read(timerCancelFlgProvider).state = true;
+
+    if (context.read(matchingWaitingIdProvider).state != '') {
+      // 待機中ユーザーの削除
+      FirebaseFirestore.instance
+          .collection('random-matching-room')
+          .doc(context.read(matchingWaitingIdProvider).state)
+          .delete()
+          .catchError((error) async {
+        // データ削除に失敗した場合
+        // 何もしない
+      });
+    }
 
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
@@ -103,6 +126,11 @@ class MyApp extends HookWidget {
     useWidgetLifecycleObserver(
       context,
     );
+
+    context
+        .read(bgmProvider)
+        .state
+        .setVolume(context.read(bgmVolumeProvider).state);
 
     return MaterialApp(
       title: '水平思考対戦',
@@ -138,7 +166,7 @@ class MyApp extends HookWidget {
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
-          builder: (ctx) => TitleScreen(),
+          builder: (ctx) => const TitleScreen(),
         );
       },
     );

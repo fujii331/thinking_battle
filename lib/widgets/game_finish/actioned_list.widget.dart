@@ -89,7 +89,11 @@ class ActionedList extends HookWidget {
                         return Padding(
                           padding: EdgeInsets.only(
                             bottom: 10,
-                            top: skillList.isNotEmpty ? 2 : 10,
+                            top: index == 0
+                                ? 0
+                                : skillList.isNotEmpty
+                                    ? 2
+                                    : 10,
                             left: 2,
                             right: 2,
                           ),
@@ -108,7 +112,6 @@ class ActionedList extends HookWidget {
                                 context,
                                 targetContent,
                                 rivalInfo.imageNumber,
-                                rivalInfo.color,
                               ),
                             ],
                           ),
@@ -157,7 +160,6 @@ class ActionedList extends HookWidget {
     BuildContext context,
     DisplayContent targetContent,
     int rivalImageNumber,
-    MaterialColor rivalColor,
   ) {
     return targetContent.myTurnFlg
         ? Row(
@@ -181,7 +183,7 @@ class ActionedList extends HookWidget {
                 decoration: BoxDecoration(
                   color: Colors.grey.shade50,
                   border: Border.all(
-                    color: rivalColor,
+                    color: Colors.grey.shade800,
                     width: 1,
                   ),
                   borderRadius: const BorderRadius.all(

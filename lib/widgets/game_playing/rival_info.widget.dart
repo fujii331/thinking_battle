@@ -32,13 +32,13 @@ class RivalInfo extends StatelessWidget {
           Container(
             color: Colors.grey.shade900,
             child: UserProfileStart(
-              rivalInfo.color,
               rivalInfo.imageNumber,
               rivalInfo.matchedCount,
+              rivalInfo.continuousWinCount,
               rivalInfo.name,
               rivalInfo.rate,
+              rivalInfo.maxRate,
               rivalInfo.skillList,
-              false,
               false,
             ),
           ),

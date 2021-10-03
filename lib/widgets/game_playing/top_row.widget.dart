@@ -74,7 +74,7 @@ class TopRow extends HookWidget {
               decoration: BoxDecoration(
                 color: Colors.grey.shade50,
                 border: Border.all(
-                  color: rivalInfo.color,
+                  color: Colors.grey.shade800,
                   width: 2,
                 ),
                 borderRadius: const BorderRadius.all(

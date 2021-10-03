@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/screens/mode_select.screen.dart';
-import 'package:thinking_battle/widgets/common/failed_loading.widget.dart';
+import 'package:thinking_battle/widgets/common/comment_modal.widget.dart';
 import 'package:thinking_battle/widgets/common/loading_modal.widget.dart';
 
 Future signUp(
@@ -56,7 +56,10 @@ Future signUp(
       showCloseIcon: true,
       animType: AnimType.SCALE,
       width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
-      body: const FaildLoading(),
+      body: const CommentModal(
+        '読み込み失敗！',
+        'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
+      ),
     ).show();
   }
 }
@@ -93,7 +96,10 @@ Future login(
       showCloseIcon: true,
       animType: AnimType.SCALE,
       width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
-      body: const FaildLoading(),
+      body: const CommentModal(
+        '読み込み失敗！',
+        'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
+      ),
     ).show();
   }
 }

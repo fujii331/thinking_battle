@@ -1,33 +1,46 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
-import 'package:thinking_battle/providers/game.provider.dart';
-import 'package:thinking_battle/services/return_color.service.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
+import 'package:thinking_battle/widgets/common/comment_modal.widget.dart';
 
 void firstSetting(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
+  final double? failedRate = prefs.getDouble('failedRate');
+  // レート設定
+  if (failedRate != null && failedRate != 0.0) {
+    context.read(continuousWinCountProvider).state = 0;
+    prefs.setInt('continuousWinCount', 0);
+    prefs.setDouble('rate', failedRate);
+    prefs.setDouble('failedRate', 0.0);
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.NO_HEADER,
+      headerAnimationLoop: false,
+      dismissOnTouchOutside: true,
+      dismissOnBackKeyPress: true,
+      showCloseIcon: true,
+      animType: AnimType.SCALE,
+      width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+      body: const CommentModal(
+        '！注意！',
+        '前回の対戦中にアプリが終了しました。\nマナーを守ってのプレイにご協力をお願いします。',
+      ),
+    ).show();
+  }
+
   // 音量設定
-  final double? bgmVolume = prefs.getDouble('bgmVolume');
   final double? seVolume = prefs.getDouble('seVolume');
 
-  if (bgmVolume != null) {
-    context.read(bgmVolumeProvider).state = bgmVolume;
-  } else {
-    prefs.setDouble('bgmVolume', 0.2);
-  }
   if (seVolume != null) {
     context.read(seVolumeProvider).state = seVolume;
   } else {
     prefs.setDouble('seVolume', 0.5);
   }
-
-  context
-      .read(bgmProvider)
-      .state
-      .setVolume(context.read(bgmVolumeProvider).state);
 
   context.read(soundEffectProvider).state.loadAll([
     'sounds/cancel.mp3',
@@ -58,8 +71,6 @@ void firstSetting(BuildContext context) async {
   // 最大レート
   final double maxRate = context.read(maxRateProvider).state =
       prefs.getDouble('maxRate') ?? 1500.0;
-  // カラー
-  context.read(colorProvider).state = returnColor(maxRate);
 
   // スキル
   context.read(mySkillIdsListProvider).state =
@@ -74,6 +85,12 @@ void firstSetting(BuildContext context) async {
   context.read(matchedCountProvider).state = prefs.getInt('matchCount') ?? 0;
   // 勝利数
   context.read(winCountProvider).state = prefs.getInt('winCount') ?? 0;
+  // 連続勝利数
+  context.read(continuousWinCountProvider).state =
+      prefs.getInt('continuousWinCount') ?? 0;
+  // 最大連続勝利数
+  context.read(maxContinuousWinCountProvider).state =
+      prefs.getInt('maxContinuousWinCount') ?? 0;
 
   // ライフ
   // if (prefs.getString('saveTime') != null) {

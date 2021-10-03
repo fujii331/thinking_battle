@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:thinking_battle/models/quiz.model.dart';
 
-List getNiceQuestion(
+int getNiceQuestion(
   BuildContext context,
   List<Question> allQuestions,
 ) {
@@ -16,11 +16,11 @@ List getNiceQuestion(
     final importance2Questions =
         allQuestions.where((question) => question.importance == 2).toList();
     if (importance2Questions.isEmpty) {
-      return [allQuestions.first.id, true];
+      return allQuestions.first.id;
     } else {
-      return [importance2Questions.first.id, false];
+      return importance2Questions.first.id;
     }
   } else {
-    return [importantQuestions.first.id, false];
+    return importantQuestions.first.id;
   }
 }

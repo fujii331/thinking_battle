@@ -5,7 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
-import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 
 class EditImage extends HookWidget {
   const EditImage({Key? key}) : super(key: key);

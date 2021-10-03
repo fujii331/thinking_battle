@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
-import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/title//authentication.service.dart';
 import 'package:thinking_battle/widgets/title/first_setting.widget.dart';
 
