@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -5,6 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/screens/game_start.screen.dart';
+import 'package:thinking_battle/widgets/mode_select/password_setting.widget.dart';
 
 class PlayGameButtons extends StatelessWidget {
   final AudioCache soundEffect;
@@ -26,12 +28,19 @@ class PlayGameButtons extends StatelessWidget {
           Colors.lime.shade800,
           1,
         ),
-        const SizedBox(height: 25),
+        const SizedBox(height: 20),
         _playButton(
           context,
           'ランダムマッチ',
           Colors.lightBlue.shade600,
           2,
+        ),
+        const SizedBox(height: 20),
+        _playButton(
+          context,
+          'フレンドマッチ',
+          Colors.deepOrange.shade500,
+          3,
         ),
       ],
     );
@@ -47,25 +56,39 @@ class PlayGameButtons extends StatelessWidget {
       width: 210,
       child: ElevatedButton(
         onPressed: () async {
-          context.read(rivalInfoProvider).state = dummyPlayerInfo;
-
           soundEffect.play(
             'sounds/tap.mp3',
             isNotification: true,
             volume: seVolume,
           );
 
-          context.read(bgmProvider).state.stop();
-
-          if (buttonNumber == 1) {
-            context.read(trainingProvider).state = true;
+          if (buttonNumber == 3) {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.NO_HEADER,
+              headerAnimationLoop: false,
+              dismissOnTouchOutside: true,
+              dismissOnBackKeyPress: true,
+              showCloseIcon: true,
+              animType: AnimType.SCALE,
+              width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+              body: const PasswordSetting(),
+            ).show();
           } else {
-            context.read(trainingProvider).state = false;
-          }
+            context.read(rivalInfoProvider).state = dummyPlayerInfo;
+            context.read(friendMatchWordProvider).state = '';
+            context.read(bgmProvider).state.stop();
 
-          Navigator.of(context).pushNamed(
-            GameStartScreen.routeName,
-          );
+            if (buttonNumber == 1) {
+              context.read(trainingProvider).state = true;
+            } else {
+              context.read(trainingProvider).state = false;
+            }
+
+            Navigator.of(context).pushNamed(
+              GameStartScreen.routeName,
+            );
+          }
         },
         child: Text(
           text,
@@ -79,7 +102,7 @@ class PlayGameButtons extends StatelessWidget {
           shadowColor: Colors.grey,
           padding: const EdgeInsets.symmetric(
             horizontal: 20,
-            vertical: 10,
+            vertical: 9,
           ),
           textStyle: Theme.of(context).textTheme.button,
           shape: RoundedRectangleBorder(

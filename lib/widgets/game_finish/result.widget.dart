@@ -32,6 +32,9 @@ class Result extends HookWidget {
     final double maxRate = useProvider(maxRateProvider).state;
     final bool trainingFlg = useProvider(trainingProvider).state;
     final bool changedTraining = useProvider(changedTrainingProvider).state;
+    final String friendMatchWord = useProvider(friendMatchWordProvider).state;
+    final bool notRateChangeFlg =
+        (trainingFlg && !changedTraining) || friendMatchWord != '';
 
     return Scaffold(
       body: Stack(
@@ -61,7 +64,7 @@ class Result extends HookWidget {
                       rivalInfo.maxRate,
                       false,
                       winFlg == null ? null : !winFlg!,
-                      trainingFlg && !changedTraining,
+                      notRateChangeFlg,
                     ),
                     const SizedBox(height: 15),
                     CenterRowFinish(winFlg),
@@ -75,7 +78,7 @@ class Result extends HookWidget {
                       maxRate,
                       true,
                       winFlg,
-                      trainingFlg && !changedTraining,
+                      notRateChangeFlg,
                     ),
                   ],
                 ),

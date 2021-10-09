@@ -12,7 +12,7 @@ class TitleWord extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            '水平思考対戦',
+            '水平思考\nモンスターズ',
             textAlign: TextAlign.center,
             style: TextStyle(
               height: 1.2,

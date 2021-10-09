@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class FaildMatching extends HookWidget {
-  const FaildMatching({Key? key}) : super(key: key);
+  final String topText;
+  final String secondText;
+
+  // ignore: use_key_in_widget_constructors
+  const FaildMatching(
+    this.topText,
+    this.secondText,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +22,18 @@ class FaildMatching extends HookWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const <Widget>[
+        children: <Widget>[
           Text(
-            '通信失敗！',
-            style: TextStyle(
+            topText,
+            style: const TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
-            '電波状況をご確認ください。\nメニュー画面に戻ります。',
-            style: TextStyle(
+            secondText,
+            style: const TextStyle(
               fontSize: 18.0,
               fontFamily: 'Stick',
             ),

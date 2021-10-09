@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,6 +23,8 @@ class GameFinishScreen extends HookWidget {
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
     final bool trainingFlg = useProvider(trainingProvider).state;
     final bool changedTraining = useProvider(changedTrainingProvider).state;
+    final String friendMatchWord = useProvider(friendMatchWordProvider).state;
+    final bool friendMatchFlg = friendMatchWord != '';
 
     final screenNo = useState<int>(0);
     final pageController = usePageController(initialPage: 0, keepPage: true);
@@ -30,44 +32,52 @@ class GameFinishScreen extends HookWidget {
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         context.read(bgmProvider).state.stop();
-        context.read(timerCancelFlgProvider).state = true;
         await Future.delayed(
           const Duration(milliseconds: 500),
         );
 
         if (!trainingFlg || changedTraining) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          // 対戦数
-          context.read(matchedCountProvider).state += 1;
-          prefs.setInt('matchCount', context.read(matchedCountProvider).state);
+
+          if (!friendMatchFlg) {
+            // 対戦数
+            context.read(matchedCountProvider).state += 1;
+            prefs.setInt(
+                'matchCount', context.read(matchedCountProvider).state);
+          }
 
           if (winFlg == true) {
-            if (!trainingFlg && !changedTraining) {
-              // ランダムマッチの部屋
-              DatabaseReference firebaseInstance = FirebaseDatabase.instance
-                  .reference()
-                  .child('random-match/' +
-                      context.read(matchingRoomIdProvider).state);
+            // if (!trainingFlg && !changedTraining) {
+            //   // 対戦部屋
+            //   DocumentReference<Map<String, dynamic>>? playingRoomDoc =
+            //       FirebaseFirestore.instance
+            //           .collection('playing-room')
+            //           .doc(context.read(matchingRoomIdProvider).state);
 
-              firebaseInstance.remove().onError((error, stackTrace) => null);
+            //   playingRoomDoc.delete().catchError((error) {
+            //     // データ削除に失敗した場合、何もしない
+            //   });
+            // }
+
+            if (!friendMatchFlg) {
+              // 勝利数
+              context.read(winCountProvider).state += 1;
+              prefs.setInt('winCount', context.read(winCountProvider).state);
+
+              final int updatedCount =
+                  context.read(continuousWinCountProvider).state + 1;
+
+              context.read(continuousWinCountProvider).state = updatedCount;
+              prefs.setInt('continuousWinCount', updatedCount);
+
+              if (updatedCount >
+                  context.read(maxContinuousWinCountProvider).state) {
+                context.read(maxContinuousWinCountProvider).state =
+                    updatedCount;
+                prefs.setInt('maxContinuousWinCount', updatedCount);
+              }
             }
-
-            // 勝利数
-            context.read(winCountProvider).state += 1;
-            prefs.setInt('winCount', context.read(winCountProvider).state);
-
-            final int updatedCount =
-                context.read(continuousWinCountProvider).state + 1;
-
-            context.read(continuousWinCountProvider).state = updatedCount;
-            prefs.setInt('continuousWinCount', updatedCount);
-
-            if (updatedCount >
-                context.read(maxContinuousWinCountProvider).state) {
-              context.read(maxContinuousWinCountProvider).state = updatedCount;
-              prefs.setInt('maxContinuousWinCount', updatedCount);
-            }
-          } else {
+          } else if (!friendMatchFlg) {
             context.read(continuousWinCountProvider).state = 0;
             prefs.setInt('continuousWinCount', 0);
           }

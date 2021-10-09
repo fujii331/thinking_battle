@@ -49,8 +49,6 @@ void trainingInitialAction(
   ];
   final List<int> skillList = skillListData[Random().nextInt(5)];
 
-  context.read(enemySkillsProvider).state = skillList;
-
   context.read(rivalInfoProvider).state = PlayerInfo(
     name: '坊やくん',
     rate: 1500.0,

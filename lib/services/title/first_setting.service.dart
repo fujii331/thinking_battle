@@ -17,20 +17,6 @@ void firstSetting(BuildContext context) async {
     prefs.setInt('continuousWinCount', 0);
     prefs.setDouble('rate', failedRate);
     prefs.setDouble('failedRate', 0.0);
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.NO_HEADER,
-      headerAnimationLoop: false,
-      dismissOnTouchOutside: true,
-      dismissOnBackKeyPress: true,
-      showCloseIcon: true,
-      animType: AnimType.SCALE,
-      width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
-      body: const CommentModal(
-        '！注意！',
-        '前回の対戦中にアプリが終了しました。\nマナーを守ってのプレイにご協力をお願いします。',
-      ),
-    ).show();
   }
 
   // 音量設定

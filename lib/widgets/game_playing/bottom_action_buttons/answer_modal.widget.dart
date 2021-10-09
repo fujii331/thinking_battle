@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,12 +11,13 @@ import 'package:thinking_battle/models/send_content.model.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/services/game_playing/common_action.service.dart';
+import 'package:thinking_battle/services/game_playing/failed_connect.service.dart';
 
 class AnswerModal extends HookWidget {
   final BuildContext screenContext;
   final ScrollController scrollController;
-  final DatabaseReference firebaseRef;
-  final StreamSubscription<Event>? messagesSubscription;
+  final DocumentReference<Map<String, dynamic>>? myActionDoc;
+  final StreamSubscription<DocumentSnapshot>? rivalListenSubscription;
   final AudioCache soundEffect;
   final double seVolume;
   final bool myTurnFlg;
@@ -25,8 +26,8 @@ class AnswerModal extends HookWidget {
   const AnswerModal(
     this.screenContext,
     this.scrollController,
-    this.firebaseRef,
-    this.messagesSubscription,
+    this.myActionDoc,
+    this.rivalListenSubscription,
     this.soundEffect,
     this.seVolume,
     this.myTurnFlg,
@@ -153,7 +154,7 @@ class AnswerModal extends HookWidget {
                   ),
                 ),
                 onPressed: myTurnFlg && inputAnswer.isNotEmpty
-                    ? () {
+                    ? () async {
                         if (RegExp(r'^([ぁ-ん|ー])+$').hasMatch(inputAnswer)) {
                           soundEffect.play(
                             'sounds/tap.mp3',
@@ -163,33 +164,37 @@ class AnswerModal extends HookWidget {
                           hiraganaState.value = true;
                           context.read(myTurnFlgProvider).state = false;
 
-                          if (context.read(matchingRoomIdProvider).state !=
-                              '') {
-                            firebaseRef.push().set({
-                              'questionId': 0,
-                              'answer': inputAnswer,
-                              'skill1': null,
-                              'skill2': null,
-                              'skill3': null,
-                            });
-                          } else {
-                            final sendContent = SendContent(
-                              questionId: 0,
-                              answer: inputAnswer,
-                              skillIds: [],
-                            );
-
-                            // ターン行動実行
-                            turnAction(
-                              screenContext,
-                              sendContent,
-                              true,
-                              scrollController,
-                              soundEffect,
-                              seVolume,
-                              messagesSubscription,
-                            );
+                          // 通信対戦時は相手にデータを送る
+                          if (myActionDoc != null) {
+                            await myActionDoc!
+                                .set({
+                                  'questionId': 0,
+                                  'answer': inputAnswer,
+                                  'skillIds': [],
+                                })
+                                .timeout(const Duration(seconds: 5))
+                                .onError((error, stackTrace) {
+                                  rivalListenSubscription!.cancel();
+                                  failedConnect(context);
+                                });
                           }
+
+                          final sendContent = SendContent(
+                            questionId: 0,
+                            answer: inputAnswer,
+                            skillIds: [],
+                          );
+
+                          // ターン行動実行
+                          turnAction(
+                            screenContext,
+                            sendContent,
+                            true,
+                            scrollController,
+                            soundEffect,
+                            seVolume,
+                            rivalListenSubscription,
+                          );
 
                           Navigator.pop(context);
                         } else {

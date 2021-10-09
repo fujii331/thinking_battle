@@ -1,12 +1,11 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:intl/intl.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
-import 'package:thinking_battle/models/received_content.model.dart';
 import 'dart:async';
 
 import 'package:thinking_battle/models/send_content.model.dart';
@@ -33,7 +32,9 @@ class GamePlayingScreen extends HookWidget {
   void timeStart(
     BuildContext context,
     ScrollController scrollController,
-    StreamSubscription<Event>? messagesSubscription,
+    DocumentReference<Map<String, dynamic>>? myActionDoc,
+    DocumentReference<Map<String, dynamic>>? rivalActionDoc,
+    StreamSubscription<DocumentSnapshot>? rivalListenSubscription,
     AudioCache soundEffect,
     double seVolume,
   ) {
@@ -67,6 +68,22 @@ class GamePlayingScreen extends HookWidget {
                 },
               );
 
+              // 通信対戦時は相手にデータを送る
+              if (myActionDoc != null) {
+                await myActionDoc
+                    .set({
+                      'questionId':
+                          context.read(selectableQuestionsProvider).state[0].id,
+                      'answer': '',
+                      'skillIds': [],
+                    })
+                    .timeout(const Duration(seconds: 5))
+                    .onError((error, stackTrace) {
+                      rivalListenSubscription!.cancel();
+                      failedConnect(context);
+                    });
+              }
+
               final sendContent = SendContent(
                 questionId:
                     context.read(selectableQuestionsProvider).state[0].id,
@@ -82,7 +99,7 @@ class GamePlayingScreen extends HookWidget {
                 scrollController,
                 soundEffect,
                 seVolume,
-                messagesSubscription,
+                rivalListenSubscription,
               );
             }
           }
@@ -100,18 +117,12 @@ class GamePlayingScreen extends HookWidget {
           // 時間切れ判定
           if (DateFormat('ss').format(rivalTurnTime) == '00') {
             context.read(displayRivalturnSetFlgProvider).state = false;
-            if (messagesSubscription != null) {
+            if (rivalListenSubscription != null) {
               // listenを解除
-              messagesSubscription.cancel();
+              rivalListenSubscription.cancel();
             }
 
-            // ランダムマッチの部屋
-            DatabaseReference firebaseInstance = FirebaseDatabase.instance
-                .reference()
-                .child('random-match/' +
-                    context.read(matchingRoomIdProvider).state);
-
-            await firebaseInstance.get().then((DataSnapshot? snapshot) async {
+            await rivalActionDoc!.get().then((DocumentSnapshot<Map> _) async {
               // 接続成功
               AwesomeDialog(
                 context: context,
@@ -133,6 +144,8 @@ class GamePlayingScreen extends HookWidget {
                 context,
                 true,
               );
+
+              context.read(timerCancelFlgProvider).state = true;
 
               await Future.delayed(
                 const Duration(milliseconds: 3500),
@@ -179,45 +192,47 @@ class GamePlayingScreen extends HookWidget {
 
     final scrollController = useScrollController();
 
-    StreamSubscription<Event>? messagesSubscription;
-    final DatabaseReference firebaseRef = FirebaseDatabase.instance
-        .reference()
-        .child('playing-room/' + context.read(matchingRoomIdProvider).state);
+    final DocumentReference<Map<String, dynamic>>? rivalActionDoc =
+        context.read(matchingRoomIdProvider).state != ''
+            ? FirebaseFirestore.instance
+                .collection('playing-room')
+                .doc(context.read(matchingRoomIdProvider).state)
+                .collection('each-action')
+                .doc(precedingFlg ? '後攻' : '先行')
+            : null;
+
+    final DocumentReference<Map<String, dynamic>>? myActionDoc =
+        context.read(matchingRoomIdProvider).state != ''
+            ? FirebaseFirestore.instance
+                .collection('playing-room')
+                .doc(context.read(matchingRoomIdProvider).state)
+                .collection('each-action')
+                .doc(precedingFlg ? '先行' : '後攻')
+            : null;
+
+    StreamSubscription<DocumentSnapshot>? rivalListenSubscription;
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         if (context.read(matchingRoomIdProvider).state != '') {
-          messagesSubscription = firebaseRef.onChildAdded.listen((Event event) {
-            final ReceivedContent receivedContent = event.snapshot.value;
-            final List<int> skillIdsList = [];
+          rivalActionDoc!.delete().catchError((error) {
+            // データ削除に失敗した場合、何もしない
+          });
 
-            if (receivedContent.skill1 != 0) {
-              skillIdsList.add(receivedContent.skill1);
-            }
-
-            if (receivedContent.skill2 != 0) {
-              skillIdsList.add(receivedContent.skill2);
-            }
-
-            if (receivedContent.skill3 != 0) {
-              skillIdsList.add(receivedContent.skill3);
-            }
-
-            final sendContent = SendContent(
-              questionId: receivedContent.questionId,
-              answer: '',
-              skillIds: skillIdsList,
-            );
+          rivalListenSubscription = rivalActionDoc.snapshots().listen(
+              (DocumentSnapshot<Object?> querySnapshot) {
+            SendContent sendContentSnapshot =
+                SendContent.fromJson(querySnapshot);
 
             // ターン行動実行
             turnAction(
               context,
-              sendContent,
-              context.read(displayMyturnSetFlgProvider).state ? true : false,
+              sendContentSnapshot,
+              false,
               scrollController,
               soundEffect,
               seVolume,
-              messagesSubscription,
+              rivalListenSubscription,
             );
           }, onError: (Object o) {
             // 接続失敗
@@ -229,7 +244,9 @@ class GamePlayingScreen extends HookWidget {
         timeStart(
           context,
           scrollController,
-          messagesSubscription,
+          myActionDoc,
+          rivalActionDoc,
+          rivalListenSubscription,
           soundEffect,
           seVolume,
         );
@@ -320,8 +337,8 @@ class GamePlayingScreen extends HookWidget {
                         BottomActionButtons(
                           context,
                           scrollController,
-                          firebaseRef,
-                          messagesSubscription,
+                          myActionDoc,
+                          rivalListenSubscription,
                           soundEffect,
                           seVolume,
                         ),

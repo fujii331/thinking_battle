@@ -45,7 +45,7 @@ class BottomIconButtons extends HookWidget {
         showCloseIcon: true,
         animType: AnimType.SCALE,
         width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
-        body: MyRoom(),
+        body: const MyRoom(),
       ).show();
 
   @override

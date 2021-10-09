@@ -7,12 +7,10 @@ class MatchingInfo {
   final int imageNumber;
   final int matchedCount;
   final int continuousWinCount;
-  final int skill1;
-  final int skill2;
-  final int skill3;
+  final List<int> skillList;
   final int matchingStatus;
   final bool precedingFlg;
-  final String createdAt;
+  final String customData;
 
   const MatchingInfo({
     required this.name,
@@ -21,28 +19,28 @@ class MatchingInfo {
     required this.imageNumber,
     required this.matchedCount,
     required this.continuousWinCount,
-    required this.skill1,
-    required this.skill2,
-    required this.skill3,
+    required this.skillList,
     required this.matchingStatus,
     required this.precedingFlg,
-    required this.createdAt,
+    required this.customData,
   });
 
   factory MatchingInfo.fromJson(DocumentSnapshot<Object?> json) {
     return MatchingInfo(
-      name: json['name'],
-      rate: json['rate'],
-      maxRate: json['maxRate'],
-      imageNumber: json['imageNumber'],
-      matchedCount: json['matchedCount'],
-      continuousWinCount: json['continuousWinCount'],
-      skill1: json['skill1'],
-      skill2: json['skill2'],
-      skill3: json['skill3'],
-      matchingStatus: json['matchingStatus'],
-      precedingFlg: json['precedingFlg'],
-      createdAt: json['createdAt'],
+      name: json['name'] as String,
+      rate: json['rate'] as double,
+      maxRate: json['maxRate'] as double,
+      imageNumber: json['imageNumber'] as int,
+      matchedCount: json['matchedCount'] as int,
+      continuousWinCount: json['continuousWinCount'] as int,
+      skillList: [
+        json['skillList'][0] as int,
+        json['skillList'][1] as int,
+        json['skillList'][2] as int,
+      ],
+      matchingStatus: json['matchingStatus'] as int,
+      precedingFlg: json['precedingFlg'] as bool,
+      customData: json['customData'] as String,
     );
   }
 }

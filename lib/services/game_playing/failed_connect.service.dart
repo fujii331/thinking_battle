@@ -1,6 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter/material.dart';
+import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/screens/game_finish.screen.dart';
 import 'package:thinking_battle/screens/game_playing.screen.dart';
 import 'package:thinking_battle/services/game_playing/update_rate.service.dart';
@@ -28,6 +30,8 @@ Future failedConnect(
     context,
     false,
   );
+
+  context.read(timerCancelFlgProvider).state = true;
 
   await Future.delayed(
     const Duration(milliseconds: 3500),

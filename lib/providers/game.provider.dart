@@ -1,5 +1,4 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter/material.dart';
 import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/models/quiz.model.dart';
@@ -10,6 +9,7 @@ final displayContentListProvider = StateProvider((ref) => <DisplayContent>[]);
 final turnCountProvider = StateProvider((ref) => 0);
 final trainingProvider = StateProvider((ref) => false);
 final changedTrainingProvider = StateProvider((ref) => false);
+final friendMatchWordProvider = StateProvider((ref) => '');
 final rivalInfoProvider = StateProvider((ref) => dummyPlayerInfo);
 final matchingWaitingIdProvider = StateProvider((ref) => '');
 final matchingRoomIdProvider = StateProvider((ref) => '');
@@ -33,7 +33,6 @@ final rivalTurnTimeProvider = StateProvider((ref) => DateTime.now());
 final myTurnFlgProvider = StateProvider((ref) => false);
 final currentSkillPointProvider = StateProvider((ref) => 5);
 final enemySkillPointProvider = StateProvider((ref) => 5);
-final enemySkillsProvider = StateProvider((ref) => <int>[]);
 
 final inputAnswerProvider = StateProvider((ref) => '');
 final selectableQuestionsProvider = StateProvider((ref) => <Question>[]);

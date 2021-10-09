@@ -5,9 +5,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/screens/mode_select.screen.dart';
 
 class CenterRowStart extends HookWidget {
-  final bool matchingFlg;
+  final bool matchingFinishedFlg;
   final bool trainingFlg;
   final AudioCache soundEffect;
   final double seVolume;
@@ -15,7 +16,7 @@ class CenterRowStart extends HookWidget {
 
   // ignore: use_key_in_widget_constructors
   const CenterRowStart(
-    this.matchingFlg,
+    this.matchingFinishedFlg,
     this.trainingFlg,
     this.soundEffect,
     this.seVolume,
@@ -29,7 +30,7 @@ class CenterRowStart extends HookWidget {
     return SizedBox(
       height: 85,
       child: Center(
-        child: matchingFlg
+        child: matchingFinishedFlg
             ? Text(
                 'VS',
                 style: TextStyle(
@@ -51,23 +52,13 @@ class CenterRowStart extends HookWidget {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (context.read(matchingRoomIdProvider).state != '') {
+                    if (context.read(matchingWaitingIdProvider).state != '') {
                       // 待機中ユーザーの削除
                       FirebaseFirestore.instance
-                          .collection('random-matching-room')
-                          .doc(context.read(matchingRoomIdProvider).state)
-                          .delete()
-                          .catchError((error) async {
-                        // データ削除に失敗した場合
-                        // 何もしない
-                      });
-
-                      context.read(matchingRoomIdProvider).state = '';
-                    } else if (context.read(matchingWaitingIdProvider).state !=
-                        '') {
-                      // 待機中ユーザーの削除
-                      FirebaseFirestore.instance
-                          .collection('random-matching-room')
+                          .collection(
+                              context.read(friendMatchWordProvider).state != ''
+                                  ? 'friend-matching-room'
+                                  : 'random-matching-room')
                           .doc(context.read(matchingWaitingIdProvider).state)
                           .delete()
                           .catchError((error) async {
@@ -90,7 +81,9 @@ class CenterRowStart extends HookWidget {
                       volume: bgmVolume,
                       isNotification: true,
                     );
-                    Navigator.pop(context);
+
+                    Navigator.popUntil(context,
+                        ModalRoute.withName(ModeSelectScreen.routeName));
                   },
                   child: const Text('やめる'),
                   style: ElevatedButton.styleFrom(

@@ -10,7 +10,7 @@ class UserProfileFinish extends StatelessWidget {
   final double maxRate;
   final bool myDataFlg;
   final bool? winFlg;
-  final bool trainingFlg;
+  final bool notRateChangeFlg;
 
   // ignore: use_key_in_widget_constructors
   const UserProfileFinish(
@@ -22,7 +22,7 @@ class UserProfileFinish extends StatelessWidget {
     this.maxRate,
     this.myDataFlg,
     this.winFlg,
-    this.trainingFlg,
+    this.notRateChangeFlg,
   );
 
   @override
@@ -66,7 +66,7 @@ class UserProfileFinish extends StatelessWidget {
                 userRate,
                 matchedCount,
                 winFlg,
-                trainingFlg,
+                notRateChangeFlg,
                 myDataFlg,
               ),
             ],
@@ -178,7 +178,7 @@ class UserProfileFinish extends StatelessWidget {
     double playerRate,
     int matchedCount,
     bool? winFlg,
-    bool trainingFlg,
+    bool notRateChangeFlg,
     bool myDataFlg,
   ) {
     return Column(
@@ -195,7 +195,8 @@ class UserProfileFinish extends StatelessWidget {
           ),
         ),
         Text(
-          (matchedCount + (!trainingFlg && !myDataFlg ? 1 : 0)).toString() +
+          (matchedCount + (!notRateChangeFlg && !myDataFlg ? 1 : 0))
+                  .toString() +
               ' 回',
           style: const TextStyle(
             color: Colors.white,
@@ -223,7 +224,7 @@ class UserProfileFinish extends StatelessWidget {
               Text(
                 playerRate.toString(),
                 style: TextStyle(
-                  color: trainingFlg || winFlg == null
+                  color: notRateChangeFlg || winFlg == null
                       ? Colors.white
                       : winFlg
                           ? Colors.blue.shade200
@@ -234,7 +235,7 @@ class UserProfileFinish extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 5),
-              trainingFlg || winFlg == null
+              notRateChangeFlg || winFlg == null
                   ? Container()
                   : Icon(
                       winFlg ? Icons.arrow_upward : Icons.arrow_downward,

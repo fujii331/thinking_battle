@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,6 +10,7 @@ import 'dart:math';
 
 import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/send_content.model.dart';
+import 'package:thinking_battle/providers/common.provider.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
 
@@ -25,7 +26,7 @@ Future turnAction(
   ScrollController scrollController,
   AudioCache soundEffect,
   double seVolume,
-  StreamSubscription<Event>? messagesSubscription,
+  StreamSubscription<DocumentSnapshot>? rivalListenSubscription,
 ) async {
   await Future.delayed(
     const Duration(milliseconds: 500),
@@ -111,6 +112,7 @@ Future turnAction(
       context.read(displayContentListProvider).state = displayContentList;
 
       scrollToBottom(
+        context,
         scrollController,
         i > 0 ? 15 : 35,
       );
@@ -171,6 +173,14 @@ Future turnAction(
               : '質問調査 (' + changedCount.toString() + 'つ修正)',
         );
 
+        if (changedCount > 0) {
+          scrollToBottom(
+            context,
+            scrollController,
+            changedCount * 20,
+          );
+        }
+
         await Future.delayed(
           const Duration(milliseconds: 500),
         );
@@ -180,6 +190,7 @@ Future turnAction(
           const Duration(milliseconds: 700),
         );
         context.read(displayQuestionResearchProvider).state = false;
+        displayContentList = context.read(displayContentListProvider).state;
       }
 
       await Future.delayed(
@@ -198,6 +209,7 @@ Future turnAction(
     context.read(displayContentListProvider).state = displayContentList;
 
     scrollToBottom(
+      context,
       scrollController,
       sendContent.skillIds.isEmpty &&
               targetQuestion.asking.length * (fontSize + 1) > restrictWidth
@@ -278,6 +290,7 @@ Future turnAction(
     context.read(displayContentListProvider).state = displayContentList;
 
     scrollToBottom(
+      context,
       scrollController,
       answerText.length * (fontSize + 1) > restrictWidth ? 138 : 50,
     );
@@ -340,7 +353,7 @@ Future turnAction(
 
       displayContentList.last = DisplayContent(
         content: displayContentList.last.content,
-        reply: '正解！',
+        reply: '正解!',
         answerFlg: true,
         myTurnFlg: myTurnFlg,
         skillIds: [],
@@ -349,12 +362,14 @@ Future turnAction(
         specialMessage: '',
       );
       context.read(displayContentListProvider).state = displayContentList;
+      context.read(timerCancelFlgProvider).state = true;
 
       await Future.delayed(
         const Duration(milliseconds: 1300),
       );
 
-      if (!context.read(trainingProvider).state ||
+      if ((!context.read(trainingProvider).state &&
+              context.read(friendMatchWordProvider).state == '') ||
           context.read(changedTrainingProvider).state) {
         // レート計算
         await updateRate(
@@ -363,8 +378,8 @@ Future turnAction(
         );
       }
 
-      if (messagesSubscription != null) {
-        messagesSubscription.cancel();
+      if (rivalListenSubscription != null) {
+        rivalListenSubscription.cancel();
       }
 
       Navigator.of(context).pushReplacementNamed(
@@ -381,7 +396,7 @@ Future turnAction(
 
       displayContentList.last = DisplayContent(
         content: displayContentList.last.content,
-        reply: '残念！',
+        reply: '残念!',
         answerFlg: true,
         myTurnFlg: myTurnFlg,
         skillIds: [],
@@ -391,8 +406,10 @@ Future turnAction(
       );
       context.read(displayContentListProvider).state = displayContentList;
 
-      // 次のターンの解答を禁止する
-      context.read(answerFailedFlgProvider).state = true;
+      if (myTurnFlg) {
+        // 次のターンの解答を禁止する
+        context.read(answerFailedFlgProvider).state = true;
+      }
     }
   }
 
@@ -428,13 +445,15 @@ Future turnAction(
     );
 
     scrollToBottom(
+      context,
       scrollController,
       50,
     );
 
-    if (messagesSubscription != null) {
-      messagesSubscription.cancel();
+    if (rivalListenSubscription != null) {
+      rivalListenSubscription.cancel();
     }
+    context.read(timerCancelFlgProvider).state = true;
 
     await Future.delayed(
       const Duration(milliseconds: 2000),
@@ -459,15 +478,19 @@ Future turnAction(
 }
 
 void scrollToBottom(
+  BuildContext context,
   ScrollController scrollController,
   int scrollHeight,
 ) {
-  final bottomOffset = scrollController.position.maxScrollExtent + scrollHeight;
-  scrollController.animateTo(
-    bottomOffset,
-    duration: const Duration(milliseconds: 500),
-    curve: Curves.easeInOut,
-  );
+  if (scrollController.position.maxScrollExtent > 0) {
+    final bottomOffset =
+        scrollController.position.maxScrollExtent + scrollHeight;
+    scrollController.animateTo(
+      bottomOffset,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
 }
 
 Future initializeAction(

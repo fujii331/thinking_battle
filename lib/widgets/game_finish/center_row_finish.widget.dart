@@ -19,6 +19,8 @@ class CenterRowFinish extends HookWidget {
   Widget build(BuildContext context) {
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
+    final String friendMatchWord = useProvider(friendMatchWordProvider).state;
+    final bool friendMatchFlg = friendMatchWord != '';
 
     return Column(
       children: [
@@ -75,7 +77,10 @@ class CenterRowFinish extends HookWidget {
                       volume: seVolume,
                     );
 
-                    context.read(changedTrainingProvider).state = false;
+                    if (context.read(changedTrainingProvider).state) {
+                      context.read(changedTrainingProvider).state = false;
+                      context.read(trainingProvider).state = false;
+                    }
 
                     Navigator.pop(context);
                   },
@@ -86,7 +91,7 @@ class CenterRowFinish extends HookWidget {
                 width: 120,
                 height: 40,
                 child: ElevatedButton(
-                  child: const Text('次のゲーム'),
+                  child: Text(friendMatchFlg ? 'もう一回' : '次のゲーム'),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue.shade500,
                     padding: const EdgeInsets.only(
@@ -106,7 +111,10 @@ class CenterRowFinish extends HookWidget {
                       volume: seVolume,
                     );
 
-                    context.read(changedTrainingProvider).state = false;
+                    if (context.read(changedTrainingProvider).state) {
+                      context.read(changedTrainingProvider).state = false;
+                      context.read(trainingProvider).state = false;
+                    }
 
                     Navigator.of(context).pushReplacementNamed(
                       GameStartScreen.routeName,

@@ -87,13 +87,12 @@ class _WidgetObserverState extends HookState<void, _WidgetObserver>
 
   @override
   void dispose() {
-    // timerを止める
-    context.read(timerCancelFlgProvider).state = true;
-
     if (context.read(matchingWaitingIdProvider).state != '') {
       // 待機中ユーザーの削除
       FirebaseFirestore.instance
-          .collection('random-matching-room')
+          .collection(context.read(friendMatchWordProvider).state != ''
+              ? 'friend-matching-room'
+              : 'random-matching-room')
           .doc(context.read(matchingWaitingIdProvider).state)
           .delete()
           .catchError((error) async {
@@ -133,7 +132,7 @@ class MyApp extends HookWidget {
         .setVolume(context.read(bgmVolumeProvider).state);
 
     return MaterialApp(
-      title: '水平思考対戦',
+      title: '水平思考MONSTERS',
       debugShowCheckedModeBanner: false,
       builder: EasyLoading.init(),
       theme: ThemeData(

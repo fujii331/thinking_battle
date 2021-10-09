@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,8 +13,8 @@ import 'package:thinking_battle/widgets/game_playing/bottom_action_buttons/quest
 class BottomActionButtons extends HookWidget {
   final BuildContext screenContext;
   final ScrollController scrollController;
-  final DatabaseReference firebaseRef;
-  final StreamSubscription<Event>? messagesSubscription;
+  final DocumentReference<Map<String, dynamic>>? myActionDoc;
+  final StreamSubscription<DocumentSnapshot>? rivalListenSubscription;
   final AudioCache soundEffect;
   final double seVolume;
 
@@ -22,8 +22,8 @@ class BottomActionButtons extends HookWidget {
   const BottomActionButtons(
     this.screenContext,
     this.scrollController,
-    this.firebaseRef,
-    this.messagesSubscription,
+    this.myActionDoc,
+    this.rivalListenSubscription,
     this.soundEffect,
     this.seVolume,
   );
@@ -70,8 +70,8 @@ class BottomActionButtons extends HookWidget {
                           return AnswerModal(
                             screenContext,
                             scrollController,
-                            firebaseRef,
-                            messagesSubscription,
+                            myActionDoc,
+                            rivalListenSubscription,
                             soundEffect,
                             seVolume,
                             myTurnFlg,
@@ -119,8 +119,8 @@ class BottomActionButtons extends HookWidget {
                           return QuestionModal(
                             screenContext,
                             scrollController,
-                            firebaseRef,
-                            messagesSubscription,
+                            myActionDoc,
+                            rivalListenSubscription,
                             soundEffect,
                             seVolume,
                             myTurnFlg,

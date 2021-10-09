@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class SendContent {
   final int questionId;
   final String answer;
@@ -8,4 +10,26 @@ class SendContent {
     required this.answer,
     required this.skillIds,
   });
+
+  factory SendContent.fromJson(DocumentSnapshot<Object?> json) {
+    final skillIds = json['skillIds'] as List;
+    return SendContent(
+      questionId: json['questionId'] as int,
+      answer: json['answer'] as String,
+      skillIds: skillIds.isEmpty
+          ? []
+          : skillIds.length == 1
+              ? [skillIds[0] as int]
+              : skillIds.length == 2
+                  ? [
+                      skillIds[0] as int,
+                      skillIds[1] as int,
+                    ]
+                  : [
+                      skillIds[0] as int,
+                      skillIds[1] as int,
+                      skillIds[2] as int,
+                    ],
+    );
+  }
 }

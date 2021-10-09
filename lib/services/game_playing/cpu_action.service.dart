@@ -32,7 +32,7 @@ Future cpuAction(
   // ターン数
   int cpuTurn = (displayContentList.length ~/ 2) + 1;
   // スキル
-  List<int> enemySkills = context.read(enemySkillsProvider).state;
+  List<int> enemySkills = context.read(rivalInfoProvider).state.skillList;
   // 的情報
   PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;
   // スキルポイント
@@ -159,7 +159,9 @@ Future cpuAction(
   }
 
   await Future.delayed(
-    Duration(seconds: 5 + Random().nextInt(6)),
+    Duration(
+        seconds:
+            cpuTurn < 6 ? 3 + Random().nextInt(3) : 5 + Random().nextInt(6)),
   );
 
   final SendContent sendContent = SendContent(

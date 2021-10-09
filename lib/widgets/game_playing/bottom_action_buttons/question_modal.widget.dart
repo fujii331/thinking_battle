@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,6 +11,7 @@ import 'package:thinking_battle/models/send_content.model.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
 import 'package:thinking_battle/services/game_playing/common_action.service.dart';
+import 'package:thinking_battle/services/game_playing/failed_connect.service.dart';
 import 'package:thinking_battle/services/game_playing/get_nice_question.service.dart';
 
 import 'package:thinking_battle/data/skills.dart';
@@ -19,8 +20,8 @@ import 'package:thinking_battle/widgets/game_playing/bottom_action_buttons/skill
 class QuestionModal extends HookWidget {
   final BuildContext screenContext;
   final ScrollController scrollController;
-  final DatabaseReference firebaseRef;
-  final StreamSubscription<Event>? messagesSubscription;
+  final DocumentReference<Map<String, dynamic>>? myActionDoc;
+  final StreamSubscription<DocumentSnapshot>? rivalListenSubscription;
   final AudioCache soundEffect;
   final double seVolume;
   final bool myTurnFlg;
@@ -29,8 +30,8 @@ class QuestionModal extends HookWidget {
   const QuestionModal(
     this.screenContext,
     this.scrollController,
-    this.firebaseRef,
-    this.messagesSubscription,
+    this.myActionDoc,
+    this.rivalListenSubscription,
     this.soundEffect,
     this.seVolume,
     this.myTurnFlg,
@@ -189,7 +190,7 @@ class QuestionModal extends HookWidget {
                       onPressed: myTurnFlg &&
                               (selectQuestionId != 0 ||
                                   selectSkillIds.contains(2))
-                          ? () {
+                          ? () async {
                               context.read(myTurnFlgProvider).state = false;
 
                               soundEffect.play(
@@ -212,38 +213,36 @@ class QuestionModal extends HookWidget {
                                 );
                               }
 
-                              if (context.read(matchingRoomIdProvider).state !=
-                                  '') {
-                                firebaseRef.push().set({
-                                  'questionId': sendQuestionId,
-                                  'answer': '',
-                                  'skill1': selectSkillIds.isNotEmpty
-                                      ? selectSkillIds[0]
-                                      : 0,
-                                  'skill2': selectSkillIds.length > 1
-                                      ? selectSkillIds[1]
-                                      : 0,
-                                  'skill3': selectSkillIds.length > 2
-                                      ? selectSkillIds[2]
-                                      : 0,
-                                });
-                              } else {
-                                final sendContent = SendContent(
-                                  questionId: sendQuestionId,
-                                  answer: '',
-                                  skillIds: selectSkillIds,
-                                );
-                                // ターン行動実行
-                                turnAction(
-                                  screenContext,
-                                  sendContent,
-                                  true,
-                                  scrollController,
-                                  soundEffect,
-                                  seVolume,
-                                  messagesSubscription,
-                                );
+                              // 通信対戦時は相手にデータを送る
+                              if (myActionDoc != null) {
+                                await myActionDoc!
+                                    .set({
+                                      'questionId': sendQuestionId,
+                                      'answer': '',
+                                      'skillIds': selectSkillIds,
+                                    })
+                                    .timeout(const Duration(seconds: 5))
+                                    .onError((error, stackTrace) {
+                                      rivalListenSubscription!.cancel();
+                                      failedConnect(context);
+                                    });
                               }
+
+                              final sendContent = SendContent(
+                                questionId: sendQuestionId,
+                                answer: '',
+                                skillIds: selectSkillIds,
+                              );
+                              // ターン行動実行
+                              turnAction(
+                                screenContext,
+                                sendContent,
+                                true,
+                                scrollController,
+                                soundEffect,
+                                seVolume,
+                                rivalListenSubscription,
+                              );
 
                               Navigator.pop(context);
                             }
