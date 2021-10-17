@@ -183,6 +183,7 @@ class GamePlayingScreen extends HookWidget {
 
     final DateTime myTurnTime = useProvider(myTurnTimeProvider).state;
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
+    final bool myTurnFlg = useProvider(myTurnFlgProvider).state;
 
     final ValueNotifier<bool> displayFlgState = useState<bool>(false);
 
@@ -327,6 +328,7 @@ class GamePlayingScreen extends HookWidget {
                           seVolume,
                           rivalInfo,
                           myTurnTime,
+                          myTurnFlg,
                         ),
                         const SizedBox(height: 15),
                         ContentList(
@@ -341,6 +343,7 @@ class GamePlayingScreen extends HookWidget {
                           rivalListenSubscription,
                           soundEffect,
                           seVolume,
+                          myTurnFlg,
                         ),
                       ],
                     ),

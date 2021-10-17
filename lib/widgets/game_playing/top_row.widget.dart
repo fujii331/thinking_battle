@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
+import 'package:thinking_battle/widgets/game_playing/message_modal.widget.dart';
 import 'package:thinking_battle/widgets/game_playing/rival_info.widget.dart';
 
 class TopRow extends HookWidget {
@@ -14,6 +16,7 @@ class TopRow extends HookWidget {
   final double seVolume;
   final PlayerInfo rivalInfo;
   final DateTime myTurnTime;
+  final bool myTurnFlg;
 
   // ignore: use_key_in_widget_constructors
   const TopRow(
@@ -21,6 +24,7 @@ class TopRow extends HookWidget {
     this.seVolume,
     this.rivalInfo,
     this.myTurnTime,
+    this.myTurnFlg,
   );
 
   @override
@@ -28,6 +32,8 @@ class TopRow extends HookWidget {
     final int currentSkillPoint = useProvider(currentSkillPointProvider).state;
 
     final int spChargeTurn = useProvider(spChargeTurnProvider).state;
+    final int messagedTurnCount = useProvider(messagedTurnCountProvider).state;
+    final int selectMessageId = useProvider(selectMessageIdProvider).state;
 
     final bool displayMyturnSetFlg =
         useProvider(displayMyturnSetFlgProvider).state;
@@ -35,6 +41,9 @@ class TopRow extends HookWidget {
         useProvider(displayRivalturnSetFlgProvider).state;
 
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
+    final List colorList = returnCardColorList(rivalInfo.cardNumber);
+
+    final bool enableMessageFlg = myTurnFlg && messagedTurnCount == 0;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -69,28 +78,73 @@ class TopRow extends HookWidget {
               ).show();
             },
             child: Container(
+              padding: const EdgeInsets.all(1.5),
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.grey.shade50,
+                gradient: LinearGradient(
+                  begin: FractionalOffset.topLeft,
+                  end: FractionalOffset.bottomRight,
+                  colors: colorList[0][0],
+                  stops: const [
+                    0.2,
+                    0.6,
+                    0.9,
+                  ],
+                ),
                 border: Border.all(
-                  color: Colors.grey.shade800,
-                  width: 2,
+                  color: colorList[0][1],
+                  width: 1,
                 ),
                 borderRadius: const BorderRadius.all(
-                  Radius.circular(30),
+                  Radius.circular(50),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(2),
-                child: Image.asset(
-                  'assets/images/' + rivalInfo.imageNumber.toString() + '.png',
-                  height: 30,
-                ),
+              child: Image.asset(
+                'assets/images/characters/' +
+                    rivalInfo.imageNumber.toString() +
+                    '.png',
               ),
             ),
           ),
-          const SizedBox(width: 50),
+          IconButton(
+            iconSize: 20,
+            icon: Icon(
+              selectMessageId == 0 ? Icons.mail : Icons.mark_email_read,
+              color: selectMessageId != 0
+                  ? Colors.yellow.shade200
+                  : enableMessageFlg
+                      ? Colors.white
+                      : Colors.grey.shade600,
+            ),
+            onPressed: enableMessageFlg
+                ? () {
+                    soundEffect.play(
+                      'sounds/tap.mp3',
+                      isNotification: true,
+                      volume: seVolume,
+                    );
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.NO_HEADER,
+                      headerAnimationLoop: false,
+                      dismissOnTouchOutside: true,
+                      dismissOnBackKeyPress: true,
+                      showCloseIcon: true,
+                      closeIcon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                      animType: AnimType.SCALE,
+                      width: MediaQuery.of(context).size.width * .86 > 650
+                          ? 650
+                          : null,
+                      body: const MessageModal(),
+                    ).show();
+                  }
+                : () {},
+          ),
+          const SizedBox(width: 20),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.5 > 130
                 ? 130

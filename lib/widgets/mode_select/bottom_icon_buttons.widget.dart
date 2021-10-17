@@ -1,11 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-import 'package:thinking_battle/providers/player.provider.dart';
-import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/my_room.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/sound_mode.widget.dart';
 
 class BottomIconButtons extends HookWidget {
@@ -32,22 +29,6 @@ class BottomIconButtons extends HookWidget {
         ),
       )..show();
 
-  void toMyRoom(
-    BuildContext context,
-    // TextEditingController playerNameController,
-  ) =>
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.NO_HEADER,
-        headerAnimationLoop: false,
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: true,
-        showCloseIcon: true,
-        animType: AnimType.SCALE,
-        width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
-        body: const MyRoom(),
-      ).show();
-
   @override
   Widget build(BuildContext context) {
     // final playerNameController = useTextEditingController();
@@ -60,19 +41,10 @@ class BottomIconButtons extends HookWidget {
         children: [
           _iconButton(
             context,
-            Colors.yellow.shade100,
-            Icons.account_circle,
-            soundEffect,
-            1,
-            seVolume,
-            // playerNameController,
-          ),
-          _iconButton(
-            context,
             Colors.blue,
             Icons.audiotrack,
             soundEffect,
-            2,
+            1,
             seVolume,
             // null,
           ),
@@ -81,7 +53,7 @@ class BottomIconButtons extends HookWidget {
             Colors.green.shade300,
             Icons.auto_stories,
             soundEffect,
-            3,
+            2,
             seVolume,
             // null,
           ),
@@ -112,14 +84,8 @@ class BottomIconButtons extends HookWidget {
           volume: seVolume,
         );
         if (buttonPuttern == 1) {
-          // playerNameController!.text = context.read(playerNameProvider).state;
-          toMyRoom(
-            context,
-            // playerNameController,
-          );
-        } else if (buttonPuttern == 2) {
           toSoundMode(context);
-        } else if (buttonPuttern == 3) {
+        } else if (buttonPuttern == 2) {
           // playerNameController!.text = context.read(playerNameProvider).state;
           // toMyRoom(
           //   context,

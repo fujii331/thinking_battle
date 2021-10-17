@@ -14,6 +14,54 @@ class EditImage extends HookWidget {
   Widget build(BuildContext context) {
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
+    final List<String> imageNumberList =
+        useProvider(imageNumberListProvider).state;
+
+    final List<Widget> imageRowList = [];
+    List<Widget> imageList = [];
+
+    for (String imageNumberString in imageNumberList) {
+      // 画像をimageListに追加
+      imageList.add(
+        _imageSelect(
+          context,
+          int.parse(imageNumberString),
+          soundEffect,
+          seVolume,
+        ),
+      );
+
+      // 3個たまったらRowに追加
+      if (imageList.length == 3) {
+        imageRowList.add(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              imageList[0],
+              imageList[1],
+              imageList[2],
+            ],
+          ),
+        );
+
+        imageList = [];
+      }
+    }
+
+    if (imageList.isNotEmpty) {
+      imageRowList.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            imageList[0],
+            imageList.length > 1
+                ? imageList[1]
+                : const SizedBox(height: 60, width: 60),
+            const SizedBox(height: 60, width: 60),
+          ],
+        ),
+      );
+    }
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -39,59 +87,20 @@ class EditImage extends HookWidget {
               ),
             ),
           ),
-          _imageSelectRow(
-            context,
-            1,
-            soundEffect,
-            seVolume,
-          ),
-          _imageSelectRow(
-            context,
-            2,
-            soundEffect,
-            seVolume,
-          ),
-          _imageSelectRow(
-            context,
-            3,
-            soundEffect,
-            seVolume,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _imageSelectRow(
-    BuildContext context,
-    int rowNumber,
-    AudioCache soundEffect,
-    double seVolume,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 12,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _imageSelect(
-            context,
-            3 * (rowNumber - 1) + 1,
-            soundEffect,
-            seVolume,
-          ),
-          _imageSelect(
-            context,
-            3 * (rowNumber - 1) + 2,
-            soundEffect,
-            seVolume,
-          ),
-          _imageSelect(
-            context,
-            3 * (rowNumber - 1) + 3,
-            soundEffect,
-            seVolume,
+          SizedBox(
+            height: 230,
+            width: 230,
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 12,
+                  ),
+                  child: imageRowList[index],
+                );
+              },
+              itemCount: imageRowList.length,
+            ),
           ),
         ],
       ),
@@ -117,6 +126,7 @@ class EditImage extends HookWidget {
         Navigator.pop(context);
       },
       child: Container(
+        padding: const EdgeInsets.all(2),
         width: 60,
         height: 60,
         decoration: BoxDecoration(
@@ -129,12 +139,8 @@ class EditImage extends HookWidget {
             Radius.circular(10),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: Image.asset(
-            'assets/images/' + imageNumber.toString() + '.png',
-            height: 50,
-          ),
+        child: Image.asset(
+          'assets/images/characters/' + imageNumber.toString() + '.png',
         ),
       ),
     );

@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:thinking_battle/services/return_color.service.dart';
+import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
+import 'package:thinking_battle/widgets/common/continuous_win.widget.dart';
+import 'package:thinking_battle/widgets/common/profile_name.widget.dart';
+import 'package:thinking_battle/widgets/common/skill_column.widget.dart';
+import 'package:thinking_battle/widgets/common/stack_label.widget.dart';
+import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
+import 'package:thinking_battle/widgets/common/user_profile_image.widget.dart';
 
 class UserProfileFinish extends StatelessWidget {
   final int imageNumber;
+  final int cardNumber;
   final int matchedCount;
   final int continuousWinCount;
-  final String userName;
+  final String playerName;
   final double userRate;
-  final double maxRate;
+  final List<int> mySkillIdsList;
   final bool myDataFlg;
   final bool? winFlg;
   final bool notRateChangeFlg;
@@ -15,11 +22,12 @@ class UserProfileFinish extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const UserProfileFinish(
     this.imageNumber,
+    this.cardNumber,
     this.matchedCount,
     this.continuousWinCount,
-    this.userName,
+    this.playerName,
     this.userRate,
-    this.maxRate,
+    this.mySkillIdsList,
     this.myDataFlg,
     this.winFlg,
     this.notRateChangeFlg,
@@ -27,116 +35,90 @@ class UserProfileFinish extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List colorSet = returnColor(maxRate);
+    final List colorList = returnCardColorList(cardNumber);
 
     return Stack(
       children: [
         Container(
-          padding: const EdgeInsets.only(
-            left: 20,
-            right: 5,
-            top: 10,
-            bottom: 10,
-          ),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: FractionalOffset.topLeft,
-              end: FractionalOffset.bottomRight,
-              colors: colorSet[0],
-              stops: const [
-                0.2,
-                0.6,
-                0.9,
-              ],
-            ),
             border: Border.all(
-              color: colorSet[2],
-              width: 3,
+              color: Colors.black,
+              width: 2,
             ),
-          ),
-          width: 235,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _playerIcon(
-                imageNumber,
-              ),
-              const SizedBox(width: 45),
-              _playerData(
-                userRate,
-                matchedCount,
-                winFlg,
-                notRateChangeFlg,
-                myDataFlg,
-              ),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.shade600,
+                  blurRadius: 5.0,
+                  spreadRadius: 0.1,
+                  offset: const Offset(2, 2))
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 4.0,
-            top: 13,
-          ),
-          child: Container(
-            padding: const EdgeInsets.only(
-              left: 5,
-            ),
-            height: 32,
-            width: 125,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: FractionalOffset.topLeft,
-                end: FractionalOffset.bottomRight,
-                colors: colorSet[1],
-                stops: const [
-                  0.6,
-                  0.9,
-                ],
+          width: MediaQuery.of(context).size.width * 0.8 > 280.0
+              ? 280.0
+              : MediaQuery.of(context).size.width * 0.8 < 250
+                  ? MediaQuery.of(context).size.width * 0.9
+                  : MediaQuery.of(context).size.width * 0.8,
+          height: 158,
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fitHeight,
+                    image: AssetImage('assets/images/cards/' +
+                        cardNumber.toString() +
+                        '.png'),
+                  ),
+                ),
               ),
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(50),
-                bottomRight: Radius.circular(50),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 2),
-                SizedBox(
-                  height: 9,
-                  child: Text(
-                    'name',
-                    style: TextStyle(
-                      color: Colors.blueGrey.shade200,
-                      fontSize: 10,
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 20,
+                  top: 9,
+                  bottom: 9,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: ProfileName(
+                            playerName,
+                            colorList[1],
+                            0,
+                          ),
+                        ),
+                        UserProfileImage(
+                          imageNumber,
+                          colorList,
+                        ),
+                      ],
                     ),
-                  ),
+                    const Spacer(),
+                    _playerData(
+                      userRate,
+                      matchedCount,
+                      mySkillIdsList,
+                      colorList[1],
+                      winFlg,
+                      notRateChangeFlg,
+                      myDataFlg,
+                    ),
+                  ],
                 ),
-                Text(
-                  userName,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'KaiseiOpti',
-                    fontSize: 13.8,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         continuousWinCount > 1
             ? Padding(
                 padding: const EdgeInsets.only(left: 60.0, top: 5),
-                child: Text(
-                  continuousWinCount.toString() + ' 連勝中！',
-                  style: TextStyle(
-                    color: Colors.yellow.shade100,
-                    fontFamily: 'KaiseiOpti',
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: ContinuousWin(
+                  continuousWinCount,
+                  0,
                 ),
               )
             : const SizedBox(),
@@ -144,109 +126,98 @@ class UserProfileFinish extends StatelessWidget {
     );
   }
 
-  Widget _playerIcon(
-    int imageNumber,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 40),
-      child: Container(
-        width: 72,
-        height: 72,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade50,
-          border: Border.all(
-            color: Colors.grey.shade800,
-            width: 2,
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: imageNumber == 0
-              ? Container()
-              : Image.asset(
-                  'assets/images/' + imageNumber.toString() + '.png',
-                ),
-        ),
-      ),
-    );
-  }
-
   Widget _playerData(
     double playerRate,
     int matchedCount,
+    List<int> mySkillIdsList,
+    bool darkColorFlg,
     bool? winFlg,
     bool notRateChangeFlg,
     bool myDataFlg,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 15,
-          child: Text(
-            'match',
-            style: TextStyle(
-              color: Colors.blueGrey.shade200,
-              fontSize: 13,
+    return SizedBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: darkColorFlg
+                      ? Colors.grey.shade500
+                      : Colors.grey.shade800,
+                  width: 1,
+                ),
+              ),
+            ),
+            child: Row(
+              children: [
+                const StackLabel(
+                  'match',
+                  0,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                StackWord(
+                  (matchedCount + (!notRateChangeFlg && !myDataFlg ? 1 : 0))
+                          .toString() +
+                      ' 回',
+                  Colors.white,
+                  0,
+                ),
+              ],
             ),
           ),
-        ),
-        Text(
-          (matchedCount + (!notRateChangeFlg && !myDataFlg ? 1 : 0))
-                  .toString() +
-              ' 回',
-          style: const TextStyle(
-            color: Colors.white,
-            fontFamily: 'KaiseiOpti',
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 15,
-          child: Text(
-            'rate',
-            style: TextStyle(
-              color: Colors.blueGrey.shade200,
-              fontSize: 13,
+          const SizedBox(height: 1),
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: darkColorFlg
+                      ? Colors.grey.shade500
+                      : Colors.grey.shade800,
+                  width: 1,
+                ),
+              ),
             ),
-          ),
-        ),
-        SizedBox(
-          width: 82,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                playerRate.toString(),
-                style: TextStyle(
-                  color: notRateChangeFlg || winFlg == null
+            child: Row(
+              children: [
+                const StackLabel(
+                  'rate',
+                  0,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                StackWord(
+                  playerRate.toString(),
+                  notRateChangeFlg || winFlg == null
                       ? Colors.white
                       : winFlg
                           ? Colors.blue.shade200
                           : Colors.red.shade200,
-                  fontSize: 18,
-                  fontFamily: 'KaiseiOpti',
-                  fontWeight: FontWeight.bold,
+                  0,
                 ),
-              ),
-              const SizedBox(width: 5),
-              notRateChangeFlg || winFlg == null
-                  ? Container()
-                  : Icon(
-                      winFlg ? Icons.arrow_upward : Icons.arrow_downward,
-                      color:
-                          winFlg ? Colors.blue.shade200 : Colors.red.shade200,
-                      size: 17,
-                    ),
-            ],
+                const SizedBox(width: 5),
+                notRateChangeFlg || winFlg == null
+                    ? Container()
+                    : Icon(
+                        winFlg ? Icons.arrow_upward : Icons.arrow_downward,
+                        color:
+                            winFlg ? Colors.blue.shade200 : Colors.red.shade200,
+                        size: 17,
+                      ),
+              ],
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 7),
+          SkillColumn(
+            mySkillIdsList,
+            0,
+          ),
+        ],
+      ),
     );
   }
 }

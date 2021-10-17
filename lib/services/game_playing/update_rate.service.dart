@@ -39,9 +39,8 @@ Future updateRate(
   context.read(rivalInfoProvider).state = PlayerInfo(
     name: rivalInfo.name,
     rate: newRivalRate,
-    maxRate:
-        newRivalRate > rivalInfo.maxRate ? newRivalRate : rivalInfo.maxRate,
     imageNumber: rivalInfo.imageNumber,
+    cardNumber: rivalInfo.cardNumber,
     matchedCount: rivalInfo.matchedCount,
     continuousWinCount: winFlg ? 0 : rivalInfo.continuousWinCount + 1,
     skillList: rivalInfo.skillList,

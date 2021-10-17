@@ -4,14 +4,14 @@ import 'package:thinking_battle/models/skill.model.dart';
 
 class SkillTooltip extends StatelessWidget {
   final Skill skill;
-  final Color textColor;
-  final double fontSize;
+  final bool profileFlg;
+  final double wordMinusSize;
 
   // ignore: use_key_in_widget_constructors
   const SkillTooltip(
     this.skill,
-    this.textColor,
-    this.fontSize,
+    this.profileFlg,
+    this.wordMinusSize,
   );
 
   @override
@@ -19,13 +19,35 @@ class SkillTooltip extends StatelessWidget {
     return SizedBox(
       child: Tooltip(
         message: skill.skillExplanation,
-        child: Text(
-          skill.skillName,
-          style: TextStyle(
-            color: textColor,
-            fontSize: fontSize,
-          ),
-        ),
+        child: profileFlg
+            ? Stack(
+                children: <Widget>[
+                  Text(
+                    '・ ' + skill.skillName,
+                    style: TextStyle(
+                      fontSize: 13 - wordMinusSize,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 3.2
+                        ..color = Colors.grey.shade900,
+                    ),
+                  ),
+                  Text(
+                    '・ ' + skill.skillName,
+                    style: TextStyle(
+                      fontSize: 13 - wordMinusSize,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              )
+            : Text(
+                skill.skillName,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18 - wordMinusSize,
+                ),
+              ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
           color: Colors.grey.shade900,
@@ -42,8 +64,8 @@ class SkillTooltip extends StatelessWidget {
           bottom: 9,
         ),
         preferBelow: false,
-        textStyle: const TextStyle(
-          fontSize: 16,
+        textStyle: TextStyle(
+          fontSize: 16 - wordMinusSize,
           color: Colors.white,
         ),
         showDuration: const Duration(seconds: 100),

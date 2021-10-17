@@ -13,12 +13,7 @@ import 'package:thinking_battle/services/title/authentication.service.dart';
 import 'package:thinking_battle/widgets/common/edit_image.widget.dart';
 
 class ProfileUpdateArea extends HookWidget {
-  final bool firstSettingFlg;
-
-  // ignore: use_key_in_widget_constructors
-  const ProfileUpdateArea(
-    this.firstSettingFlg,
-  );
+  const ProfileUpdateArea({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +56,7 @@ class ProfileUpdateArea extends HookWidget {
                       ).show();
                     },
                     child: Container(
+                      padding: const EdgeInsets.all(2),
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
@@ -73,12 +69,11 @@ class ProfileUpdateArea extends HookWidget {
                           Radius.circular(10),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Image.asset(
-                          'assets/images/' + imageNumber.toString() + '.png',
-                          height: 50,
-                        ),
+                      child: Image.asset(
+                        'assets/images/characters/' +
+                            imageNumber.toString() +
+                            '.png',
+                        height: 50,
                       ),
                     ),
                   ),
@@ -138,7 +133,7 @@ class ProfileUpdateArea extends HookWidget {
                   const SizedBox(height: 15),
                   SizedBox(
                     width: 75,
-                    height: firstSettingFlg ? 36 : 32,
+                    height: 36,
                     child: ElevatedButton(
                       onPressed: judgeFlgState.value
                           ? () async {
@@ -156,21 +151,12 @@ class ProfileUpdateArea extends HookWidget {
                               prefs.setString(
                                   'playerName', playerNameState.value);
 
-                              if (firstSettingFlg) {
-                                // ユーザー登録を行う
-                                signUp(context);
-                              }
+                              // ユーザー登録を行う
+                              signUp(context);
                             }
                           : () {},
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: firstSettingFlg ? 0 : 1.5),
-                        child: Text(
-                          firstSettingFlg ? '進む' : '名前変更',
-                          style: TextStyle(
-                            fontSize: firstSettingFlg ? null : 15,
-                          ),
-                        ),
+                      child: const Text(
+                        '進む',
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: judgeFlgState.value

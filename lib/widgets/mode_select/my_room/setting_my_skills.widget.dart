@@ -110,6 +110,8 @@ class SettingMySkills extends HookWidget {
                     ? () async {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
+
+                        selectingSkillList.sort();
                         soundEffect.play(
                           'sounds/change.mp3',
                           isNotification: true,
@@ -175,8 +177,8 @@ class SettingMySkills extends HookWidget {
           ),
           SkillTooltip(
             skill,
-            Colors.black,
-            18,
+            false,
+            0,
           ),
         ],
       ),

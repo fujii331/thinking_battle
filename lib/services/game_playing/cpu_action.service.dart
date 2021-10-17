@@ -47,16 +47,17 @@ Future cpuAction(
   List<int> returnSkillIds = [];
 
   for (DisplayContent displayContent in displayContentList) {
-    if (displayContent.skillIds.contains(4)) {
+    if (displayContent.skillIds.contains(4) && !displayContent.myTurnFlg) {
       sumImportance -= displayContent.importance;
       searchFlg = true;
-    } else if (!displayContent.skillIds.contains(1)) {
+    } else if (displayContent.skillIds.contains(1) &&
+        !displayContent.myTurnFlg) {
+      searchFlg = true;
+    } else {
       sumImportance +=
           displayContent.importance * displayContent.importance == 4
               ? 3
               : displayContent.importance;
-    } else {
-      searchFlg = true;
     }
   }
 

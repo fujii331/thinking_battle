@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:thinking_battle/models/player_info.model.dart';
 
-import 'package:thinking_battle/widgets/game_start/user_profile_start.widget.dart';
+import 'package:thinking_battle/widgets/common/user_profile_common.widget.dart';
 
 class RivalInfo extends StatelessWidget {
   final PlayerInfo rivalInfo;
@@ -31,15 +31,15 @@ class RivalInfo extends StatelessWidget {
           const SizedBox(height: 20),
           Container(
             color: Colors.grey.shade900,
-            child: UserProfileStart(
+            child: UserProfileCommon(
               rivalInfo.imageNumber,
+              rivalInfo.cardNumber,
               rivalInfo.matchedCount,
               rivalInfo.continuousWinCount,
               rivalInfo.name,
               rivalInfo.rate,
-              rivalInfo.maxRate,
               rivalInfo.skillList,
-              false,
+              1.2,
             ),
           ),
         ],

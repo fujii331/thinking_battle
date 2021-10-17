@@ -50,10 +50,10 @@ void trainingInitialAction(
   final List<int> skillList = skillListData[Random().nextInt(5)];
 
   context.read(rivalInfoProvider).state = PlayerInfo(
-    name: '坊やくん',
+    name: '練習くん',
     rate: 1500.0,
-    maxRate: 1500.0,
-    imageNumber: 9,
+    imageNumber: Random().nextInt(9) + 1,
+    cardNumber: Random().nextInt(5) + 1,
     matchedCount: 0,
     continuousWinCount: 0,
     skillList: skillList,

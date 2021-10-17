@@ -6,6 +6,7 @@ import 'package:thinking_battle/data/skills.dart';
 import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 
 class ContentList extends HookWidget {
   final ScrollController scrollController;
@@ -26,26 +27,37 @@ class ContentList extends HookWidget {
     final bool animationQuestionResearch =
         useProvider(animationQuestionResearchProvider).state;
 
-    return Container(
+    final List colorList = returnCardColorList(rivalInfo.cardNumber);
+
+    return SizedBox(
       height: MediaQuery.of(context).size.height - 240,
       width: MediaQuery.of(context).size.width * .9,
-      decoration: BoxDecoration(
-        color: Colors.indigo.shade700.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Colors.black,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade800.withOpacity(0.5),
-            blurRadius: 3.0,
-            offset: const Offset(5, 5),
-          )
-        ],
-      ),
       child: Stack(
         children: [
           Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/content_background.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.indigo.shade700.withOpacity(0.80),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: Colors.black,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade800.withOpacity(0.5),
+                  blurRadius: 3.0,
+                  offset: const Offset(5, 5),
+                )
+              ],
+            ),
             padding: const EdgeInsets.only(
               right: 10,
               left: 10,
@@ -104,6 +116,7 @@ class ContentList extends HookWidget {
                         targetContent,
                         rivalInfo.imageNumber,
                         displayNumber,
+                        colorList,
                       ),
                     ],
                   ),
@@ -126,7 +139,7 @@ class ContentList extends HookWidget {
                     ),
                   ),
                 )
-              : Container()
+              : Container(),
         ],
       ),
     );
@@ -169,6 +182,7 @@ class ContentList extends HookWidget {
     DisplayContent targetContent,
     int rivalImageNumber,
     int displayNumber,
+    List colorList,
   ) {
     return targetContent.myTurnFlg
         ? Row(
@@ -194,25 +208,32 @@ class ContentList extends HookWidget {
                   ? Row(
                       children: [
                         Container(
+                          padding: const EdgeInsets.all(1),
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade50,
+                            gradient: LinearGradient(
+                              begin: FractionalOffset.topLeft,
+                              end: FractionalOffset.bottomRight,
+                              colors: colorList[0][0],
+                              stops: const [
+                                0.2,
+                                0.6,
+                                0.9,
+                              ],
+                            ),
                             border: Border.all(
-                              color: Colors.grey.shade800,
+                              color: colorList[0][1],
                               width: 1,
                             ),
                             borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
+                              Radius.circular(50),
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Image.asset(
-                              'assets/images/' +
-                                  rivalImageNumber.toString() +
-                                  '.png',
-                            ),
+                          child: Image.asset(
+                            'assets/images/characters/' +
+                                rivalImageNumber.toString() +
+                                '.png',
                           ),
                         ),
                         const SizedBox(width: 3),

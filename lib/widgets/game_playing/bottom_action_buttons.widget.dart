@@ -17,6 +17,7 @@ class BottomActionButtons extends HookWidget {
   final StreamSubscription<DocumentSnapshot>? rivalListenSubscription;
   final AudioCache soundEffect;
   final double seVolume;
+  final bool myTurnFlg;
 
   // ignore: use_key_in_widget_constructors
   const BottomActionButtons(
@@ -26,11 +27,11 @@ class BottomActionButtons extends HookWidget {
     this.rivalListenSubscription,
     this.soundEffect,
     this.seVolume,
+    this.myTurnFlg,
   );
 
   @override
   Widget build(BuildContext context) {
-    final bool myTurnFlg = useProvider(myTurnFlgProvider).state;
     final bool forceQuestionFlg = useProvider(forceQuestionFlgProvider).state;
     final bool answerFailedFlg = useProvider(answerFailedFlgProvider).state;
 

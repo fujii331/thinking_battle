@@ -44,7 +44,7 @@ Future turnAction(
   const double fontSize = 16;
   final double restrictWidth = myTurnFlg
       ? MediaQuery.of(context).size.width * .56
-      : MediaQuery.of(context).size.width * .47;
+      : MediaQuery.of(context).size.width * .46;
 
   // 画面上の表示を消す
   if (myTurnFlg) {
@@ -120,10 +120,13 @@ Future turnAction(
       if (displaySkillIds[i] == 5) {
         int changedCount = 0;
         await Future.delayed(
-          const Duration(milliseconds: 1000),
+          const Duration(milliseconds: 800),
         );
 
         context.read(displayQuestionResearchProvider).state = true;
+        await Future.delayed(
+          const Duration(milliseconds: 200),
+        );
         context.read(animationQuestionResearchProvider).state = true;
 
         soundEffect.play(
@@ -133,7 +136,7 @@ Future turnAction(
         );
 
         await Future.delayed(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 2000),
         );
 
         context.read(displayContentListProvider).state =
@@ -182,7 +185,7 @@ Future turnAction(
         }
 
         await Future.delayed(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 300),
         );
 
         context.read(animationQuestionResearchProvider).state = false;
@@ -603,6 +606,8 @@ Future initializeAction(
         DateTime(2020, 1, 1, 1, 1).add(const Duration(seconds: 45));
     // 相手のターンの表示
     context.read(displayRivalturnSetFlgProvider).state = true;
+    // メッセージを初期化
+    context.read(selectMessageIdProvider).state = 0;
 
     if (context.read(trainingProvider).state) {
       cpuAction(

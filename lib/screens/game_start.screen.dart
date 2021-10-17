@@ -17,7 +17,7 @@ import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/widgets/game_start/center_row_start.widget.dart';
 import 'package:thinking_battle/widgets/game_start/failed_matching.widget.dart';
 import 'package:thinking_battle/widgets/game_start/top_row_start.widget.dart';
-import 'package:thinking_battle/widgets/game_start/user_profile_start.widget.dart';
+import 'package:thinking_battle/widgets/common/user_profile_common.widget.dart';
 
 class GameStartScreen extends HookWidget {
   const GameStartScreen({Key? key}) : super(key: key);
@@ -65,12 +65,13 @@ class GameStartScreen extends HookWidget {
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
 
     final int imageNumber = useProvider(imageNumberProvider).state;
+    final int cardNumber = useProvider(cardNumberProvider).state;
+
     final int matchedCount = useProvider(matchedCountProvider).state;
     final int continuousWinCount =
         useProvider(continuousWinCountProvider).state;
     final String playerName = useProvider(playerNameProvider).state;
     final double rate = useProvider(rateProvider).state;
-    final double maxRate = useProvider(maxRateProvider).state;
     final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
     final bool trainingFlg = context.read(trainingProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
@@ -114,9 +115,9 @@ class GameStartScreen extends HookWidget {
             await matchingAction(
               context,
               imageNumber,
+              cardNumber,
               playerName,
               rate,
-              maxRate,
               matchedCount,
               continuousWinCount,
               mySkillIdsList,
@@ -172,11 +173,6 @@ class GameStartScreen extends HookWidget {
         body: Stack(
           children: <Widget>[
             background(),
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.blueGrey.shade900.withOpacity(0.7),
-            ),
             Center(
               child: SingleChildScrollView(
                 child: SizedBox(
@@ -194,15 +190,15 @@ class GameStartScreen extends HookWidget {
                           ? AnimatedOpacity(
                               duration: const Duration(milliseconds: 500),
                               opacity: matchingFlg.value ? 1 : 0,
-                              child: UserProfileStart(
+                              child: UserProfileCommon(
                                 rivalInfo.imageNumber,
+                                rivalInfo.cardNumber,
                                 rivalInfo.matchedCount,
                                 rivalInfo.continuousWinCount,
                                 rivalInfo.name,
                                 rivalInfo.rate,
-                                rivalInfo.maxRate,
                                 rivalInfo.skillList,
-                                true,
+                                0,
                               ),
                             )
                           : SizedBox(
@@ -246,15 +242,15 @@ class GameStartScreen extends HookWidget {
                         seVolume,
                         matchingQuitFlg,
                       ),
-                      UserProfileStart(
+                      UserProfileCommon(
                         imageNumber,
+                        cardNumber,
                         matchedCount,
                         continuousWinCount,
                         playerName,
                         rate,
-                        maxRate,
                         mySkillIdsList,
-                        true,
+                        0,
                       ),
                     ],
                   ),

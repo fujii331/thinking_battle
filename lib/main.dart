@@ -132,7 +132,7 @@ class MyApp extends HookWidget {
         .setVolume(context.read(bgmVolumeProvider).state);
 
     return MaterialApp(
-      title: '水平思考MONSTERS',
+      title: '水平思考モンスターズ',
       debugShowCheckedModeBanner: false,
       builder: EasyLoading.init(),
       theme: ThemeData(

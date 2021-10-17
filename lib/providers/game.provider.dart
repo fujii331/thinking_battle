@@ -18,8 +18,8 @@ final precedingFlgProvider = StateProvider((ref) => false);
 const dummyPlayerInfo = PlayerInfo(
   name: '',
   rate: 0,
-  maxRate: 0,
   imageNumber: 0,
+  cardNumber: 0,
   matchedCount: 0,
   continuousWinCount: 0,
   skillList: [],
@@ -38,6 +38,8 @@ final inputAnswerProvider = StateProvider((ref) => '');
 final selectableQuestionsProvider = StateProvider((ref) => <Question>[]);
 final selectQuestionIdProvider = StateProvider((ref) => 0);
 final selectSkillIdsProvider = StateProvider((ref) => <int>[]);
+final selectMessageIdProvider = StateProvider((ref) => 0);
+final messagedTurnCountProvider = StateProvider((ref) => 0);
 
 final answerFailedFlgProvider = StateProvider((ref) => false);
 final forceQuestionFlgProvider = StateProvider((ref) => false);

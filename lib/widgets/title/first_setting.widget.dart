@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:thinking_battle/widgets/common/profile_update_area.widget.dart';
+import 'package:thinking_battle/widgets/title/profile_update_area.widget.dart';
 
 class FirstSetting extends HookWidget {
   const FirstSetting({Key? key}) : super(key: key);
@@ -22,14 +22,14 @@ class FirstSetting extends HookWidget {
               bottom: 25,
             ),
             child: Text(
-              '名前とアイコンを設定！',
+              '登録名とアイコンを設定！',
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          const ProfileUpdateArea(true),
+          const ProfileUpdateArea(),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.only(

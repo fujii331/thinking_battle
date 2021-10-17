@@ -52,6 +52,19 @@ void firstSetting(BuildContext context) async {
   context.read(loginIdProvider).state = prefs.getString('email') ?? '';
   // 画像番号
   context.read(imageNumberProvider).state = prefs.getInt('imageNumber') ?? 1;
+  // カード番号
+  context.read(cardNumberProvider).state = prefs.getInt('cardNumber') ?? 1;
+  // 画像番号リスト
+  context.read(imageNumberListProvider).state =
+      prefs.getStringList('imageNumberList') ??
+          ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  // カード番号リスト
+  context.read(cardNumberListProvider).state =
+      prefs.getStringList('cardNumberList') ?? ['1', '2', '3', '4'];
+  // メッセージIDリスト
+  context.read(messageIdsListProvider).state =
+      prefs.getStringList('messageIdsList') ?? ['1', '2', '3', '4'];
   // レート
   context.read(rateProvider).state = prefs.getDouble('rate') ?? 1500.0;
   // 最大レート
@@ -66,6 +79,15 @@ void firstSetting(BuildContext context) async {
               ?.map((skill) => int.parse(skill))
               .toList() as List<int>
           : [1, 2, 3];
+
+  // メッセージ
+  context.read(myMessageIdsListProvider).state =
+      prefs.getStringList('messageList') != null
+          ? prefs
+              .getStringList('messageList')
+              ?.map((message) => int.parse(message))
+              .toList() as List<int>
+          : [1, 2, 3, 4];
 
   // 対戦数
   context.read(matchedCountProvider).state = prefs.getInt('matchCount') ?? 0;

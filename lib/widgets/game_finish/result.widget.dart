@@ -24,27 +24,23 @@ class Result extends HookWidget {
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
 
     final int imageNumber = useProvider(imageNumberProvider).state;
+    final int cardNumber = useProvider(cardNumberProvider).state;
     final int matchedCount = useProvider(matchedCountProvider).state;
     final int continuousWinCount =
         useProvider(continuousWinCountProvider).state;
     final String playerName = useProvider(playerNameProvider).state;
     final double rate = useProvider(rateProvider).state;
-    final double maxRate = useProvider(maxRateProvider).state;
     final bool trainingFlg = useProvider(trainingProvider).state;
     final bool changedTraining = useProvider(changedTrainingProvider).state;
     final String friendMatchWord = useProvider(friendMatchWordProvider).state;
     final bool notRateChangeFlg =
         (trainingFlg && !changedTraining) || friendMatchWord != '';
+    final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
 
     return Scaffold(
       body: Stack(
         children: <Widget>[
           background(),
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.blueGrey.shade900.withOpacity(0.7),
-          ),
           Center(
             child: SingleChildScrollView(
               child: SizedBox(
@@ -57,11 +53,12 @@ class Result extends HookWidget {
                     const SizedBox(height: 20),
                     UserProfileFinish(
                       rivalInfo.imageNumber,
+                      rivalInfo.cardNumber,
                       rivalInfo.matchedCount,
                       rivalInfo.continuousWinCount,
                       rivalInfo.name,
                       rivalInfo.rate,
-                      rivalInfo.maxRate,
+                      rivalInfo.skillList,
                       false,
                       winFlg == null ? null : !winFlg!,
                       notRateChangeFlg,
@@ -71,11 +68,12 @@ class Result extends HookWidget {
                     const SizedBox(height: 15),
                     UserProfileFinish(
                       imageNumber,
+                      cardNumber,
                       matchedCount,
                       continuousWinCount,
                       playerName,
                       rate,
-                      maxRate,
+                      mySkillIdsList,
                       true,
                       winFlg,
                       notRateChangeFlg,

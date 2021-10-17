@@ -228,8 +228,8 @@ class SkillModal extends HookWidget {
             padding: const EdgeInsets.only(top: 9),
             child: SkillTooltip(
               skill,
-              Colors.black,
-              18,
+              false,
+              0,
             ),
           ),
         ],

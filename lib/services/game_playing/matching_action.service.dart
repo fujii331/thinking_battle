@@ -19,9 +19,9 @@ import 'package:thinking_battle/widgets/game_start/failed_matching.widget.dart';
 Future matchingAction(
   BuildContext context,
   int imageNumber,
+  int cardNumber,
   String userName,
   double userRate,
-  double maxRate,
   int matchedCount,
   int continuousWinCount,
   List<int> userSkillIdsList,
@@ -31,9 +31,9 @@ Future matchingAction(
   await mainMatchingAction(
     context,
     imageNumber,
+    cardNumber,
     userName,
     userRate,
-    maxRate,
     matchedCount,
     continuousWinCount,
     userSkillIdsList,
@@ -47,9 +47,9 @@ Future matchingAction(
       await matchingAction(
         context,
         imageNumber,
+        cardNumber,
         userName,
         userRate,
-        maxRate,
         matchedCount,
         continuousWinCount,
         userSkillIdsList,
@@ -63,9 +63,9 @@ Future matchingAction(
 Future mainMatchingAction(
   BuildContext context,
   int imageNumber,
+  int cardNumber,
   String userName,
   double userRate,
-  double maxRate,
   int matchedCount,
   int continuousWinCount,
   List<int> userSkillIdsList,
@@ -92,8 +92,8 @@ Future mainMatchingAction(
         context,
         userName,
         userRate,
-        maxRate,
         imageNumber,
+        cardNumber,
         matchedCount,
         continuousWinCount,
         userSkillIdsList,
@@ -122,8 +122,8 @@ Future mainMatchingAction(
         context,
         userName,
         userRate,
-        maxRate,
         imageNumber,
+        cardNumber,
         matchedCount,
         continuousWinCount,
         userSkillIdsList,
@@ -144,8 +144,8 @@ Future actionAfterSearch(
   BuildContext context,
   String userName,
   double userRate,
-  double maxRate,
   int imageNumber,
+  int cardNumber,
   int matchedCount,
   int continuousWinCount,
   List<int> userSkillIdsList,
@@ -160,8 +160,8 @@ Future actionAfterSearch(
       context,
       userName,
       userRate,
-      maxRate,
       imageNumber,
+      cardNumber,
       matchedCount,
       continuousWinCount,
       userSkillIdsList,
@@ -175,9 +175,9 @@ Future actionAfterSearch(
       querySnapshot.docs[0].id,
       context,
       imageNumber,
+      cardNumber,
       userName,
       userRate,
-      maxRate,
       matchedCount,
       continuousWinCount,
       userSkillIdsList,
@@ -192,8 +192,8 @@ Future matchingPreparation(
   BuildContext context,
   String userName,
   double userRate,
-  double maxRate,
   int imageNumber,
+  int cardNumber,
   int matchedCount,
   int continuousWinCount,
   List<int> userSkillIdsList,
@@ -207,8 +207,8 @@ Future matchingPreparation(
   await matchingRoomRef.doc(matchingId).set({
     'name': userName,
     'rate': userRate,
-    'maxRate': maxRate,
     'imageNumber': imageNumber,
+    'cardNumber': cardNumber,
     'matchedCount': matchedCount,
     'continuousWinCount': continuousWinCount,
     'skillList': userSkillIdsList,
@@ -232,8 +232,8 @@ Future matchingPreparation(
         context.read(rivalInfoProvider).state = PlayerInfo(
           name: matchingInfoSnapshot.name,
           rate: matchingInfoSnapshot.rate,
-          maxRate: matchingInfoSnapshot.maxRate,
           imageNumber: matchingInfoSnapshot.imageNumber,
+          cardNumber: matchingInfoSnapshot.cardNumber,
           matchedCount: matchingInfoSnapshot.matchedCount,
           continuousWinCount: matchingInfoSnapshot.continuousWinCount,
           skillList: matchingInfoSnapshot.skillList,
@@ -355,9 +355,9 @@ Future matchingUpdate(
   String matchingId,
   BuildContext context,
   int imageNumber,
+  int cardNumber,
   String userName,
   double userRate,
-  double maxRate,
   int matchedCount,
   int continuousWinCount,
   List<int> userSkillIdsList,
@@ -387,8 +387,8 @@ Future matchingUpdate(
         transaction.update(matchingTargetRef, {
           'name': userName,
           'rate': userRate,
-          'maxRate': maxRate,
           'imageNumber': imageNumber,
+          'cardNumber': cardNumber,
           'matchedCount': matchedCount,
           'continuousWinCount': continuousWinCount,
           'skillList': userSkillIdsList,
@@ -414,8 +414,8 @@ Future matchingUpdate(
       context.read(rivalInfoProvider).state = PlayerInfo(
         name: firstMatchedInfoSnapshot.name,
         rate: firstMatchedInfoSnapshot.rate,
-        maxRate: firstMatchedInfoSnapshot.maxRate,
         imageNumber: firstMatchedInfoSnapshot.imageNumber,
+        cardNumber: firstMatchedInfoSnapshot.cardNumber,
         matchedCount: firstMatchedInfoSnapshot.matchedCount,
         continuousWinCount: firstMatchedInfoSnapshot.continuousWinCount,
         skillList: firstMatchedInfoSnapshot.skillList,
@@ -444,7 +444,8 @@ Future matchingUpdate(
   });
 
   for (int i = 0; i < 3; i++) {
-    if (context.read(matchingRoomIdProvider).state != '') {
+    if (matchingQuitFlgState.value ||
+        context.read(matchingRoomIdProvider).state != '') {
       break;
     }
     await Future.delayed(const Duration(seconds: 1));

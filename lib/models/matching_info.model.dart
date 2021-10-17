@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MatchingInfo {
   final String name;
   final double rate;
-  final double maxRate;
   final int imageNumber;
+  final int cardNumber;
   final int matchedCount;
   final int continuousWinCount;
   final List<int> skillList;
@@ -15,8 +15,8 @@ class MatchingInfo {
   const MatchingInfo({
     required this.name,
     required this.rate,
-    required this.maxRate,
     required this.imageNumber,
+    required this.cardNumber,
     required this.matchedCount,
     required this.continuousWinCount,
     required this.skillList,
@@ -29,8 +29,8 @@ class MatchingInfo {
     return MatchingInfo(
       name: json['name'] as String,
       rate: json['rate'] as double,
-      maxRate: json['maxRate'] as double,
       imageNumber: json['imageNumber'] as int,
+      cardNumber: json['cardNumber'] as int,
       matchedCount: json['matchedCount'] as int,
       continuousWinCount: json['continuousWinCount'] as int,
       skillList: [
