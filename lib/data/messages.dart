@@ -7,7 +7,7 @@ const messageSettings = <Message>[
   ),
   Message(
     id: 2,
-    message: '難しいな...',
+    message: '難しいな',
   ),
   Message(
     id: 3,
@@ -15,15 +15,15 @@ const messageSettings = <Message>[
   ),
   Message(
     id: 4,
-    message: 'ここからだ！',
+    message: 'ありがとう！',
   ),
   Message(
     id: 5,
-    message: 'ナイス質問お願い...',
+    message: 'まだ答えないで！',
   ),
   Message(
     id: 6,
-    message: 'スキル使う？',
+    message: 'スキルはやめて〜',
   ),
   Message(
     id: 7,
@@ -39,7 +39,7 @@ const messageSettings = <Message>[
   ),
   Message(
     id: 10,
-    message: '今回は負けない',
+    message: '楽しみましょう！',
   ),
   Message(
     id: 11,
@@ -48,5 +48,37 @@ const messageSettings = <Message>[
   Message(
     id: 12,
     message: '解答しようかな〜',
+  ),
+  Message(
+    id: 13,
+    message: '君と戦いたかった',
+  ),
+  Message(
+    id: 14,
+    message: '嘘つき使った？',
+  ),
+  Message(
+    id: 15,
+    message: 'また会おう！',
+  ),
+  Message(
+    id: 16,
+    message: 'このテーマ苦手',
+  ),
+  Message(
+    id: 17,
+    message: '絶対負けん！',
+  ),
+  Message(
+    id: 18,
+    message: '君は強い！',
+  ),
+  Message(
+    id: 19,
+    message: 'あと一歩でわかりそう',
+  ),
+  Message(
+    id: 20,
+    message: 'キタコレ',
   ),
 ];

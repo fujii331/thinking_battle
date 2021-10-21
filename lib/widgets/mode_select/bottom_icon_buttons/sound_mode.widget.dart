@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
+import 'package:thinking_battle/widgets/common/modal_close_button.widget.dart';
 
 class SoundMode extends HookWidget {
   final AudioCache soundEffect;
@@ -107,32 +108,7 @@ class SoundMode extends HookWidget {
             ),
           ),
           const SizedBox(height: 25),
-          SizedBox(
-            width: 90,
-            height: 40,
-            child: ElevatedButton(
-              onPressed: () => {
-                soundEffect.play(
-                  'sounds/cancel.mp3',
-                  isNotification: true,
-                  volume: seVolume,
-                ),
-                Navigator.pop(context),
-              },
-              child: const Text('閉じる'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red.shade400,
-                padding: const EdgeInsets.only(
-                  bottom: 3,
-                ),
-                shape: const StadiumBorder(),
-                side: BorderSide(
-                  width: 2,
-                  color: Colors.red.shade700,
-                ),
-              ),
-            ),
-          ),
+          const ModalCloseButton(),
         ],
       ),
     );

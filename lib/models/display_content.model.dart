@@ -7,6 +7,7 @@ class DisplayContent {
   final List displayList;
   final int importance;
   final String specialMessage;
+  final int messageId;
 
   const DisplayContent({
     required this.content,
@@ -17,5 +18,6 @@ class DisplayContent {
     required this.displayList,
     required this.importance,
     required this.specialMessage,
+    required this.messageId,
   });
 }

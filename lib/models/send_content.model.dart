@@ -4,11 +4,13 @@ class SendContent {
   final int questionId;
   final String answer;
   final List<int> skillIds;
+  final int messageId;
 
   const SendContent({
     required this.questionId,
     required this.answer,
     required this.skillIds,
+    required this.messageId,
   });
 
   factory SendContent.fromJson(DocumentSnapshot<Object?> json) {
@@ -30,6 +32,7 @@ class SendContent {
                       skillIds[1] as int,
                       skillIds[2] as int,
                     ],
+      messageId: json['messageId'] as int,
     );
   }
 }

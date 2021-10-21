@@ -213,6 +213,9 @@ class QuestionModal extends HookWidget {
                                 );
                               }
 
+                              final messageId =
+                                  context.read(selectMessageIdProvider).state;
+
                               // 通信対戦時は相手にデータを送る
                               if (myActionDoc != null) {
                                 await myActionDoc!
@@ -220,6 +223,7 @@ class QuestionModal extends HookWidget {
                                       'questionId': sendQuestionId,
                                       'answer': '',
                                       'skillIds': selectSkillIds,
+                                      'messageId': messageId,
                                     })
                                     .timeout(const Duration(seconds: 5))
                                     .onError((error, stackTrace) {
@@ -232,6 +236,7 @@ class QuestionModal extends HookWidget {
                                 questionId: sendQuestionId,
                                 answer: '',
                                 skillIds: selectSkillIds,
+                                messageId: messageId,
                               );
                               // ターン行動実行
                               turnAction(
@@ -314,11 +319,11 @@ class QuestionModal extends HookWidget {
       height: 45,
       child: ElevatedButton(
         onPressed: () {
-          soundEffect.play(
-            'sounds/tap.mp3',
-            isNotification: true,
-            volume: seVolume,
-          );
+          // soundEffect.play(
+          //   'sounds/tap.mp3',
+          //   isNotification: true,
+          //   volume: seVolume,
+          // );
 
           context.read(selectQuestionIdProvider).state = targetQuestion.id;
           changeFlgState.value = !changeFlgState.value;

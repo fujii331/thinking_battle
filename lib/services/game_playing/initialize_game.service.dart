@@ -9,13 +9,13 @@ import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/data/quiz_data.dart';
 
-String commonInitialAction(
+void commonInitialAction(
   BuildContext context,
 ) {
-  final Quiz quiz = quizData[Random().nextInt(quizData.length)];
   // 初期化
   context.read(bgmProvider).state.stop();
   context.read(currentSkillPointProvider).state = 5;
+  context.read(afterMessageTimeProvider).state = 0;
   context.read(alreadyseenQuestionsProvider).state = [];
   context.read(selectableQuestionsProvider).state = [];
   context.read(displayContentListProvider).state = [];
@@ -24,12 +24,6 @@ String commonInitialAction(
   context.read(spChargeTurnProvider).state = 0;
   context.read(turnCountProvider).state = 0;
   context.read(timerCancelFlgProvider).state = false;
-
-  // 問題を設定
-  context.read(allQuestionsProvider).state = quiz.questions;
-  context.read(correctAnswersProvider).state = quiz.correctAnswers;
-
-  return quiz.thema;
 }
 
 void trainingInitialAction(
@@ -58,4 +52,10 @@ void trainingInitialAction(
     continuousWinCount: 0,
     skillList: skillList,
   );
+
+  final Quiz quiz = quizData[Random().nextInt(quizData.length)];
+  // 問題を設定
+  context.read(quizThemaProvider).state = quiz.thema;
+  context.read(allQuestionsProvider).state = quiz.questions;
+  context.read(correctAnswersProvider).state = quiz.correctAnswers;
 }

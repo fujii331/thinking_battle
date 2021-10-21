@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:audioplayers/audioplayers.dart';
-
-import '../../providers/common.provider.dart';
+import 'package:thinking_battle/widgets/common/modal_close_button.widget.dart';
 
 class CommentModal extends HookWidget {
   final String topText;
@@ -17,9 +14,6 @@ class CommentModal extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AudioCache soundEffect = useProvider(soundEffectProvider).state;
-    final double seVolume = useProvider(seVolumeProvider).state;
-
     return Padding(
       padding: const EdgeInsets.only(
         top: 15,
@@ -46,32 +40,7 @@ class CommentModal extends HookWidget {
             ),
           ),
           const SizedBox(height: 30),
-          SizedBox(
-            width: 90,
-            height: 40,
-            child: ElevatedButton(
-              onPressed: () => {
-                soundEffect.play(
-                  'sounds/cancel.mp3',
-                  isNotification: true,
-                  volume: seVolume,
-                ),
-                Navigator.pop(context),
-              },
-              child: const Text('閉じる'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red.shade400,
-                padding: const EdgeInsets.only(
-                  bottom: 3,
-                ),
-                shape: const StadiumBorder(),
-                side: BorderSide(
-                  width: 2,
-                  color: Colors.red.shade700,
-                ),
-              ),
-            ),
-          ),
+          const ModalCloseButton(),
         ],
       ),
     );

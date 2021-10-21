@@ -164,6 +164,9 @@ class AnswerModal extends HookWidget {
                           hiraganaState.value = true;
                           context.read(myTurnFlgProvider).state = false;
 
+                          final messageId =
+                              context.read(selectMessageIdProvider).state;
+
                           // 通信対戦時は相手にデータを送る
                           if (myActionDoc != null) {
                             await myActionDoc!
@@ -171,6 +174,7 @@ class AnswerModal extends HookWidget {
                                   'questionId': 0,
                                   'answer': inputAnswer,
                                   'skillIds': [],
+                                  'messageId': messageId,
                                 })
                                 .timeout(const Duration(seconds: 5))
                                 .onError((error, stackTrace) {
@@ -183,6 +187,7 @@ class AnswerModal extends HookWidget {
                             questionId: 0,
                             answer: inputAnswer,
                             skillIds: [],
+                            messageId: messageId,
                           );
 
                           // ターン行動実行

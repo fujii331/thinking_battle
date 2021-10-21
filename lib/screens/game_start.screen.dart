@@ -47,11 +47,10 @@ class GameStartScreen extends HookWidget {
 
     context.read(bgmProvider).state.stop();
 
-    final String thema = commonInitialAction(context);
+    commonInitialAction(context);
 
     Navigator.of(context).pushReplacementNamed(
       GamePlayingScreen.routeName,
-      arguments: thema,
     );
   }
 
@@ -78,6 +77,7 @@ class GameStartScreen extends HookWidget {
 
     final matchingQuitFlg = useState(false);
     final matchingFlg = useState(false);
+    final interruptionFlgState = useState(false);
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
@@ -89,7 +89,7 @@ class GameStartScreen extends HookWidget {
           const Duration(milliseconds: 500),
         );
         context.read(bgmProvider).state = await soundEffect.loop(
-          'sounds/matting.mp3',
+          'sounds/waiting_matching.mp3',
           volume: bgmVolume,
           isNotification: true,
         );
@@ -123,6 +123,7 @@ class GameStartScreen extends HookWidget {
               mySkillIdsList,
               matchingQuitFlg,
               fiendMatchWord,
+              interruptionFlgState,
             ).then((_) {
               if (!matchingQuitFlg.value) {
                 gameStart(
@@ -168,7 +169,7 @@ class GameStartScreen extends HookWidget {
     }, const []);
 
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => false,
       child: Scaffold(
         body: Stack(
           children: <Widget>[

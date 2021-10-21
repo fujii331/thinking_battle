@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,13 +8,13 @@ import 'package:thinking_battle/widgets/common/continuous_win.widget.dart';
 import 'package:thinking_battle/widgets/common/profile_name.widget.dart';
 import 'package:thinking_battle/widgets/common/stack_label.widget.dart';
 import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
-import 'package:thinking_battle/widgets/mode_select/my_room/setting_my_skills.widget.dart';
 
 class MyInfo extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
   final int cardNumber;
   final List colorList;
+  final int matchedCount;
 
   // ignore: use_key_in_widget_constructors
   const MyInfo(
@@ -23,6 +22,7 @@ class MyInfo extends HookWidget {
     this.seVolume,
     this.cardNumber,
     this.colorList,
+    this.matchedCount,
   );
 
   @override
@@ -47,8 +47,8 @@ class MyInfo extends HookWidget {
               offset: const Offset(2, 2))
         ],
       ),
-      width: MediaQuery.of(context).size.width * 0.9 > 270.0
-          ? 270.0
+      width: MediaQuery.of(context).size.width * 0.9 > 275.0
+          ? 275.0
           : MediaQuery.of(context).size.width * 0.9,
       height: 120,
       child: Stack(
@@ -74,6 +74,8 @@ class MyInfo extends HookWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(6),
+                      width: 85,
+                      height: 85,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: FractionalOffset.topLeft,
@@ -93,13 +95,13 @@ class MyInfo extends HookWidget {
                           Radius.circular(50),
                         ),
                       ),
-                      width: MediaQuery.of(context).size.width > 300 ? 85 : 70,
-                      height: MediaQuery.of(context).size.width > 300 ? 85 : 70,
-                      child: Image.asset(
-                        'assets/images/characters/' +
-                            imageNumber.toString() +
-                            '.png',
-                      ),
+                      child: imageNumber == 0
+                          ? Container()
+                          : Image.asset(
+                              'assets/images/characters/' +
+                                  imageNumber.toString() +
+                                  '.png',
+                            ),
                     ),
                   ],
                 ),
@@ -114,8 +116,8 @@ class MyInfo extends HookWidget {
                         colorList[1],
                         -1,
                       ),
-                      const SizedBox(height: 7),
-                      Wrap(
+                      const SizedBox(height: 10),
+                      Row(
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +129,22 @@ class MyInfo extends HookWidget {
                               StackWord(
                                 rate.toString(),
                                 Colors.white,
+                                1,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const StackLabel(
+                                'match',
                                 0,
+                              ),
+                              StackWord(
+                                matchedCount.toString() + ' 回',
+                                Colors.white,
+                                1,
                               ),
                             ],
                           ),

@@ -2,6 +2,7 @@ import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:thinking_battle/data/messages.dart';
 import 'package:thinking_battle/data/skills.dart';
 import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
@@ -71,6 +72,12 @@ class ContentList extends HookWidget {
 
                 int displayNumber = 0;
                 final List<Widget> skillList = [];
+                Widget messageWidget = Container();
+
+                if (targetContent.messageId != 0) {
+                  displayNumber++;
+                  messageWidget = _message(targetContent);
+                }
 
                 for (int skillId in targetContent.skillIds) {
                   if (skillId != 0 &&
@@ -105,6 +112,7 @@ class ContentList extends HookWidget {
                         ? CrossAxisAlignment.start
                         : CrossAxisAlignment.end,
                     children: [
+                      messageWidget,
                       skillList.isNotEmpty
                           ? Padding(
                               padding: const EdgeInsets.only(bottom: 4),
@@ -143,6 +151,48 @@ class ContentList extends HookWidget {
         ],
       ),
     );
+  }
+
+  Widget _message(
+    DisplayContent targetContent,
+  ) {
+    return targetContent.displayList.isNotEmpty
+        ? Container(
+            height: 43,
+            width: double.infinity,
+            padding: const EdgeInsets.only(
+              left: 36.0,
+              right: 4.0,
+              bottom: 10,
+            ),
+            child: Bubble(
+              alignment: targetContent.myTurnFlg
+                  ? Alignment.topRight
+                  : Alignment.topLeft,
+              borderWidth: 1,
+              borderColor: Colors.black,
+              elevation: 2.0,
+              shadowColor: Colors.grey,
+              nipOffset: 10,
+              nipWidth: 12,
+              nipHeight: 8,
+              nip: targetContent.myTurnFlg
+                  ? BubbleNip.rightBottom
+                  : BubbleNip.leftBottom,
+              color: Colors.grey.shade700,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 2.5),
+                child: Text(
+                  messageSettings[targetContent.messageId - 1].message,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          )
+        : Container();
   }
 
   Widget _skillMessage(

@@ -7,13 +7,11 @@ import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
-import 'package:thinking_battle/widgets/common/user_profile_common.widget.dart';
 
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons.widget.dart';
-// import 'package:thinking_battle/widgets/mode_select/my_info.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/my_info.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/play_game_buttons.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_room_button.widget.dart';
-// import 'package:thinking_battle/widgets/common/stamina.widget.dart';
 
 class ModeSelectScreen extends HookWidget {
   const ModeSelectScreen({Key? key}) : super(key: key);
@@ -26,13 +24,8 @@ class ModeSelectScreen extends HookWidget {
     final double seVolume = useProvider(seVolumeProvider).state;
     final int cardNumber = useProvider(cardNumberProvider).state;
     final List colorList = returnCardColorList(cardNumber);
-    final int imageNumber = useProvider(imageNumberProvider).state;
-    final String playerName = useProvider(playerNameProvider).state;
-    final double rate = useProvider(rateProvider).state;
-    final int continuousWinCount =
-        useProvider(continuousWinCountProvider).state;
+
     final int matchedCount = useProvider(matchedCountProvider).state;
-    final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
 
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -136,21 +129,12 @@ class ModeSelectScreen extends HookWidget {
                 children: <Widget>[
                   // const Stamina(),
                   const SizedBox(height: 95),
-                  // MyInfo(
-                  //   soundEffect,
-                  //   seVolume,
-                  //   cardNumber,
-                  //   colorList,
-                  // ),
-                  UserProfileCommon(
-                    imageNumber,
+                  MyInfo(
+                    soundEffect,
+                    seVolume,
                     cardNumber,
+                    colorList,
                     matchedCount,
-                    continuousWinCount,
-                    playerName,
-                    rate,
-                    mySkillIdsList,
-                    0,
                   ),
                   const SizedBox(height: 28),
                   PlayGameButtons(

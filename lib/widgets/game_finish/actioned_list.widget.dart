@@ -2,6 +2,7 @@ import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:thinking_battle/data/messages.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 
 import 'package:thinking_battle/widgets/common/background.widget.dart';
@@ -81,6 +82,12 @@ class ActionedList extends HookWidget {
 
                             final List<Widget> skillList = [];
 
+                            Widget messageWidget = Container();
+
+                            if (targetContent.messageId != 0) {
+                              messageWidget = _message(targetContent);
+                            }
+
                             for (int skillId in targetContent.skillIds) {
                               if (skillId != 0) {
                                 skillList.add(
@@ -117,6 +124,7 @@ class ActionedList extends HookWidget {
                                     ? CrossAxisAlignment.start
                                     : CrossAxisAlignment.end,
                                 children: [
+                                  messageWidget,
                                   skillList.isNotEmpty
                                       ? Padding(
                                           padding:
@@ -145,6 +153,44 @@ class ActionedList extends HookWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _message(
+    DisplayContent targetContent,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.only(
+        left: 36.0,
+        right: 4.0,
+        bottom: 10,
+      ),
+      child: Bubble(
+        alignment:
+            targetContent.myTurnFlg ? Alignment.topRight : Alignment.topLeft,
+        borderWidth: 1,
+        borderColor: Colors.black,
+        elevation: 2.0,
+        shadowColor: Colors.grey,
+        nipOffset: 14,
+        nipWidth: 12,
+        nipHeight: 8,
+        nip: targetContent.myTurnFlg
+            ? BubbleNip.rightBottom
+            : BubbleNip.leftBottom,
+        color: Colors.grey.shade700,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 2.5),
+          child: Text(
+            messageSettings[targetContent.messageId - 1].message,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -274,9 +320,12 @@ class ActionedList extends HookWidget {
                 : skillIds.contains(-1)
                     ? Colors.yellow.shade200
                     : Colors.white,
-        child: Text(
-          message,
-          style: const TextStyle(fontSize: fontSize),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 2.5),
+          child: Text(
+            message,
+            style: const TextStyle(fontSize: fontSize),
+          ),
         ),
       ),
     );

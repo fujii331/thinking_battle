@@ -60,6 +60,12 @@ class BottomActionButtons extends HookWidget {
               ),
               onPressed: myTurnFlg && !forceQuestionFlg && !answerFailedFlg
                   ? () {
+                      soundEffect.play(
+                        'sounds/tap.mp3',
+                        isNotification: true,
+                        volume: seVolume,
+                      );
+
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,

@@ -4,16 +4,20 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 
 class EditImage extends HookWidget {
-  const EditImage({Key? key}) : super(key: key);
+  final AudioCache soundEffect;
+  final double seVolume;
+
+  // ignore: use_key_in_widget_constructors
+  const EditImage(
+    this.soundEffect,
+    this.seVolume,
+  );
 
   @override
   Widget build(BuildContext context) {
-    final AudioCache soundEffect = useProvider(soundEffectProvider).state;
-    final double seVolume = useProvider(seVolumeProvider).state;
     final List<String> imageNumberList =
         useProvider(imageNumberListProvider).state;
 
@@ -26,8 +30,6 @@ class EditImage extends HookWidget {
         _imageSelect(
           context,
           int.parse(imageNumberString),
-          soundEffect,
-          seVolume,
         ),
       );
 
@@ -88,7 +90,7 @@ class EditImage extends HookWidget {
             ),
           ),
           SizedBox(
-            height: 230,
+            height: imageRowList.length > 2 ? 230 : 150,
             width: 230,
             child: ListView.builder(
               itemBuilder: (context, index) {
@@ -110,14 +112,12 @@ class EditImage extends HookWidget {
   Widget _imageSelect(
     BuildContext context,
     int imageNumber,
-    AudioCache soundEffect,
-    double seVolume,
   ) {
     return InkWell(
       onTap: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         soundEffect.play(
-          'sounds/tap.mp3',
+          'sounds/change.mp3',
           isNotification: true,
           volume: seVolume,
         );

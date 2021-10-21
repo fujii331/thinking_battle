@@ -4,16 +4,20 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 
 class EditTheme extends HookWidget {
-  const EditTheme({Key? key}) : super(key: key);
+  final AudioCache soundEffect;
+  final double seVolume;
+
+  // ignore: use_key_in_widget_constructors
+  const EditTheme(
+    this.soundEffect,
+    this.seVolume,
+  );
 
   @override
   Widget build(BuildContext context) {
-    final AudioCache soundEffect = useProvider(soundEffectProvider).state;
-    final double seVolume = useProvider(seVolumeProvider).state;
     final List<String> cardNumberList =
         useProvider(cardNumberListProvider).state;
 
@@ -26,8 +30,6 @@ class EditTheme extends HookWidget {
         _cardSelect(
           context,
           int.parse(cardNumberString),
-          soundEffect,
-          seVolume,
         ),
       );
 
@@ -56,8 +58,14 @@ class EditTheme extends HookWidget {
             cardList[0],
             cardList.length > 1
                 ? cardList[1]
-                : const SizedBox(height: 60, width: 60),
-            const SizedBox(height: 60, width: 60),
+                : const SizedBox(
+                    width: 63,
+                    height: 36,
+                  ),
+            const SizedBox(
+              width: 63,
+              height: 36,
+            ),
           ],
         ),
       );
@@ -88,7 +96,7 @@ class EditTheme extends HookWidget {
             ),
           ),
           SizedBox(
-            height: 180,
+            height: cardRowList.length > 2 ? 180 : 120,
             width: 230,
             child: ListView.builder(
               itemBuilder: (context, index) {
@@ -110,14 +118,12 @@ class EditTheme extends HookWidget {
   Widget _cardSelect(
     BuildContext context,
     int themeNumber,
-    AudioCache soundEffect,
-    double seVolume,
   ) {
     return InkWell(
       onTap: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         soundEffect.play(
-          'sounds/tap.mp3',
+          'sounds/change.mp3',
           isNotification: true,
           volume: seVolume,
         );

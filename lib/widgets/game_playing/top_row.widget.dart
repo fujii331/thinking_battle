@@ -8,14 +8,14 @@ import 'package:thinking_battle/models/player_info.model.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
-import 'package:thinking_battle/widgets/game_playing/message_modal.widget.dart';
+import 'package:thinking_battle/widgets/game_playing/message_pop_up_menu.widget.dart';
 import 'package:thinking_battle/widgets/game_playing/rival_info.widget.dart';
 
 class TopRow extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
   final PlayerInfo rivalInfo;
-  final DateTime myTurnTime;
+  final int myTurnTime;
   final bool myTurnFlg;
 
   // ignore: use_key_in_widget_constructors
@@ -32,8 +32,6 @@ class TopRow extends HookWidget {
     final int currentSkillPoint = useProvider(currentSkillPointProvider).state;
 
     final int spChargeTurn = useProvider(spChargeTurnProvider).state;
-    final int messagedTurnCount = useProvider(messagedTurnCountProvider).state;
-    final int selectMessageId = useProvider(selectMessageIdProvider).state;
 
     final bool displayMyturnSetFlg =
         useProvider(displayMyturnSetFlgProvider).state;
@@ -42,8 +40,6 @@ class TopRow extends HookWidget {
 
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
     final List colorList = returnCardColorList(rivalInfo.cardNumber);
-
-    final bool enableMessageFlg = myTurnFlg && messagedTurnCount == 0;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -107,44 +103,28 @@ class TopRow extends HookWidget {
               ),
             ),
           ),
-          IconButton(
-            iconSize: 20,
-            icon: Icon(
-              selectMessageId == 0 ? Icons.mail : Icons.mark_email_read,
-              color: selectMessageId != 0
-                  ? Colors.yellow.shade200
-                  : enableMessageFlg
-                      ? Colors.white
-                      : Colors.grey.shade600,
+          const SizedBox(width: 5),
+          SizedBox(
+            width: 30,
+            child: MessagePopUpMenu(
+              soundEffect,
+              seVolume,
+              myTurnFlg,
             ),
-            onPressed: enableMessageFlg
-                ? () {
-                    soundEffect.play(
-                      'sounds/tap.mp3',
-                      isNotification: true,
-                      volume: seVolume,
-                    );
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.NO_HEADER,
-                      headerAnimationLoop: false,
-                      dismissOnTouchOutside: true,
-                      dismissOnBackKeyPress: true,
-                      showCloseIcon: true,
-                      closeIcon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
-                      animType: AnimType.SCALE,
-                      width: MediaQuery.of(context).size.width * .86 > 650
-                          ? 650
-                          : null,
-                      body: const MessageModal(),
-                    ).show();
-                  }
-                : () {},
           ),
-          const SizedBox(width: 20),
+          // enableMessageCount > 0
+          //     ? Padding(
+          //         padding: const EdgeInsets.only(bottom: 13),
+          //         child: Text(
+          //           enableMessageCount.toString(),
+          //           style: TextStyle(
+          //             color: Colors.yellow.shade100,
+          //             fontSize: 12,
+          //           ),
+          //         ),
+          //       )
+          //     : Container(),
+          const Spacer(),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.5 > 130
                 ? 130
@@ -165,19 +145,14 @@ class TopRow extends HookWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          left:
-                              int.parse(DateFormat('s').format(myTurnTime)) < 10
-                                  ? 24
-                                  : 10,
+                          left: myTurnTime < 10 ? 24 : 10,
                         ),
                         child: Container(
                           padding: const EdgeInsets.only(top: 3),
                           child: Text(
-                            DateFormat('s').format(myTurnTime),
+                            myTurnTime.toString(),
                             style: TextStyle(
-                              color: int.parse(
-                                          DateFormat('s').format(myTurnTime)) <
-                                      10
+                              color: myTurnTime < 10
                                   ? Colors.red.shade200
                                   : Colors.white,
                               fontSize: 24,
@@ -211,7 +186,7 @@ class TopRow extends HookWidget {
               ],
             ),
           ),
-          const SizedBox(width: 30),
+          const Spacer(),
           SizedBox(
             width: 47,
             child: Row(

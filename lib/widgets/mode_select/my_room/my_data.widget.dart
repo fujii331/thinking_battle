@@ -112,7 +112,7 @@ class MyData extends HookWidget {
                                 SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
                                 soundEffect.play(
-                                  'sounds/tap.mp3',
+                                  'sounds/change.mp3',
                                   isNotification: true,
                                   volume: seVolume,
                                 );

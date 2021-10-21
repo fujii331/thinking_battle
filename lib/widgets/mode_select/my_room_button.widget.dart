@@ -7,6 +7,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/widgets/common/edit_image.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_room/edit_theme.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/my_room/gacha_select.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_room/my_data.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_room/setting_my_messages.widget.dart';
 
@@ -50,7 +51,7 @@ class MyRoomButton extends HookWidget {
             isNotification: true,
             volume: seVolume,
           );
-          selectWord == 'マイデータ'
+          selectWord == 'マイデータ' || selectWord == 'ガチャ'
               ? AwesomeDialog(
                   context: context,
                   dialogType: DialogType.NO_HEADER,
@@ -62,7 +63,12 @@ class MyRoomButton extends HookWidget {
                   width: MediaQuery.of(context).size.width * .86 > 650
                       ? 650
                       : null,
-                  body: const MyData(),
+                  body: selectWord == 'マイデータ'
+                      ? const MyData()
+                      : GachaSelect(
+                          soundEffect,
+                          seVolume,
+                        ),
                 ).show()
               : AwesomeDialog(
                   context: context,
@@ -76,9 +82,15 @@ class MyRoomButton extends HookWidget {
                       ? 650
                       : null,
                   body: selectWord == 'アイコン'
-                      ? const EditImage()
+                      ? EditImage(
+                          soundEffect,
+                          seVolume,
+                        )
                       : selectWord == 'テーマ'
-                          ? const EditTheme()
+                          ? EditTheme(
+                              soundEffect,
+                              seVolume,
+                            )
                           : selectWord == 'スキル'
                               ? SettingMySkills(
                                   [

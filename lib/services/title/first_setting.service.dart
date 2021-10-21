@@ -1,11 +1,11 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
-import 'package:thinking_battle/widgets/common/comment_modal.widget.dart';
 
 void firstSetting(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -35,10 +35,13 @@ void firstSetting(BuildContext context) async {
     'sounds/got_message.mp3',
     'sounds/matching.mp3',
     'sounds/my_turn.mp3',
+    'sounds/new_item.mp3',
     'sounds/open_advertise.mp3',
     'sounds/question_research.mp3',
     'sounds/ready.mp3',
     'sounds/reply.mp3',
+    'sounds/rival_message.mp3',
+    'sounds/same_item.mp3',
     'sounds/skill.mp3',
     'sounds/start.mp3',
     'sounds/tap.mp3',
@@ -56,8 +59,7 @@ void firstSetting(BuildContext context) async {
   context.read(cardNumberProvider).state = prefs.getInt('cardNumber') ?? 1;
   // 画像番号リスト
   context.read(imageNumberListProvider).state =
-      prefs.getStringList('imageNumberList') ??
-          ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      prefs.getStringList('imageNumberList') ?? ['1', '2', '3', '4', '5', '6'];
 
   // カード番号リスト
   context.read(cardNumberListProvider).state =
@@ -67,9 +69,6 @@ void firstSetting(BuildContext context) async {
       prefs.getStringList('messageIdsList') ?? ['1', '2', '3', '4'];
   // レート
   context.read(rateProvider).state = prefs.getDouble('rate') ?? 1500.0;
-  // 最大レート
-  final double maxRate = context.read(maxRateProvider).state =
-      prefs.getDouble('maxRate') ?? 1500.0;
 
   // スキル
   context.read(mySkillIdsListProvider).state =
@@ -99,6 +98,23 @@ void firstSetting(BuildContext context) async {
   // 最大連続勝利数
   context.read(maxContinuousWinCountProvider).state =
       prefs.getInt('maxContinuousWinCount') ?? 0;
+
+  // GP
+  context.read(gpPointProvider).state = prefs.getInt('gpPoint') ?? 0;
+  // ガチャカウント
+  context.read(gpCountProvider).state = prefs.getInt('gpCount') ?? 5;
+
+  // 日時
+  final todayString = DateFormat('yyyy/MM/dd').format(DateTime.now());
+  final dataString = prefs.getString('dataString') ?? todayString;
+
+  // 日時の更新が行われたらgpカウントを更新
+  if (dataString != todayString) {
+    context.read(gpCountProvider).state = 5;
+    prefs.setInt('gpCount', 5);
+  }
+
+  prefs.setString('dataString', todayString);
 
   // ライフ
   // if (prefs.getString('saveTime') != null) {

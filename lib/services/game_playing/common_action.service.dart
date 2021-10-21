@@ -31,6 +31,7 @@ Future turnAction(
   await Future.delayed(
     const Duration(milliseconds: 500),
   );
+
   // 表示リスト
   List<DisplayContent> displayContentList =
       context.read(displayContentListProvider).state;
@@ -44,7 +45,7 @@ Future turnAction(
   const double fontSize = 16;
   final double restrictWidth = myTurnFlg
       ? MediaQuery.of(context).size.width * .56
-      : MediaQuery.of(context).size.width * .46;
+      : MediaQuery.of(context).size.width * .47;
 
   // 画面上の表示を消す
   if (myTurnFlg) {
@@ -82,11 +83,42 @@ Future turnAction(
       displayList: [],
       importance: targetQuestion.importance,
       specialMessage: '',
+      messageId: sendContent.messageId,
+      // messageId: 2, // テスト用
     );
 
     // 表示リストに追加する
     displayContentList.add(displayContent);
     context.read(displayContentListProvider).state = displayContentList;
+
+    if (sendContent.messageId != 0) {
+      // メッセージ表示
+      soundEffect.play(
+        'sounds/rival_message.mp3',
+        isNotification: true,
+        volume: seVolume,
+      );
+
+      displayContentList.last.displayList.add(0);
+      context.read(displayContentListProvider).state = displayContentList;
+
+      if (myTurnFlg) {
+        // メッセージを初期化
+        context.read(selectMessageIdProvider).state = 0;
+        // メッセージカウントを減少
+        context.read(afterMessageTimeProvider).state = 60;
+      }
+
+      scrollToBottom(
+        context,
+        scrollController,
+        50,
+      );
+
+      await Future.delayed(
+        const Duration(milliseconds: 1000),
+      );
+    }
 
     final List<int> displaySkillIds = sendContent.skillIds
         .where((skill) => (myTurnFlg == true || skill != 4))
@@ -154,9 +186,10 @@ Future turnAction(
               answerFlg: displaycontent.answerFlg,
               myTurnFlg: displaycontent.myTurnFlg,
               skillIds: changedSkillIds,
-              displayList: [0, 0, 0, 0, 0],
+              displayList: [0, 0, 0, 0, 0, 0],
               importance: displaycontent.importance,
               specialMessage: displaycontent.specialMessage,
+              messageId: displaycontent.messageId,
             );
           } else {
             return displaycontent;
@@ -174,6 +207,7 @@ Future turnAction(
           specialMessage: changedCount == 0
               ? '質問調査 (修正なし)'
               : '質問調査 (' + changedCount.toString() + 'つ修正)',
+          messageId: displayContentList.last.messageId,
         );
 
         if (changedCount > 0) {
@@ -216,23 +250,9 @@ Future turnAction(
       scrollController,
       sendContent.skillIds.isEmpty &&
               targetQuestion.asking.length * (fontSize + 1) > restrictWidth
-          ? 138
+          ? 150
           : 50,
     );
-
-    await Future.delayed(
-      const Duration(milliseconds: 2000),
-    );
-
-    // 返答表示
-    soundEffect.play(
-      'sounds/reply.mp3',
-      isNotification: true,
-      volume: seVolume,
-    );
-
-    displayContentList.last.displayList.add(0);
-    context.read(displayContentListProvider).state = displayContentList;
 
     if (myTurnFlg) {
       // 解答禁止状態の場合、解除する
@@ -265,6 +285,20 @@ Future turnAction(
         context.read(forceQuestionFlgProvider).state = true;
       }
     }
+
+    await Future.delayed(
+      const Duration(milliseconds: 2000),
+    );
+
+    // 返答表示
+    soundEffect.play(
+      'sounds/reply.mp3',
+      isNotification: true,
+      volume: seVolume,
+    );
+
+    displayContentList.last.displayList.add(0);
+    context.read(displayContentListProvider).state = displayContentList;
   } else {
     // 正解判定
     final correctAnswerFlg =
@@ -286,6 +320,7 @@ Future turnAction(
       displayList: [],
       importance: 0,
       specialMessage: '',
+      messageId: sendContent.messageId,
     );
 
     // 表示リストに追加する
@@ -329,6 +364,7 @@ Future turnAction(
           displayList: displayContentList.last.displayList,
           importance: 0,
           specialMessage: '',
+          messageId: displayContentList.last.messageId,
         );
       } else {
         displayContentList.last.displayList.add(0);
@@ -363,6 +399,7 @@ Future turnAction(
         displayList: displayContentList.last.displayList,
         importance: 0,
         specialMessage: '',
+        messageId: displayContentList.last.messageId,
       );
       context.read(displayContentListProvider).state = displayContentList;
       context.read(timerCancelFlgProvider).state = true;
@@ -406,6 +443,7 @@ Future turnAction(
         displayList: displayContentList.last.displayList,
         importance: 0,
         specialMessage: '',
+        messageId: displayContentList.last.messageId,
       );
       context.read(displayContentListProvider).state = displayContentList;
 
@@ -434,6 +472,7 @@ Future turnAction(
       displayList: [0],
       importance: 0,
       specialMessage: '',
+      messageId: 0,
     );
 
     // 表示リストに追加する
@@ -490,7 +529,19 @@ void scrollToBottom(
         scrollController.position.maxScrollExtent + scrollHeight;
     scrollController.animateTo(
       bottomOffset,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+    );
+  } else if (context.read(turnCountProvider).state > 2) {
+    scrollController.animateTo(
+      25,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+    );
+  } else if (context.read(turnCountProvider).state > 1) {
+    scrollController.animateTo(
+      10,
+      duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
     );
   }
@@ -541,8 +592,7 @@ Future initializeAction(
     int turnCount = context.read(turnCountProvider).state;
 
     // 時間を初期化
-    context.read(myTurnTimeProvider).state =
-        DateTime(2020, 1, 1, 1, 1).add(const Duration(seconds: 30));
+    context.read(myTurnTimeProvider).state = 30;
 
     // 値を初期化
     context.read(inputAnswerProvider).state = '';
@@ -602,12 +652,9 @@ Future initializeAction(
     context.read(displayMyturnSetFlgProvider).state = true;
   } else {
     // 時間を初期化
-    context.read(rivalTurnTimeProvider).state =
-        DateTime(2020, 1, 1, 1, 1).add(const Duration(seconds: 45));
+    context.read(rivalTurnTimeProvider).state = 45;
     // 相手のターンの表示
     context.read(displayRivalturnSetFlgProvider).state = true;
-    // メッセージを初期化
-    context.read(selectMessageIdProvider).state = 0;
 
     if (context.read(trainingProvider).state) {
       cpuAction(

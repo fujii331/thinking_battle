@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/screens/game_start.screen.dart';
+import 'package:thinking_battle/screens/mode_select.screen.dart';
 
 class CenterRowFinish extends HookWidget {
   final bool? winFlg;
@@ -82,7 +83,10 @@ class CenterRowFinish extends HookWidget {
                       context.read(trainingProvider).state = false;
                     }
 
-                    Navigator.pop(context);
+                    Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(ModeSelectScreen.routeName),
+                    );
                   },
                 ),
               ),
@@ -116,7 +120,14 @@ class CenterRowFinish extends HookWidget {
                       context.read(trainingProvider).state = false;
                     }
 
-                    Navigator.of(context).pushReplacementNamed(
+                    // Navigator.of(context).pushReplacementNamed(
+                    //   GameStartScreen.routeName,
+                    // );
+                    Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(ModeSelectScreen.routeName),
+                    );
+                    Navigator.of(context).pushNamed(
                       GameStartScreen.routeName,
                     );
                   },

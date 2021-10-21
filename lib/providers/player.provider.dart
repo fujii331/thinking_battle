@@ -5,6 +5,8 @@ final imageNumberListProvider = StateProvider((ref) => <String>[]);
 final cardNumberProvider = StateProvider((ref) => 0);
 final cardNumberListProvider = StateProvider((ref) => <String>[]);
 final messageIdsListProvider = StateProvider((ref) => <String>[]);
+final gpPointProvider = StateProvider((ref) => 0);
+final gpCountProvider = StateProvider((ref) => 0);
 
 final playerNameProvider = StateProvider((ref) => '');
 

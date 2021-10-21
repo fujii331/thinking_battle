@@ -50,11 +50,9 @@ class UserProfileCommon extends StatelessWidget {
                   offset: const Offset(2, 2))
             ],
           ),
-          width: MediaQuery.of(context).size.width * 0.8 > 280.0
+          width: MediaQuery.of(context).size.width * 0.9 > 280.0
               ? 280.0
-              : MediaQuery.of(context).size.width * 0.8 < 250
-                  ? MediaQuery.of(context).size.width * 0.9
-                  : MediaQuery.of(context).size.width * 0.8,
+              : MediaQuery.of(context).size.width * 0.9,
           height: 158,
           child: Stack(
             children: [

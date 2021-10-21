@@ -15,6 +15,9 @@ class GameFinishScreen extends HookWidget {
   const GameFinishScreen({Key? key}) : super(key: key);
   static const routeName = '/game-finish';
 
+  // final bool? winFlg;
+  // const GameFinishScreen({Key? key, required this.winFlg}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final bool? winFlg = ModalRoute.of(context)?.settings.arguments as bool?;
@@ -47,17 +50,17 @@ class GameFinishScreen extends HookWidget {
           }
 
           if (winFlg == true) {
-            // if (!trainingFlg && !changedTraining) {
-            //   // 対戦部屋
-            //   DocumentReference<Map<String, dynamic>>? playingRoomDoc =
-            //       FirebaseFirestore.instance
-            //           .collection('playing-room')
-            //           .doc(context.read(matchingRoomIdProvider).state);
+            if (!trainingFlg && !changedTraining) {
+              // 対戦部屋
+              DocumentReference<Map<String, dynamic>>? playingRoomDoc =
+                  FirebaseFirestore.instance
+                      .collection('playing-room')
+                      .doc(context.read(matchingRoomIdProvider).state);
 
-            //   playingRoomDoc.delete().catchError((error) {
-            //     // データ削除に失敗した場合、何もしない
-            //   });
-            // }
+              playingRoomDoc.delete().catchError((error) {
+                // データ削除に失敗した場合、何もしない
+              });
+            }
 
             if (!friendMatchFlg) {
               // 勝利数

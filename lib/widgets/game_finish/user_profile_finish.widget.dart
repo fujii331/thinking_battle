@@ -61,16 +61,18 @@ class UserProfileFinish extends StatelessWidget {
           height: 158,
           child: Stack(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fitHeight,
-                    image: AssetImage('assets/images/cards/' +
-                        cardNumber.toString() +
-                        '.png'),
-                  ),
-                ),
-              ),
+              mySkillIdsList.isNotEmpty
+                  ? Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fitHeight,
+                          image: AssetImage('assets/images/cards/' +
+                              cardNumber.toString() +
+                              '.png'),
+                        ),
+                      ),
+                    )
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.only(
                   right: 20,
@@ -191,12 +193,17 @@ class UserProfileFinish extends StatelessWidget {
                   width: 10,
                 ),
                 StackWord(
-                  playerRate.toString(),
+                  playerRate.toString() +
+                      (notRateChangeFlg || winFlg == null
+                          ? ''
+                          : winFlg
+                              ? ' ↑'
+                              : ' ↓'),
                   notRateChangeFlg || winFlg == null
                       ? Colors.white
                       : winFlg
-                          ? Colors.blue.shade200
-                          : Colors.red.shade200,
+                          ? Colors.blue.shade100
+                          : Colors.red.shade100,
                   0,
                 ),
                 const SizedBox(width: 5),
@@ -212,10 +219,12 @@ class UserProfileFinish extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 7),
-          SkillColumn(
-            mySkillIdsList,
-            0,
-          ),
+          mySkillIdsList.isNotEmpty
+              ? SkillColumn(
+                  mySkillIdsList,
+                  0,
+                )
+              : Container(),
         ],
       ),
     );

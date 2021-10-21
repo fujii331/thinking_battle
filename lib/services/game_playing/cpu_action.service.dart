@@ -169,6 +169,7 @@ Future cpuAction(
     questionId: returnQuestionId,
     answer: returnAnswer,
     skillIds: returnSkillIds,
+    messageId: 0,
   );
 
   turnAction(

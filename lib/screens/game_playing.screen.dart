@@ -42,15 +42,10 @@ class GamePlayingScreen extends HookWidget {
       const Duration(seconds: 1),
       (Timer timer) async {
         if (context.read(myTurnFlgProvider).state) {
-          final DateTime myTurnTime = context.read(myTurnTimeProvider).state =
-              context.read(myTurnTimeProvider).state.add(
-                    const Duration(
-                      seconds: -1,
-                    ),
-                  );
+          final int myTurnTime = context.read(myTurnTimeProvider).state -= 1;
 
           // 時間切れ判定
-          if (DateFormat('ss').format(myTurnTime) == '00') {
+          if (myTurnTime == 0) {
             await Future.delayed(
               const Duration(milliseconds: 500),
             );
@@ -68,6 +63,8 @@ class GamePlayingScreen extends HookWidget {
                 },
               );
 
+              final messageId = context.read(selectMessageIdProvider).state;
+
               // 通信対戦時は相手にデータを送る
               if (myActionDoc != null) {
                 await myActionDoc
@@ -76,6 +73,7 @@ class GamePlayingScreen extends HookWidget {
                           context.read(selectableQuestionsProvider).state[0].id,
                       'answer': '',
                       'skillIds': [],
+                      'messageId': messageId,
                     })
                     .timeout(const Duration(seconds: 5))
                     .onError((error, stackTrace) {
@@ -89,6 +87,7 @@ class GamePlayingScreen extends HookWidget {
                     context.read(selectableQuestionsProvider).state[0].id,
                 answer: '',
                 skillIds: [],
+                messageId: messageId,
               );
 
               // ターン行動実行
@@ -106,16 +105,11 @@ class GamePlayingScreen extends HookWidget {
         }
 
         if (context.read(displayRivalturnSetFlgProvider).state) {
-          final DateTime rivalTurnTime =
-              context.read(rivalTurnTimeProvider).state =
-                  context.read(rivalTurnTimeProvider).state.add(
-                        const Duration(
-                          seconds: -1,
-                        ),
-                      );
+          final int rivalTurnTime =
+              context.read(rivalTurnTimeProvider).state -= 1;
 
           // 時間切れ判定
-          if (DateFormat('ss').format(rivalTurnTime) == '00') {
+          if (rivalTurnTime == 0) {
             context.read(displayRivalturnSetFlgProvider).state = false;
             if (rivalListenSubscription != null) {
               // listenを解除
@@ -164,6 +158,11 @@ class GamePlayingScreen extends HookWidget {
           }
         }
 
+        if (context.read(afterMessageTimeProvider).state > 0) {
+          final int afterMessageTime =
+              context.read(afterMessageTimeProvider).state -= 1;
+        }
+
         if (timer.isActive && context.read(timerCancelFlgProvider).state) {
           timer.cancel();
         }
@@ -173,15 +172,14 @@ class GamePlayingScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String quizThema =
-        ModalRoute.of(context)?.settings.arguments as String;
+    final String quizThema = useProvider(quizThemaProvider).state;
 
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
     final bool precedingFlg = useProvider(precedingFlgProvider).state;
 
-    final DateTime myTurnTime = useProvider(myTurnTimeProvider).state;
+    final int myTurnTime = useProvider(myTurnTimeProvider).state;
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
     final bool myTurnFlg = useProvider(myTurnFlgProvider).state;
 

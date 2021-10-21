@@ -31,20 +31,14 @@ class CenterRowStart extends HookWidget {
       height: 85,
       child: Center(
         child: matchingFinishedFlg
-            ? Text(
-                'VS',
-                style: TextStyle(
-                  color: Colors.orange.shade300,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  shadows: <Shadow>[
-                    Shadow(
-                      color: Colors.grey.shade800,
-                      offset: const Offset(4, 4),
-                      blurRadius: 4,
-                    ),
-                  ],
+            ? Container(
+                // height: 50,
+                width: 100,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fitWidth,
+                    image: AssetImage('assets/images/vs.png'),
+                  ),
                 ),
               )
             : SizedBox(
@@ -52,24 +46,18 @@ class CenterRowStart extends HookWidget {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (context.read(matchingWaitingIdProvider).state != '') {
-                      // 待機中ユーザーの削除
-                      FirebaseFirestore.instance
-                          .collection(
-                              context.read(friendMatchWordProvider).state != ''
-                                  ? 'friend-matching-room'
-                                  : 'random-matching-room')
-                          .doc(context.read(matchingWaitingIdProvider).state)
-                          .delete()
-                          .catchError((error) async {
-                        // データ削除に失敗した場合
-                        // 何もしない
-                      });
-
-                      context.read(matchingWaitingIdProvider).state = '';
-                    }
-
                     matchingQuitFlg.value = true;
+
+                    final bool deleteFlg =
+                        context.read(matchingWaitingIdProvider).state != '';
+                    final String roomDocument =
+                        context.read(friendMatchWordProvider).state != ''
+                            ? 'friend-matching-room'
+                            : 'random-matching-room';
+                    final String matchingWaitingId =
+                        context.read(matchingWaitingIdProvider).state;
+
+                    context.read(matchingWaitingIdProvider).state = '';
                     soundEffect.play(
                       'sounds/cancel.mp3',
                       isNotification: true,
@@ -84,6 +72,21 @@ class CenterRowStart extends HookWidget {
 
                     Navigator.popUntil(context,
                         ModalRoute.withName(ModeSelectScreen.routeName));
+
+                    await Future.delayed(
+                      const Duration(milliseconds: 700),
+                    );
+                    if (deleteFlg) {
+                      // 待機中ユーザーの削除
+                      FirebaseFirestore.instance
+                          .collection(roomDocument)
+                          .doc(matchingWaitingId)
+                          .delete()
+                          .catchError((error) async {
+                        // データ削除に失敗した場合
+                        // 何もしない
+                      });
+                    }
                   },
                   child: const Text('やめる'),
                   style: ElevatedButton.styleFrom(

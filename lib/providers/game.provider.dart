@@ -3,6 +3,7 @@ import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/models/quiz.model.dart';
 
+final quizThemaProvider = StateProvider((ref) => '');
 final correctAnswersProvider = StateProvider((ref) => <String>[]);
 final allQuestionsProvider = StateProvider((ref) => <Question>[]);
 final displayContentListProvider = StateProvider((ref) => <DisplayContent>[]);
@@ -27,8 +28,8 @@ const dummyPlayerInfo = PlayerInfo(
 
 final alreadyseenQuestionsProvider = StateProvider((ref) => <Question>[]);
 
-final myTurnTimeProvider = StateProvider((ref) => DateTime.now());
-final rivalTurnTimeProvider = StateProvider((ref) => DateTime.now());
+final myTurnTimeProvider = StateProvider((ref) => 30);
+final rivalTurnTimeProvider = StateProvider((ref) => 45);
 
 final myTurnFlgProvider = StateProvider((ref) => false);
 final currentSkillPointProvider = StateProvider((ref) => 5);
@@ -39,7 +40,7 @@ final selectableQuestionsProvider = StateProvider((ref) => <Question>[]);
 final selectQuestionIdProvider = StateProvider((ref) => 0);
 final selectSkillIdsProvider = StateProvider((ref) => <int>[]);
 final selectMessageIdProvider = StateProvider((ref) => 0);
-final messagedTurnCountProvider = StateProvider((ref) => 0);
+final afterMessageTimeProvider = StateProvider((ref) => 0);
 
 final answerFailedFlgProvider = StateProvider((ref) => false);
 final forceQuestionFlgProvider = StateProvider((ref) => false);

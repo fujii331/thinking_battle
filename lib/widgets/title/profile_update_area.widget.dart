@@ -52,7 +52,10 @@ class ProfileUpdateArea extends HookWidget {
                         width: MediaQuery.of(context).size.width * .86 > 650
                             ? 650
                             : null,
-                        body: const EditImage(),
+                        body: EditImage(
+                          soundEffect,
+                          seVolume,
+                        ),
                       ).show();
                     },
                     child: Container(
