@@ -14,14 +14,14 @@ class CenterRowStart extends HookWidget {
   final double seVolume;
   final ValueNotifier<bool> matchingQuitFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const CenterRowStart(
-    this.matchingFinishedFlg,
-    this.trainingFlg,
-    this.soundEffect,
-    this.seVolume,
-    this.matchingQuitFlg,
-  );
+  const CenterRowStart({
+    Key? key,
+    required this.matchingFinishedFlg,
+    required this.trainingFlg,
+    required this.soundEffect,
+    required this.seVolume,
+    required this.matchingQuitFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

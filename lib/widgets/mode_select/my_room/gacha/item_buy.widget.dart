@@ -15,14 +15,14 @@ class ItemBuy extends HookWidget {
   final BuildContext previousContext;
   final int buttonNumber;
 
-  // ignore: use_key_in_widget_constructors
-  const ItemBuy(
-    this.itemNumber,
-    this.needGpPoint,
-    this.cardNumberList,
-    this.previousContext,
-    this.buttonNumber,
-  );
+  const ItemBuy({
+    Key? key,
+    required this.itemNumber,
+    required this.needGpPoint,
+    required this.cardNumberList,
+    required this.previousContext,
+    required this.buttonNumber,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

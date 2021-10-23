@@ -16,12 +16,12 @@ class SettingMySkills extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
 
-  // ignore: use_key_in_widget_constructors
-  const SettingMySkills(
-    this.selectingSkillList,
-    this.soundEffect,
-    this.seVolume,
-  );
+  const SettingMySkills({
+    Key? key,
+    required this.selectingSkillList,
+    required this.soundEffect,
+    required this.seVolume,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -176,9 +176,9 @@ class SettingMySkills extends HookWidget {
             },
           ),
           SkillTooltip(
-            skill,
-            false,
-            0,
+            skill: skill,
+            profileFlg: false,
+            wordMinusSize: 0,
           ),
         ],
       ),

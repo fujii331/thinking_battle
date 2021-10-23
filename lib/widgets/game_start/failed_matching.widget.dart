@@ -5,11 +5,11 @@ class FaildMatching extends HookWidget {
   final String topText;
   final String secondText;
 
-  // ignore: use_key_in_widget_constructors
-  const FaildMatching(
-    this.topText,
-    this.secondText,
-  );
+  const FaildMatching({
+    Key? key,
+    required this.topText,
+    required this.secondText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -4,11 +4,11 @@ class ContinuousWin extends StatelessWidget {
   final int continuousWinCount;
   final double wordMinusSize;
 
-  // ignore: use_key_in_widget_constructors
-  const ContinuousWin(
-    this.continuousWinCount,
-    this.wordMinusSize,
-  );
+  const ContinuousWin({
+    Key? key,
+    required this.continuousWinCount,
+    required this.wordMinusSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class ContinuousWin extends StatelessWidget {
             fontStyle: FontStyle.italic,
             foreground: Paint()
               ..style = PaintingStyle.stroke
-              ..strokeWidth = 2
+              ..strokeWidth = 2.5
               ..color = Colors.blueGrey.shade900,
           ),
         ),

@@ -12,11 +12,11 @@ class GachaSelect extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
 
-  // ignore: use_key_in_widget_constructors
-  const GachaSelect(
-    this.soundEffect,
-    this.seVolume,
-  );
+  const GachaSelect({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +113,9 @@ class GachaSelect extends HookWidget {
           width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
           body: buttonNumber == 3
               ? const MessageGacha()
-              : ImageItemGacha(buttonNumber),
+              : ImageItemGacha(
+                  buttonNumber: buttonNumber,
+                ),
         ).show();
       },
       child: Container(
@@ -127,7 +129,7 @@ class GachaSelect extends HookWidget {
                 ? [
                     Colors.cyan.shade200,
                     Colors.lightBlue.shade200,
-                    Colors.indigo.shade200,
+                    Colors.blue.shade300,
                   ]
                 : buttonNumber == 2
                     ? [

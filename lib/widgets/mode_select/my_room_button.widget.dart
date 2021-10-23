@@ -19,13 +19,13 @@ class MyRoomButton extends HookWidget {
   final List colorList;
   final String selectWord;
 
-  // ignore: use_key_in_widget_constructors
-  const MyRoomButton(
-    this.soundEffect,
-    this.seVolume,
-    this.colorList,
-    this.selectWord,
-  );
+  const MyRoomButton({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+    required this.colorList,
+    required this.selectWord,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +66,8 @@ class MyRoomButton extends HookWidget {
                   body: selectWord == 'マイデータ'
                       ? const MyData()
                       : GachaSelect(
-                          soundEffect,
-                          seVolume,
+                          soundEffect: soundEffect,
+                          seVolume: seVolume,
                         ),
                 ).show()
               : AwesomeDialog(
@@ -83,33 +83,33 @@ class MyRoomButton extends HookWidget {
                       : null,
                   body: selectWord == 'アイコン'
                       ? EditImage(
-                          soundEffect,
-                          seVolume,
+                          soundEffect: soundEffect,
+                          seVolume: seVolume,
                         )
                       : selectWord == 'テーマ'
                           ? EditTheme(
-                              soundEffect,
-                              seVolume,
+                              soundEffect: soundEffect,
+                              seVolume: seVolume,
                             )
                           : selectWord == 'スキル'
                               ? SettingMySkills(
-                                  [
+                                  selectingSkillList: [
                                     ...context
                                         .read(mySkillIdsListProvider)
                                         .state
                                   ],
-                                  soundEffect,
-                                  seVolume,
+                                  soundEffect: soundEffect,
+                                  seVolume: seVolume,
                                 )
                               : selectWord == 'メッセージ'
                                   ? SettingMyMessages(
-                                      [
+                                      selectingMessageList: [
                                         ...context
                                             .read(myMessageIdsListProvider)
                                             .state
                                       ],
-                                      soundEffect,
-                                      seVolume,
+                                      soundEffect: soundEffect,
+                                      seVolume: seVolume,
                                     )
                                   : null,
                 ).show();

@@ -11,10 +11,10 @@ import 'package:thinking_battle/screens/mode_select.screen.dart';
 class CenterRowFinish extends HookWidget {
   final bool? winFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const CenterRowFinish(
-    this.winFlg,
-  );
+  const CenterRowFinish({
+    Key? key,
+    required this.winFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

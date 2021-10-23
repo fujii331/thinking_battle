@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,6 +32,17 @@ class GameFinishScreen extends HookWidget {
 
     final screenNo = useState<int>(0);
     final pageController = usePageController(initialPage: 0, keepPage: true);
+
+    final resultBundge = winFlg == null
+        ? Icons.sentiment_satisfied
+        : winFlg
+            ? Icons.sentiment_satisfied_alt
+            : Icons.sentiment_dissatisfied_rounded;
+    final Color resultColor = winFlg == null
+        ? Colors.yellow.shade200
+        : winFlg
+            ? Colors.blue.shade200
+            : Colors.red.shade200;
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
@@ -98,22 +110,31 @@ class GameFinishScreen extends HookWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          // backgroundColor: Colors.white.withOpacity(0.4),
-          selectedItemColor: Colors.blue.shade700,
-          unselectedItemColor: Colors.grey,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: winFlg == null
-                  ? const Icon(Icons.sentiment_satisfied)
-                  : winFlg
-                      ? const Icon(Icons.sentiment_satisfied_alt)
-                      : const Icon(Icons.sentiment_dissatisfied_rounded),
-              label: '結果',
+        bottomNavigationBar: ConvexAppBar(
+          items: <TabItem>[
+            TabItem(
+              icon: Icon(
+                resultBundge,
+                color: resultColor.withOpacity(0.7),
+              ),
+              activeIcon: Icon(
+                resultBundge,
+                size: 32,
+                color: resultColor,
+              ),
+              title: '結果',
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt),
-              label: '振り返り',
+            TabItem(
+              icon: Icon(
+                Icons.list_alt,
+                color: Colors.white.withOpacity(0.7),
+              ),
+              activeIcon: const Icon(
+                Icons.list_alt,
+                size: 32,
+                color: Colors.white,
+              ),
+              title: '振り返り',
             ),
           ],
           onTap: (int selectIndex) {
@@ -122,7 +143,10 @@ class GameFinishScreen extends HookWidget {
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeOut);
           },
-          currentIndex: screenNo.value,
+          initialActiveIndex: 0,
+          style: TabStyle.react,
+          backgroundColor: Colors.indigo.shade800,
+          // currentIndex: screenNo.value,
         ),
         body: PageView(
           controller: pageController,
@@ -132,7 +156,7 @@ class GameFinishScreen extends HookWidget {
           },
           children: [
             Result(
-              winFlg,
+              winFlg: winFlg,
             ),
             const ActionedList(),
           ],

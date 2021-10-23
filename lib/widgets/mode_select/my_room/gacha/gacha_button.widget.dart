@@ -17,16 +17,16 @@ class GachaButton extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
 
-  // ignore: use_key_in_widget_constructors
-  const GachaButton(
-    this.buttonNumber,
-    this.gpPoint,
-    this.gpCount,
-    this.itemNumberList,
-    this.getitemNumberList,
-    this.soundEffect,
-    this.seVolume,
-  );
+  const GachaButton({
+    Key? key,
+    required this.buttonNumber,
+    required this.gpPoint,
+    required this.gpCount,
+    required this.itemNumberList,
+    required this.getitemNumberList,
+    required this.soundEffect,
+    required this.seVolume,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

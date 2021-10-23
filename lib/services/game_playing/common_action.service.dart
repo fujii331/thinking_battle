@@ -534,13 +534,7 @@ void scrollToBottom(
     );
   } else if (context.read(turnCountProvider).state > 2) {
     scrollController.animateTo(
-      25,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeInOut,
-    );
-  } else if (context.read(turnCountProvider).state > 1) {
-    scrollController.animateTo(
-      10,
+      50,
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
     );

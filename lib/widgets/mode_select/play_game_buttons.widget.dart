@@ -12,11 +12,11 @@ class PlayGameButtons extends StatelessWidget {
   final AudioCache soundEffect;
   final double seVolume;
 
-  // ignore: use_key_in_widget_constructors
-  const PlayGameButtons(
-    this.soundEffect,
-    this.seVolume,
-  );
+  const PlayGameButtons({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

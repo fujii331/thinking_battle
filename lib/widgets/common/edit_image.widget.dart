@@ -10,11 +10,11 @@ class EditImage extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
 
-  // ignore: use_key_in_widget_constructors
-  const EditImage(
-    this.soundEffect,
-    this.seVolume,
-  );
+  const EditImage({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -26,16 +26,16 @@ class QuestionModal extends HookWidget {
   final double seVolume;
   final bool myTurnFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const QuestionModal(
-    this.screenContext,
-    this.scrollController,
-    this.myActionDoc,
-    this.rivalListenSubscription,
-    this.soundEffect,
-    this.seVolume,
-    this.myTurnFlg,
-  );
+  const QuestionModal({
+    Key? key,
+    required this.screenContext,
+    required this.scrollController,
+    required this.myActionDoc,
+    required this.rivalListenSubscription,
+    required this.soundEffect,
+    required this.seVolume,
+    required this.myTurnFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +160,9 @@ class QuestionModal extends HookWidget {
                                       top: Radius.circular(15)),
                                 ),
                                 builder: (BuildContext context) {
-                                  return SkillModal(changeFlgState);
+                                  return SkillModal(
+                                    changeFlgState: changeFlgState,
+                                  );
                                 },
                               );
                             }
@@ -319,12 +321,6 @@ class QuestionModal extends HookWidget {
       height: 45,
       child: ElevatedButton(
         onPressed: () {
-          // soundEffect.play(
-          //   'sounds/tap.mp3',
-          //   isNotification: true,
-          //   volume: seVolume,
-          // );
-
           context.read(selectQuestionIdProvider).state = targetQuestion.id;
           changeFlgState.value = !changeFlgState.value;
         },
@@ -332,7 +328,7 @@ class QuestionModal extends HookWidget {
           targetQuestion.asking,
           style: const TextStyle(
             fontSize: 20,
-            fontFamily: 'SawarabiGothic',
+            fontFamily: 'NotoSerif',
             color: Colors.black,
           ),
         ),
@@ -342,7 +338,6 @@ class QuestionModal extends HookWidget {
             horizontal: 20,
             vertical: 5,
           ),
-          textStyle: Theme.of(context).textTheme.button,
         ),
       ),
     );

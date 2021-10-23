@@ -14,16 +14,17 @@ class GpChange extends HookWidget {
   final double seVolume;
   final int buttonNumber;
 
-  // ignore: use_key_in_widget_constructors
-  const GpChange(
-    this.itemNumber,
-    this.needGpPoint,
-    this.gpPoint,
-    this.itemNumberList,
-    this.soundEffect,
-    this.seVolume,
-    this.buttonNumber,
-  );
+  const GpChange({
+    Key? key,
+    required this.itemNumber,
+    required this.needGpPoint,
+    required this.gpPoint,
+    required this.itemNumberList,
+    required this.soundEffect,
+    st,
+    required this.seVolume,
+    required this.buttonNumber,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,11 +79,11 @@ class GpChange extends HookWidget {
                             ? 650
                             : null,
                         body: ItemBuy(
-                          itemNumber,
-                          needGpPoint,
-                          itemNumberList,
-                          context,
-                          buttonNumber,
+                          itemNumber: itemNumber,
+                          needGpPoint: needGpPoint,
+                          cardNumberList: itemNumberList,
+                          previousContext: context,
+                          buttonNumber: buttonNumber,
                         ),
                       ).show();
                     }

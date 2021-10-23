@@ -14,10 +14,10 @@ import 'package:thinking_battle/widgets/common/skill_tooltip.widget.dart';
 class SkillModal extends HookWidget {
   final ValueNotifier<bool> changeFlgState;
 
-  // ignore: use_key_in_widget_constructors
-  const SkillModal(
-    this.changeFlgState,
-  );
+  const SkillModal({
+    Key? key,
+    required this.changeFlgState,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -227,9 +227,9 @@ class SkillModal extends HookWidget {
           Padding(
             padding: const EdgeInsets.only(top: 9),
             child: SkillTooltip(
-              skill,
-              false,
-              0,
+              skill: skill,
+              profileFlg: false,
+              wordMinusSize: 0,
             ),
           ),
         ],

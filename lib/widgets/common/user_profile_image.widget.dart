@@ -4,11 +4,11 @@ class UserProfileImage extends StatelessWidget {
   final int imageNumber;
   final List colorList;
 
-  // ignore: use_key_in_widget_constructors
-  const UserProfileImage(
-    this.imageNumber,
-    this.colorList,
-  );
+  const UserProfileImage({
+    Key? key,
+    required this.imageNumber,
+    required this.colorList,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

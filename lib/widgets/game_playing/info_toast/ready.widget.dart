@@ -8,13 +8,13 @@ class Ready extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
 
-  // ignore: use_key_in_widget_constructors
-  const Ready(
-    this.precedingFlg,
-    this.thema,
-    this.soundEffect,
-    this.seVolume,
-  );
+  const Ready({
+    Key? key,
+    required this.precedingFlg,
+    required this.thema,
+    required this.soundEffect,
+    required this.seVolume,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

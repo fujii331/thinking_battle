@@ -6,12 +6,12 @@ class ProfileName extends StatelessWidget {
   final bool darkColorFlg;
   final double wordMinusSize;
 
-  // ignore: use_key_in_widget_constructors
-  const ProfileName(
-    this.playerName,
-    this.darkColorFlg,
-    this.wordMinusSize,
-  );
+  const ProfileName({
+    Key? key,
+    required this.playerName,
+    required this.darkColorFlg,
+    required this.wordMinusSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +21,8 @@ class ProfileName extends StatelessWidget {
         SizedBox(
           height: 17,
           child: StackLabel(
-            'name',
-            wordMinusSize,
+            word: 'name',
+            wordMinusSize: wordMinusSize,
           ),
         ),
         Text(
@@ -34,7 +34,7 @@ class ProfileName extends StatelessWidget {
             color: darkColorFlg ? Colors.white : Colors.black,
             shadows: <Shadow>[
               Shadow(
-                offset: const Offset(2.0, 3.0),
+                offset: const Offset(1.5, 1.5),
                 blurRadius: 2.0,
                 color:
                     darkColorFlg ? Colors.grey.shade900 : Colors.grey.shade600,

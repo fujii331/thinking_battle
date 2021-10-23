@@ -9,11 +9,11 @@ class BottomIconButtons extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
 
-  // ignore: use_key_in_widget_constructors
-  const BottomIconButtons(
-    this.soundEffect,
-    this.seVolume,
-  );
+  const BottomIconButtons({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+  }) : super(key: key);
 
   void toSoundMode(BuildContext context) => AwesomeDialog(
         context: context,
@@ -25,7 +25,7 @@ class BottomIconButtons extends HookWidget {
         animType: AnimType.SCALE,
         width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
         body: SoundMode(
-          soundEffect,
+          soundEffect: soundEffect,
         ),
       )..show();
 

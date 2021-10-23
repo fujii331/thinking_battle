@@ -19,19 +19,19 @@ class UserProfileFinish extends StatelessWidget {
   final bool? winFlg;
   final bool notRateChangeFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const UserProfileFinish(
-    this.imageNumber,
-    this.cardNumber,
-    this.matchedCount,
-    this.continuousWinCount,
-    this.playerName,
-    this.userRate,
-    this.mySkillIdsList,
-    this.myDataFlg,
-    this.winFlg,
-    this.notRateChangeFlg,
-  );
+  const UserProfileFinish({
+    Key? key,
+    required this.imageNumber,
+    required this.cardNumber,
+    required this.matchedCount,
+    required this.continuousWinCount,
+    required this.playerName,
+    required this.userRate,
+    required this.mySkillIdsList,
+    required this.myDataFlg,
+    required this.winFlg,
+    required this.notRateChangeFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -88,14 +88,14 @@ class UserProfileFinish extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 15),
                           child: ProfileName(
-                            playerName,
-                            colorList[1],
-                            0,
+                            playerName: playerName,
+                            darkColorFlg: colorList[1],
+                            wordMinusSize: 0,
                           ),
                         ),
                         UserProfileImage(
-                          imageNumber,
-                          colorList,
+                          imageNumber: imageNumber,
+                          colorList: colorList,
                         ),
                       ],
                     ),
@@ -119,8 +119,8 @@ class UserProfileFinish extends StatelessWidget {
             ? Padding(
                 padding: const EdgeInsets.only(left: 60.0, top: 5),
                 child: ContinuousWin(
-                  continuousWinCount,
-                  0,
+                  continuousWinCount: continuousWinCount,
+                  wordMinusSize: 0,
                 ),
               )
             : const SizedBox(),
@@ -155,18 +155,19 @@ class UserProfileFinish extends StatelessWidget {
             child: Row(
               children: [
                 const StackLabel(
-                  'match',
-                  0,
+                  word: 'match',
+                  wordMinusSize: 0,
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 StackWord(
-                  (matchedCount + (!notRateChangeFlg && !myDataFlg ? 1 : 0))
-                          .toString() +
-                      ' 回',
-                  Colors.white,
-                  0,
+                  word:
+                      (matchedCount + (!notRateChangeFlg && !myDataFlg ? 1 : 0))
+                              .toString() +
+                          ' 回',
+                  wordColor: Colors.white,
+                  wordMinusSize: 0,
                 ),
               ],
             ),
@@ -186,25 +187,25 @@ class UserProfileFinish extends StatelessWidget {
             child: Row(
               children: [
                 const StackLabel(
-                  'rate',
-                  0,
+                  word: 'rate',
+                  wordMinusSize: 0,
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 StackWord(
-                  playerRate.toString() +
+                  word: playerRate.toString() +
                       (notRateChangeFlg || winFlg == null
                           ? ''
                           : winFlg
                               ? ' ↑'
                               : ' ↓'),
-                  notRateChangeFlg || winFlg == null
+                  wordColor: notRateChangeFlg || winFlg == null
                       ? Colors.white
                       : winFlg
                           ? Colors.blue.shade100
                           : Colors.red.shade100,
-                  0,
+                  wordMinusSize: 0,
                 ),
                 const SizedBox(width: 5),
                 notRateChangeFlg || winFlg == null
@@ -221,8 +222,8 @@ class UserProfileFinish extends StatelessWidget {
           const SizedBox(height: 7),
           mySkillIdsList.isNotEmpty
               ? SkillColumn(
-                  mySkillIdsList,
-                  0,
+                  mySkillIdsList: mySkillIdsList,
+                  wordMinusSize: 0,
                 )
               : Container(),
         ],

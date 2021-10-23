@@ -7,12 +7,12 @@ class SkillTooltip extends StatelessWidget {
   final bool profileFlg;
   final double wordMinusSize;
 
-  // ignore: use_key_in_widget_constructors
-  const SkillTooltip(
-    this.skill,
-    this.profileFlg,
-    this.wordMinusSize,
-  );
+  const SkillTooltip({
+    Key? key,
+    required this.skill,
+    required this.profileFlg,
+    required this.wordMinusSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

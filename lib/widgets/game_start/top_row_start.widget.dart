@@ -4,10 +4,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class TopRowStart extends StatelessWidget {
   final bool matchingFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const TopRowStart(
-    this.matchingFlg,
-  );
+  const TopRowStart({
+    Key? key,
+    required this.matchingFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

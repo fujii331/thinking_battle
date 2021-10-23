@@ -7,10 +7,10 @@ import 'package:thinking_battle/widgets/common/user_profile_common.widget.dart';
 class RivalInfo extends StatelessWidget {
   final PlayerInfo rivalInfo;
 
-  // ignore: use_key_in_widget_constructors
-  const RivalInfo(
-    this.rivalInfo,
-  );
+  const RivalInfo({
+    Key? key,
+    required this.rivalInfo,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +32,14 @@ class RivalInfo extends StatelessWidget {
           Container(
             color: Colors.grey.shade900,
             child: UserProfileCommon(
-              rivalInfo.imageNumber,
-              rivalInfo.cardNumber,
-              rivalInfo.matchedCount,
-              rivalInfo.continuousWinCount,
-              rivalInfo.name,
-              rivalInfo.rate,
-              rivalInfo.skillList,
-              1.2,
+              imageNumber: rivalInfo.imageNumber,
+              cardNumber: rivalInfo.cardNumber,
+              matchedCount: rivalInfo.matchedCount,
+              continuousWinCount: rivalInfo.continuousWinCount,
+              playerName: rivalInfo.name,
+              userRate: rivalInfo.rate,
+              mySkillIdsList: rivalInfo.skillList,
+              wordMinusSize: 1.2,
             ),
           ),
         ],

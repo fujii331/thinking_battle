@@ -4,11 +4,11 @@ class StackLabel extends StatelessWidget {
   final String word;
   final double wordMinusSize;
 
-  // ignore: use_key_in_widget_constructors
-  const StackLabel(
-    this.word,
-    this.wordMinusSize,
-  );
+  const StackLabel({
+    Key? key,
+    required this.word,
+    required this.wordMinusSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

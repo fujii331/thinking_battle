@@ -14,10 +14,10 @@ import 'package:thinking_battle/widgets/game_finish/user_profile_finish.widget.d
 class Result extends HookWidget {
   final bool? winFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const Result(
-    this.winFlg,
-  );
+  const Result({
+    Key? key,
+    required this.winFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,31 +52,31 @@ class Result extends HookWidget {
                     // const Stamina(),
                     const SizedBox(height: 20),
                     UserProfileFinish(
-                      rivalInfo.imageNumber,
-                      rivalInfo.cardNumber,
-                      rivalInfo.matchedCount,
-                      rivalInfo.continuousWinCount,
-                      rivalInfo.name,
-                      rivalInfo.rate,
-                      rivalInfo.skillList,
-                      false,
-                      winFlg == null ? null : !winFlg!,
-                      notRateChangeFlg,
+                      imageNumber: rivalInfo.imageNumber,
+                      cardNumber: rivalInfo.cardNumber,
+                      matchedCount: rivalInfo.matchedCount,
+                      continuousWinCount: rivalInfo.continuousWinCount,
+                      playerName: rivalInfo.name,
+                      userRate: rivalInfo.rate,
+                      mySkillIdsList: rivalInfo.skillList,
+                      myDataFlg: false,
+                      winFlg: winFlg == null ? null : !winFlg!,
+                      notRateChangeFlg: notRateChangeFlg,
                     ),
                     const SizedBox(height: 15),
-                    CenterRowFinish(winFlg),
+                    CenterRowFinish(winFlg: winFlg),
                     const SizedBox(height: 15),
                     UserProfileFinish(
-                      imageNumber,
-                      cardNumber,
-                      matchedCount,
-                      continuousWinCount,
-                      playerName,
-                      rate,
-                      mySkillIdsList,
-                      true,
-                      winFlg,
-                      notRateChangeFlg,
+                      imageNumber: imageNumber,
+                      cardNumber: cardNumber,
+                      matchedCount: matchedCount,
+                      continuousWinCount: continuousWinCount,
+                      playerName: playerName,
+                      userRate: rate,
+                      mySkillIdsList: mySkillIdsList,
+                      myDataFlg: true,
+                      winFlg: winFlg,
+                      notRateChangeFlg: notRateChangeFlg,
                     ),
                   ],
                 ),

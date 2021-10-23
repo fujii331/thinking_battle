@@ -144,8 +144,8 @@ class GameStartScreen extends HookWidget {
                 width:
                     MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
                 body: const FaildMatching(
-                  '通信失敗',
-                  '電波状況をご確認ください。\nメニュー画面に戻ります。',
+                  topText: '通信失敗',
+                  secondText: '電波状況をご確認ください。\nメニュー画面に戻ります。',
                 ),
               ).show();
 
@@ -184,7 +184,7 @@ class GameStartScreen extends HookWidget {
                       // const Stamina(),
                       // const SizedBox(height: 30),
                       TopRowStart(
-                        rivalInfo.skillList.isNotEmpty,
+                        matchingFlg: rivalInfo.skillList.isNotEmpty,
                       ),
                       rivalInfo.skillList.isNotEmpty
                           // rivalInfo.skillList.isEmpty
@@ -192,14 +192,15 @@ class GameStartScreen extends HookWidget {
                               duration: const Duration(milliseconds: 500),
                               opacity: matchingFlg.value ? 1 : 0,
                               child: UserProfileCommon(
-                                rivalInfo.imageNumber,
-                                rivalInfo.cardNumber,
-                                rivalInfo.matchedCount,
-                                rivalInfo.continuousWinCount,
-                                rivalInfo.name,
-                                rivalInfo.rate,
-                                rivalInfo.skillList,
-                                0,
+                                imageNumber: rivalInfo.imageNumber,
+                                cardNumber: rivalInfo.cardNumber,
+                                matchedCount: rivalInfo.matchedCount,
+                                continuousWinCount:
+                                    rivalInfo.continuousWinCount,
+                                playerName: rivalInfo.name,
+                                userRate: rivalInfo.rate,
+                                mySkillIdsList: rivalInfo.skillList,
+                                wordMinusSize: 0,
                               ),
                             )
                           : SizedBox(
@@ -237,21 +238,21 @@ class GameStartScreen extends HookWidget {
                                   : null,
                             ),
                       CenterRowStart(
-                        rivalInfo.skillList.isNotEmpty,
-                        trainingFlg,
-                        soundEffect,
-                        seVolume,
-                        matchingQuitFlg,
+                        matchingFinishedFlg: rivalInfo.skillList.isNotEmpty,
+                        trainingFlg: trainingFlg,
+                        soundEffect: soundEffect,
+                        seVolume: seVolume,
+                        matchingQuitFlg: matchingQuitFlg,
                       ),
                       UserProfileCommon(
-                        imageNumber,
-                        cardNumber,
-                        matchedCount,
-                        continuousWinCount,
-                        playerName,
-                        rate,
-                        mySkillIdsList,
-                        0,
+                        imageNumber: imageNumber,
+                        cardNumber: cardNumber,
+                        matchedCount: matchedCount,
+                        continuousWinCount: continuousWinCount,
+                        playerName: playerName,
+                        userRate: rate,
+                        mySkillIdsList: mySkillIdsList,
+                        wordMinusSize: 0,
                       ),
                     ],
                   ),

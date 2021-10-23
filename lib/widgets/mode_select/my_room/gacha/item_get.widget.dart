@@ -8,12 +8,12 @@ class ItemGet extends HookWidget {
   final bool newFlg;
   final int buttonNumber;
 
-  // ignore: use_key_in_widget_constructors
-  const ItemGet(
-    this.itemNumber,
-    this.newFlg,
-    this.buttonNumber,
-  );
+  const ItemGet({
+    Key? key,
+    required this.itemNumber,
+    required this.newFlg,
+    required this.buttonNumber,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

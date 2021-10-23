@@ -53,8 +53,8 @@ class ProfileUpdateArea extends HookWidget {
                             ? 650
                             : null,
                         body: EditImage(
-                          soundEffect,
-                          seVolume,
+                          soundEffect: soundEffect,
+                          seVolume: seVolume,
                         ),
                       ).show();
                     },

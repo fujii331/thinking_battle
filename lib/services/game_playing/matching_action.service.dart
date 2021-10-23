@@ -353,8 +353,8 @@ Future matchingPreparation(
             animType: AnimType.SCALE,
             width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
             body: const FaildMatching(
-              'マッチング失敗',
-              'あいことばは一致していますか？\nメニュー画面に戻ります。',
+              topText: 'マッチング失敗',
+              secondText: 'あいことばは一致していますか？\nメニュー画面に戻ります。',
             ),
           ).show();
 

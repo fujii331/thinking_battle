@@ -11,10 +11,10 @@ import 'package:thinking_battle/widgets/mode_select/my_room/gacha/gp_change.widg
 class ImageItemGacha extends HookWidget {
   final int buttonNumber;
 
-  // ignore: use_key_in_widget_constructors
-  const ImageItemGacha(
-    this.buttonNumber,
-  );
+  const ImageItemGacha({
+    Key? key,
+    required this.buttonNumber,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -159,13 +159,13 @@ class ImageItemGacha extends HookWidget {
           ),
           const SizedBox(height: 25),
           GachaButton(
-            buttonNumber,
-            gpPoint,
-            gpCount,
-            itemNumberList,
-            getitemNumberList,
-            soundEffect,
-            seVolume,
+            buttonNumber: buttonNumber,
+            gpPoint: gpPoint,
+            gpCount: gpCount,
+            itemNumberList: itemNumberList,
+            getitemNumberList: getitemNumberList,
+            soundEffect: soundEffect,
+            seVolume: seVolume,
           ),
         ],
       ),
@@ -215,13 +215,13 @@ class ImageItemGacha extends HookWidget {
         ),
         const SizedBox(height: 5),
         GpChange(
-          itemNumber,
-          needGpPoint,
-          gpPoint,
-          itemNumberList,
-          soundEffect,
-          seVolume,
-          buttonNumber,
+          itemNumber: itemNumber,
+          needGpPoint: needGpPoint,
+          gpPoint: gpPoint,
+          itemNumberList: itemNumberList,
+          soundEffect: soundEffect,
+          seVolume: seVolume,
+          buttonNumber: buttonNumber,
         ),
       ],
     );

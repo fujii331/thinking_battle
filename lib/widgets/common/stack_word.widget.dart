@@ -5,12 +5,12 @@ class StackWord extends StatelessWidget {
   final Color wordColor;
   final double wordMinusSize;
 
-  // ignore: use_key_in_widget_constructors
-  const StackWord(
-    this.word,
-    this.wordColor,
-    this.wordMinusSize,
-  );
+  const StackWord({
+    Key? key,
+    required this.word,
+    required this.wordColor,
+    required this.wordMinusSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class StackWord extends StatelessWidget {
             fontSize: 15.0 - wordMinusSize,
             foreground: Paint()
               ..style = PaintingStyle.stroke
-              ..strokeWidth = 4
+              ..strokeWidth = 3.5
               ..color = Colors.grey.shade900,
           ),
         ),

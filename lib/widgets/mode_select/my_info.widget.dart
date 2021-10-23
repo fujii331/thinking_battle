@@ -16,14 +16,14 @@ class MyInfo extends HookWidget {
   final List colorList;
   final int matchedCount;
 
-  // ignore: use_key_in_widget_constructors
-  const MyInfo(
-    this.soundEffect,
-    this.seVolume,
-    this.cardNumber,
-    this.colorList,
-    this.matchedCount,
-  );
+  const MyInfo({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+    required this.cardNumber,
+    required this.colorList,
+    required this.matchedCount,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -112,9 +112,9 @@ class MyInfo extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ProfileName(
-                        playerName,
-                        colorList[1],
-                        -1,
+                        playerName: playerName,
+                        darkColorFlg: colorList[1],
+                        wordMinusSize: -1,
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -123,13 +123,13 @@ class MyInfo extends HookWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const StackLabel(
-                                'rate',
-                                0,
+                                word: 'rate',
+                                wordMinusSize: 0,
                               ),
                               StackWord(
-                                rate.toString(),
-                                Colors.white,
-                                1,
+                                word: rate.toString(),
+                                wordColor: Colors.white,
+                                wordMinusSize: 1,
                               ),
                             ],
                           ),
@@ -138,13 +138,13 @@ class MyInfo extends HookWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const StackLabel(
-                                'match',
-                                0,
+                                word: 'match',
+                                wordMinusSize: 0,
                               ),
                               StackWord(
-                                matchedCount.toString() + ' 回',
-                                Colors.white,
-                                1,
+                                word: matchedCount.toString() + ' 回',
+                                wordColor: Colors.white,
+                                wordMinusSize: 1,
                               ),
                             ],
                           ),
@@ -163,8 +163,8 @@ class MyInfo extends HookWidget {
                     Padding(
                       padding: const EdgeInsets.only(right: 3),
                       child: ContinuousWin(
-                        continuousWinCount,
-                        0,
+                        continuousWinCount: continuousWinCount,
+                        wordMinusSize: 0,
                       ),
                     ),
                   ],

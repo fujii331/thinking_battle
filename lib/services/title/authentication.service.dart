@@ -57,8 +57,8 @@ Future signUp(
       animType: AnimType.SCALE,
       width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
       body: const CommentModal(
-        '読み込み失敗！',
-        'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
+        topText: '読み込み失敗！',
+        secondText: 'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
       ),
     ).show();
   }
@@ -97,8 +97,8 @@ Future login(
       animType: AnimType.SCALE,
       width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
       body: const CommentModal(
-        '読み込み失敗！',
-        'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
+        topText: '読み込み失敗！',
+        secondText: 'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
       ),
     ).show();
   }

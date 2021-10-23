@@ -128,8 +128,8 @@ class GamePlayingScreen extends HookWidget {
                 width:
                     MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
                 body: const AttentionModal(
-                  '対戦相手の接続が切れました',
-                  '結果画面に移ります。',
+                  topText: '対戦相手の接続が切れました',
+                  secondText: '結果画面に移ります。',
                 ),
               ).show();
 
@@ -254,10 +254,10 @@ class GamePlayingScreen extends HookWidget {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return Ready(
-              precedingFlg,
-              quizThema,
-              soundEffect,
-              seVolume,
+              precedingFlg: precedingFlg,
+              thema: quizThema,
+              soundEffect: soundEffect,
+              seVolume: seVolume,
             );
           },
         );
@@ -322,26 +322,26 @@ class GamePlayingScreen extends HookWidget {
                     child: Column(
                       children: [
                         TopRow(
-                          soundEffect,
-                          seVolume,
-                          rivalInfo,
-                          myTurnTime,
-                          myTurnFlg,
+                          soundEffect: soundEffect,
+                          seVolume: seVolume,
+                          rivalInfo: rivalInfo,
+                          myTurnTime: myTurnTime,
+                          myTurnFlg: myTurnFlg,
                         ),
                         const SizedBox(height: 15),
                         ContentList(
-                          scrollController,
-                          rivalInfo,
+                          scrollController: scrollController,
+                          rivalInfo: rivalInfo,
                         ),
                         const SizedBox(height: 20),
                         BottomActionButtons(
-                          context,
-                          scrollController,
-                          myActionDoc,
-                          rivalListenSubscription,
-                          soundEffect,
-                          seVolume,
-                          myTurnFlg,
+                          screenContext: context,
+                          scrollController: scrollController,
+                          myActionDoc: myActionDoc,
+                          rivalListenSubscription: rivalListenSubscription,
+                          soundEffect: soundEffect,
+                          seVolume: seVolume,
+                          myTurnFlg: myTurnFlg,
                         ),
                       ],
                     ),

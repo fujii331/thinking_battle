@@ -10,11 +10,11 @@ class EditTheme extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
 
-  // ignore: use_key_in_widget_constructors
-  const EditTheme(
-    this.soundEffect,
-    this.seVolume,
-  );
+  const EditTheme({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

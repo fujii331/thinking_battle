@@ -20,8 +20,8 @@ Future failedConnect(
     animType: AnimType.SCALE,
     width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
     body: const AttentionModal(
-      '外部に接続できません',
-      '電波の状態をご確認ください。\n結果画面に移ります。',
+      topText: '外部に接続できません',
+      secondText: '電波の状態をご確認ください。\n結果画面に移ります。',
     ),
   ).show();
 

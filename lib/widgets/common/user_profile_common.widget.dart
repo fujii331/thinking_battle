@@ -18,17 +18,17 @@ class UserProfileCommon extends StatelessWidget {
   final List<int> mySkillIdsList;
   final double wordMinusSize;
 
-  // ignore: use_key_in_widget_constructors
-  const UserProfileCommon(
-    this.imageNumber,
-    this.cardNumber,
-    this.matchedCount,
-    this.continuousWinCount,
-    this.playerName,
-    this.userRate,
-    this.mySkillIdsList,
-    this.wordMinusSize,
-  );
+  const UserProfileCommon({
+    Key? key,
+    required this.imageNumber,
+    required this.cardNumber,
+    required this.matchedCount,
+    required this.continuousWinCount,
+    required this.playerName,
+    required this.userRate,
+    required this.mySkillIdsList,
+    required this.wordMinusSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,14 +81,14 @@ class UserProfileCommon extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 15),
                           child: ProfileName(
-                            playerName,
-                            colorList[1],
-                            wordMinusSize,
+                            playerName: playerName,
+                            darkColorFlg: colorList[1],
+                            wordMinusSize: wordMinusSize,
                           ),
                         ),
                         UserProfileImage(
-                          imageNumber,
-                          colorList,
+                          imageNumber: imageNumber,
+                          colorList: colorList,
                         ),
                       ],
                     ),
@@ -110,8 +110,8 @@ class UserProfileCommon extends StatelessWidget {
             ? Padding(
                 padding: const EdgeInsets.only(left: 70.0, top: 5),
                 child: ContinuousWin(
-                  continuousWinCount,
-                  wordMinusSize,
+                  continuousWinCount: continuousWinCount,
+                  wordMinusSize: wordMinusSize,
                 ),
               )
             : const SizedBox(),
@@ -146,8 +146,8 @@ class UserProfileCommon extends StatelessWidget {
           const SizedBox(height: 7),
           mySkillIdsList.isNotEmpty
               ? SkillColumn(
-                  mySkillIdsList,
-                  wordMinusSize,
+                  mySkillIdsList: mySkillIdsList,
+                  wordMinusSize: wordMinusSize,
                 )
               : Container(),
         ],
@@ -172,14 +172,17 @@ class UserProfileCommon extends StatelessWidget {
       ),
       child: Row(
         children: [
-          StackLabel(labelWord, wordMinusSize),
+          StackLabel(
+            word: labelWord,
+            wordMinusSize: wordMinusSize,
+          ),
           const SizedBox(
             width: 10,
           ),
           StackWord(
-            word,
-            Colors.white,
-            wordMinusSize,
+            word: word,
+            wordColor: Colors.white,
+            wordMinusSize: wordMinusSize,
           ),
         ],
       ),

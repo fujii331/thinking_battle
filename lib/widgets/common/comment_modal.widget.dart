@@ -6,11 +6,11 @@ class CommentModal extends HookWidget {
   final String topText;
   final String secondText;
 
-  // ignore: use_key_in_widget_constructors
-  const CommentModal(
-    this.topText,
-    this.secondText,
-  );
+  const CommentModal({
+    Key? key,
+    required this.topText,
+    required this.secondText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

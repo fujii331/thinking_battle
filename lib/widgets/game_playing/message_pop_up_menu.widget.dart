@@ -13,12 +13,12 @@ class MessagePopUpMenu extends HookWidget {
   final double seVolume;
   final bool myTurnFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const MessagePopUpMenu(
-    this.soundEffect,
-    this.seVolume,
-    this.myTurnFlg,
-  );
+  const MessagePopUpMenu({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+    required this.myTurnFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 List returnCardColorList(
   int cardNumber,
 ) {
-  List<int> darkColorList = [5, 8, 10, 13, 17, 19, 20];
+  List<int> darkColorList = [5, 8, 10, 13, 16, 17, 19, 20];
   List colorList = cardNumber < 8
       ? (cardNumber == 1
           ? [
@@ -116,9 +116,9 @@ List returnCardColorList(
                               : cardNumber == 13
                                   ? [
                                       [
-                                        Colors.purple.shade200,
-                                        Colors.orange.shade100,
                                         Colors.purple.shade300,
+                                        Colors.deepPurple.shade500,
+                                        Colors.purple.shade400,
                                       ],
                                       Colors.orange.shade500
                                     ]
@@ -142,11 +142,11 @@ List returnCardColorList(
           : cardNumber == 16
               ? [
                   [
-                    Colors.purple.shade50,
-                    Colors.pink.shade100,
-                    Colors.purple.shade200,
+                    Colors.purple.shade400,
+                    Colors.deepPurple.shade300,
+                    Colors.purple.shade300,
                   ],
-                  Colors.purple.shade300
+                  Colors.pink.shade100
                 ]
               : cardNumber == 17
                   ? [

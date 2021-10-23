@@ -18,14 +18,14 @@ class TopRow extends HookWidget {
   final int myTurnTime;
   final bool myTurnFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const TopRow(
-    this.soundEffect,
-    this.seVolume,
-    this.rivalInfo,
-    this.myTurnTime,
-    this.myTurnFlg,
-  );
+  const TopRow({
+    Key? key,
+    required this.soundEffect,
+    required this.seVolume,
+    required this.rivalInfo,
+    required this.myTurnTime,
+    required this.myTurnFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class TopRow extends HookWidget {
                 animType: AnimType.SCALE,
                 width:
                     MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
-                body: RivalInfo(rivalInfo),
+                body: RivalInfo(rivalInfo: rivalInfo),
               ).show();
             },
             child: Container(
@@ -107,9 +107,9 @@ class TopRow extends HookWidget {
           SizedBox(
             width: 30,
             child: MessagePopUpMenu(
-              soundEffect,
-              seVolume,
-              myTurnFlg,
+              soundEffect: soundEffect,
+              seVolume: seVolume,
+              myTurnFlg: myTurnFlg,
             ),
           ),
           // enableMessageCount > 0

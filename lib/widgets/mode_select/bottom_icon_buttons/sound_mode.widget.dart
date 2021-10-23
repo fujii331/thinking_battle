@@ -10,10 +10,10 @@ import 'package:thinking_battle/widgets/common/modal_close_button.widget.dart';
 class SoundMode extends HookWidget {
   final AudioCache soundEffect;
 
-  // ignore: use_key_in_widget_constructors
-  const SoundMode(
-    this.soundEffect,
-  );
+  const SoundMode({
+    Key? key,
+    required this.soundEffect,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

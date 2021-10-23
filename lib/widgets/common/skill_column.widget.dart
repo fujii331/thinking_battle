@@ -7,11 +7,11 @@ class SkillColumn extends StatelessWidget {
   final List<int> mySkillIdsList;
   final double wordMinusSize;
 
-  // ignore: use_key_in_widget_constructors
-  const SkillColumn(
-    this.mySkillIdsList,
-    this.wordMinusSize,
-  );
+  const SkillColumn({
+    Key? key,
+    required this.mySkillIdsList,
+    required this.wordMinusSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,24 +20,27 @@ class SkillColumn extends StatelessWidget {
       children: [
         const SizedBox(
           height: 17,
-          child: StackLabel('skills', 0),
+          child: StackLabel(
+            word: 'skills',
+            wordMinusSize: 0,
+          ),
         ),
         SkillTooltip(
-          skillSettings[mySkillIdsList[0] - 1],
-          true,
-          wordMinusSize,
-        ),
-        const SizedBox(height: 4),
-        SkillTooltip(
-          skillSettings[mySkillIdsList[1] - 1],
-          true,
-          wordMinusSize,
+          skill: skillSettings[mySkillIdsList[0] - 1],
+          profileFlg: true,
+          wordMinusSize: wordMinusSize,
         ),
         const SizedBox(height: 4),
         SkillTooltip(
-          skillSettings[mySkillIdsList[2] - 1],
-          true,
-          wordMinusSize,
+          skill: skillSettings[mySkillIdsList[1] - 1],
+          profileFlg: true,
+          wordMinusSize: wordMinusSize,
+        ),
+        const SizedBox(height: 4),
+        SkillTooltip(
+          skill: skillSettings[mySkillIdsList[2] - 1],
+          profileFlg: true,
+          wordMinusSize: wordMinusSize,
         ),
       ],
     );

@@ -19,16 +19,16 @@ class BottomActionButtons extends HookWidget {
   final double seVolume;
   final bool myTurnFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const BottomActionButtons(
-    this.screenContext,
-    this.scrollController,
-    this.myActionDoc,
-    this.rivalListenSubscription,
-    this.soundEffect,
-    this.seVolume,
-    this.myTurnFlg,
-  );
+  const BottomActionButtons({
+    Key? key,
+    required this.screenContext,
+    required this.scrollController,
+    required this.myActionDoc,
+    required this.rivalListenSubscription,
+    required this.soundEffect,
+    required this.seVolume,
+    required this.myTurnFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +75,13 @@ class BottomActionButtons extends HookWidget {
                         ),
                         builder: (BuildContext context) {
                           return AnswerModal(
-                            screenContext,
-                            scrollController,
-                            myActionDoc,
-                            rivalListenSubscription,
-                            soundEffect,
-                            seVolume,
-                            myTurnFlg,
+                            screenContext: screenContext,
+                            scrollController: scrollController,
+                            myActionDoc: myActionDoc,
+                            rivalListenSubscription: rivalListenSubscription,
+                            soundEffect: soundEffect,
+                            seVolume: seVolume,
+                            myTurnFlg: myTurnFlg,
                           );
                         },
                       );
@@ -124,13 +124,13 @@ class BottomActionButtons extends HookWidget {
                         ),
                         builder: (BuildContext context) {
                           return QuestionModal(
-                            screenContext,
-                            scrollController,
-                            myActionDoc,
-                            rivalListenSubscription,
-                            soundEffect,
-                            seVolume,
-                            myTurnFlg,
+                            screenContext: screenContext,
+                            scrollController: scrollController,
+                            myActionDoc: myActionDoc,
+                            rivalListenSubscription: rivalListenSubscription,
+                            soundEffect: soundEffect,
+                            seVolume: seVolume,
+                            myTurnFlg: myTurnFlg,
                           );
                         },
                       );

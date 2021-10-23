@@ -22,16 +22,16 @@ class AnswerModal extends HookWidget {
   final double seVolume;
   final bool myTurnFlg;
 
-  // ignore: use_key_in_widget_constructors
-  const AnswerModal(
-    this.screenContext,
-    this.scrollController,
-    this.myActionDoc,
-    this.rivalListenSubscription,
-    this.soundEffect,
-    this.seVolume,
-    this.myTurnFlg,
-  );
+  const AnswerModal({
+    Key? key,
+    required this.screenContext,
+    required this.scrollController,
+    required this.myActionDoc,
+    required this.rivalListenSubscription,
+    required this.soundEffect,
+    required this.seVolume,
+    required this.myTurnFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

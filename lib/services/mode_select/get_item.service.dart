@@ -65,9 +65,9 @@ Future getItem(
     animType: AnimType.SCALE,
     width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
     body: ItemGet(
-      itemNumber,
-      newItemFlg,
-      buttonNumber,
+      itemNumber: itemNumber,
+      newFlg: newItemFlg,
+      buttonNumber: buttonNumber,
     ),
   ).show();
 }

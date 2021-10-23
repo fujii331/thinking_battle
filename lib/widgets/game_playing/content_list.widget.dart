@@ -13,11 +13,11 @@ class ContentList extends HookWidget {
   final ScrollController scrollController;
   final PlayerInfo rivalInfo;
 
-  // ignore: use_key_in_widget_constructors
-  const ContentList(
-    this.scrollController,
-    this.rivalInfo,
-  );
+  const ContentList({
+    Key? key,
+    required this.scrollController,
+    required this.rivalInfo,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ContentList extends HookWidget {
     final List colorList = returnCardColorList(rivalInfo.cardNumber);
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 240,
+      height: MediaQuery.of(context).size.height - 260,
       width: MediaQuery.of(context).size.width * .9,
       child: Stack(
         children: [
