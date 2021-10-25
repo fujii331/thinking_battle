@@ -52,7 +52,7 @@ class ModeSelectScreen extends HookWidget {
             ),
           ),
           centerTitle: true,
-          backgroundColor: colorList[0][1].withOpacity(0.2),
+          backgroundColor: colorList[0][1].withOpacity(0.3),
           actions: <Widget>[
             IconButton(
               iconSize: 25,

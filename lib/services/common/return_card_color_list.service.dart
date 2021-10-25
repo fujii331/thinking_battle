@@ -3,7 +3,21 @@ import 'package:flutter/material.dart';
 List returnCardColorList(
   int cardNumber,
 ) {
-  List<int> darkColorList = [5, 8, 10, 13, 16, 17, 19, 20];
+  List<int> darkColorList = [
+    5,
+    8,
+    10,
+    13,
+    16,
+    17,
+    19,
+    20,
+    1002,
+    1003,
+    1004,
+    1006,
+    1007,
+  ];
   List colorList = cardNumber < 8
       ? (cardNumber == 1
           ? [
@@ -139,58 +153,121 @@ List returnCardColorList(
                                           ],
                                           Colors.yellow.shade100
                                         ])
-          : cardNumber == 16
-              ? [
-                  [
-                    Colors.purple.shade400,
-                    Colors.deepPurple.shade300,
-                    Colors.purple.shade300,
-                  ],
-                  Colors.pink.shade100
-                ]
-              : cardNumber == 17
+          : cardNumber < 24
+              ? cardNumber == 16
                   ? [
                       [
-                        Colors.black,
-                        Colors.grey.shade900,
-                        Colors.black,
+                        Colors.purple.shade400,
+                        Colors.deepPurple.shade300,
+                        Colors.purple.shade300,
                       ],
-                      Colors.pink.shade300
+                      Colors.pink.shade100
                     ]
-                  : cardNumber == 18
+                  : cardNumber == 17
                       ? [
                           [
-                            Colors.grey.shade200,
-                            Colors.blueGrey.shade50,
-                            Colors.grey.shade400,
+                            Colors.black,
+                            Colors.grey.shade900,
+                            Colors.black,
                           ],
-                          Colors.blueGrey.shade300
+                          Colors.pink.shade300
                         ]
-                      : cardNumber == 19
+                      : cardNumber == 18
                           ? [
                               [
-                                Colors.indigo.shade900,
-                                Colors.grey.shade900,
-                                Colors.deepPurple.shade900,
+                                Colors.grey.shade200,
+                                Colors.blueGrey.shade50,
+                                Colors.grey.shade400,
                               ],
-                              Colors.yellow.shade500
+                              Colors.blueGrey.shade300
                             ]
-                          : cardNumber == 20
+                          : cardNumber == 19
                               ? [
                                   [
-                                    Colors.grey.shade800,
-                                    Colors.blueGrey.shade900,
+                                    Colors.indigo.shade900,
                                     Colors.grey.shade900,
+                                    Colors.deepPurple.shade900,
                                   ],
-                                  Colors.amber.shade500
+                                  Colors.yellow.shade600
                                 ]
-                              : [
+                              : cardNumber == 20
+                                  ? [
+                                      [
+                                        Colors.grey.shade800,
+                                        Colors.blueGrey.shade900,
+                                        Colors.grey.shade900,
+                                      ],
+                                      Colors.amber.shade500
+                                    ]
+                                  : [
+                                      [
+                                        Colors.white,
+                                        Colors.grey.shade100,
+                                        Colors.white,
+                                      ],
+                                      Colors.grey.shade300
+                                    ]
+              : cardNumber == 1001
+                  ? [
+                      [
+                        Colors.yellow.shade200,
+                        Colors.cyan.shade100,
+                        Colors.red.shade100,
+                      ],
+                      Colors.purple.shade300
+                    ]
+                  : cardNumber == 1002
+                      ? [
+                          [
+                            Colors.black,
+                            Colors.purple.shade700,
+                            Colors.lightBlue.shade500,
+                          ],
+                          Colors.purple.shade600
+                        ]
+                      : cardNumber == 1003
+                          ? [
+                              [
+                                Colors.lightBlue.shade700,
+                                Colors.purple.shade800,
+                                Colors.pink.shade700,
+                              ],
+                              Colors.purple.shade800
+                            ]
+                          : cardNumber == 1004
+                              ? [
                                   [
-                                    Colors.white,
-                                    Colors.grey.shade100,
-                                    Colors.white,
+                                    Colors.black,
+                                    Colors.indigo.shade900,
+                                    Colors.black,
                                   ],
-                                  Colors.grey.shade300
-                                ];
+                                  Colors.indigo.shade800
+                                ]
+                              : cardNumber == 1005
+                                  ? [
+                                      [
+                                        Colors.orange.shade300,
+                                        Colors.orange.shade100,
+                                        Colors.yellow.shade200,
+                                      ],
+                                      Colors.amber.shade700
+                                    ]
+                                  : cardNumber == 1006
+                                      ? [
+                                          [
+                                            Colors.grey.shade900,
+                                            Colors.black,
+                                            Colors.grey.shade900,
+                                          ],
+                                          Colors.green.shade500
+                                        ]
+                                      : [
+                                          [
+                                            Colors.purple.shade900,
+                                            Colors.deepPurple.shade900,
+                                            Colors.red.shade900,
+                                          ],
+                                          Colors.pink.shade900
+                                        ];
   return [colorList, darkColorList.contains(cardNumber)];
 }

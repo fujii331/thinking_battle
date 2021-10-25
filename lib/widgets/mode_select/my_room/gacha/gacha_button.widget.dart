@@ -31,13 +31,22 @@ class GachaButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool enableGacha = gpCount > 0 &&
-        itemNumberList.length !=
-            (buttonNumber == 1
-                ? 24
-                : buttonNumber == 2
-                    ? 20
-                    : messageSettings.length); // ガチャの種類が増えたら要修正
+    final gachaNumber = buttonNumber == 1
+        ? 24
+        : buttonNumber == 2
+            ? 20
+            : 20; // ガチャの種類が増えたら要修正
+    bool remainingFlg = false;
+
+    // 全てのガチャを手に入れていたらフラグがfalseのままになり、ボタンが押せない
+    for (int i = 5; i <= gachaNumber; i++) {
+      if (!itemNumberList.contains(i.toString())) {
+        remainingFlg = true;
+        break;
+      }
+    }
+
+    final bool enableGacha = gpCount > 0 && remainingFlg;
 
     return SizedBox(
       width: 130,

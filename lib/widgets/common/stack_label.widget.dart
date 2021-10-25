@@ -24,7 +24,7 @@ class StackLabel extends StatelessWidget {
             fontSize: nameFlg ? 13 - wordMinusSize : 11 - wordMinusSize,
             foreground: Paint()
               ..style = PaintingStyle.stroke
-              ..strokeWidth = 3
+              ..strokeWidth = 4
               ..color = Colors.grey.shade900,
           ),
         ),

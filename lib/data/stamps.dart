@@ -55,7 +55,7 @@ const stamps = [
     ),
     Stamp(
       needCount: 5,
-      reward: '新スキル「質問確認」を解放！',
+      reward: '新スキル「質問調査」を解放！',
     ),
     Stamp(
       needCount: 50,
@@ -82,15 +82,15 @@ const stamps = [
     ),
     Stamp(
       needCount: 1800,
-      reward: '新アイコン「サッカー鬼」獲得！',
+      reward: '新アイコン「アイスマン」獲得！',
     ),
     Stamp(
       needCount: 1900,
-      reward: '新テーマ「ラビリンス」獲得！',
+      reward: '新テーマ「ブラックロック」獲得！',
     ),
     Stamp(
       needCount: 2000,
-      reward: '新メッセージ「私は強い！」獲得！',
+      reward: '新メッセージ「私は強い」獲得！',
     ),
   ],
   // 4 スキル使用回数
@@ -105,15 +105,15 @@ const stamps = [
     ),
     Stamp(
       needCount: 200,
-      reward: '新テーマ「オレンジキューブ」獲得！',
+      reward: '新アイコン「サングラスオレンジ」獲得！',
     ),
     Stamp(
       needCount: 500,
-      reward: '新メッセージ「スキル使うけど許してね」獲得！',
+      reward: '新テーマ「オレンジキューブ」獲得！',
     ),
     Stamp(
       needCount: 1000,
-      reward: '新アイコン「サングラスオレンジ」獲得！',
+      reward: '新メッセージ「スキル使うけど許してね」獲得！',
     ),
   ],
   // 5 アイコン・テーマ数

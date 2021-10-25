@@ -9,7 +9,9 @@ import 'package:thinking_battle/models/player_info.model.dart';
 import 'dart:async';
 
 import 'package:thinking_battle/models/send_content.model.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/screens/game_finish.screen.dart';
+import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 import 'package:thinking_battle/services/game_playing/common_action.service.dart';
 import 'package:thinking_battle/services/game_playing/failed_connect.service.dart';
 import 'package:thinking_battle/services/game_playing/update_rate.service.dart';
@@ -296,17 +298,13 @@ class GamePlayingScreen extends HookWidget {
             ),
           ),
           centerTitle: true,
-          backgroundColor: Colors.blueGrey[900]?.withOpacity(0.9),
+          backgroundColor: Colors.blueGrey.shade900.withOpacity(0.9),
         ),
         body: Stack(
           children: <Widget>[
             background(),
             Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromRGBO(0, 0, 0, 0.6),
-                ),
+              child: SizedBox(
                 width: widthSetting,
                 height: MediaQuery.of(context).size.height > 800 ? 800 : null,
                 child: AnimatedOpacity(

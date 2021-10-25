@@ -85,8 +85,8 @@ Future mainMatchingAction(
 
     await matchingRoomRef
         .where('matchingStatus', isEqualTo: 1)
-        .where('rate', isLessThan: userRate + 500.0)
-        .where('rate', isGreaterThan: userRate - 500.0)
+        .where('rate', isLessThan: userRate + 300.0)
+        .where('rate', isGreaterThan: userRate - 300.0)
         .limit(1)
         .get()
         .then((QuerySnapshot querySnapshot) async {

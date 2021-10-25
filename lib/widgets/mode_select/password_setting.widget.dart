@@ -96,6 +96,8 @@ class PasswordSetting extends HookWidget {
                       context.read(friendMatchWordProvider).state =
                           passwordState.value;
 
+                      Navigator.pop(context);
+
                       Navigator.of(context).pushNamed(
                         GameStartScreen.routeName,
                       );

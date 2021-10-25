@@ -7,6 +7,7 @@ import 'package:thinking_battle/data/skills.dart';
 import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 
 class ContentList extends HookWidget {
@@ -59,6 +60,8 @@ class ContentList extends HookWidget {
                 )
               ],
             ),
+          ),
+          Container(
             padding: const EdgeInsets.only(
               right: 10,
               left: 10,

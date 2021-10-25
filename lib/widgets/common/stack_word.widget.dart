@@ -23,7 +23,7 @@ class StackWord extends StatelessWidget {
             fontSize: 15.0 - wordMinusSize,
             foreground: Paint()
               ..style = PaintingStyle.stroke
-              ..strokeWidth = 3.5
+              ..strokeWidth = 4
               ..color = Colors.grey.shade900,
           ),
         ),
