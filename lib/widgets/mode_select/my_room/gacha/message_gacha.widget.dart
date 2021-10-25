@@ -24,22 +24,27 @@ class MessageGacha extends HookWidget {
     final int gpCount = useProvider(gpCountProvider).state;
 
     final List<List<int>> getitemNumberList = [
-      [5, 7],
-      [6, 7],
-      [7, 7],
-      [8, 7],
-      [9, 6],
-      [10, 6],
-      [11, 6],
-      [12, 6],
-      [13, 6],
-      [14, 6],
-      [15, 6],
-      [16, 6],
-      [17, 6],
-      [18, 6],
-      [19, 6],
-      [20, 6],
+      [5, 5],
+      [6, 5],
+      [7, 5],
+      [8, 5],
+      [9, 5],
+      [10, 5],
+      [11, 5],
+      [12, 5],
+      [13, 5],
+      [14, 5],
+      [15, 5],
+      [16, 5],
+      [17, 5],
+      [18, 5],
+      [19, 5],
+      [20, 5],
+      [21, 4],
+      [22, 4],
+      [23, 4],
+      [24, 4],
+      [25, 4],
     ];
 
     List<Widget> itemList = [];
@@ -121,7 +126,7 @@ class MessageGacha extends HookWidget {
     AudioCache soundEffect,
     double seVolume,
   ) {
-    final int needGpPoint = (50 / cardParcentage).round();
+    final int needGpPoint = (25 / cardParcentage).round();
 
     return Container(
       decoration: BoxDecoration(

@@ -273,7 +273,7 @@ Future matchingPreparation(
             context.read(matchingWaitingIdProvider).state = '';
             context.read(precedingFlgProvider).state = precedingFlg;
 
-            if (context.read(friendMatchWordProvider).state != '') {
+            if (context.read(friendMatchWordProvider).state == '') {
               // 負けた場合のレートを登録
               final double failedRate = getNewRate(
                 userRate,
@@ -467,7 +467,7 @@ Future matchingUpdate(
         context.read(precedingFlgProvider).state =
             !firstMatchedInfoSnapshot.precedingFlg;
 
-        if (context.read(friendMatchWordProvider).state != '') {
+        if (context.read(friendMatchWordProvider).state == '') {
           // 負けた場合のレートを登録
           final double failedRate = getNewRate(
             userRate,

@@ -116,7 +116,7 @@ Future turnAction(
       );
 
       await Future.delayed(
-        const Duration(milliseconds: 1000),
+        const Duration(milliseconds: 700),
       );
     }
 
@@ -140,6 +140,9 @@ Future turnAction(
             skillSettings[displaySkillIds[i] - 1].skillPoint;
       }
 
+      print('スキル発動');
+      print(context.read(enemySkillPointProvider).state);
+
       displayContentList.last.displayList.add(0);
       context.read(displayContentListProvider).state = displayContentList;
 
@@ -152,7 +155,7 @@ Future turnAction(
       if (displaySkillIds[i] == 5) {
         int changedCount = 0;
         await Future.delayed(
-          const Duration(milliseconds: 800),
+          const Duration(milliseconds: 500),
         );
 
         context.read(displayQuestionResearchProvider).state = true;
@@ -219,19 +222,19 @@ Future turnAction(
         }
 
         await Future.delayed(
-          const Duration(milliseconds: 300),
+          const Duration(milliseconds: 200),
         );
 
         context.read(animationQuestionResearchProvider).state = false;
         await Future.delayed(
-          const Duration(milliseconds: 700),
+          const Duration(milliseconds: 600),
         );
         context.read(displayQuestionResearchProvider).state = false;
         displayContentList = context.read(displayContentListProvider).state;
       }
 
       await Future.delayed(
-        const Duration(milliseconds: 1000),
+        const Duration(milliseconds: 700),
       );
     }
 
@@ -250,7 +253,7 @@ Future turnAction(
       scrollController,
       sendContent.skillIds.isEmpty &&
               targetQuestion.asking.length * (fontSize + 1) > restrictWidth
-          ? 150
+          ? 145
           : 50,
     );
 
@@ -287,7 +290,7 @@ Future turnAction(
     }
 
     await Future.delayed(
-      const Duration(milliseconds: 2000),
+      const Duration(milliseconds: 1500),
     );
 
     // 返答表示
@@ -344,7 +347,7 @@ Future turnAction(
     context.read(displayContentListProvider).state = displayContentList;
 
     await Future.delayed(
-      const Duration(milliseconds: 2000),
+      const Duration(milliseconds: 1500),
     );
 
     for (int i = 0; i < 3; i++) {
@@ -372,7 +375,7 @@ Future turnAction(
       context.read(displayContentListProvider).state = displayContentList;
 
       await Future.delayed(
-        const Duration(milliseconds: 800),
+        const Duration(milliseconds: 700),
       );
     }
 
@@ -455,7 +458,7 @@ Future turnAction(
   }
 
   await Future.delayed(
-    const Duration(milliseconds: 1000),
+    const Duration(milliseconds: 800),
   );
 
   if (allQuestions.length < 3) {
@@ -646,7 +649,7 @@ Future initializeAction(
     context.read(displayMyturnSetFlgProvider).state = true;
   } else {
     // 時間を初期化
-    context.read(rivalTurnTimeProvider).state = 45;
+    context.read(rivalTurnTimeProvider).state = 40;
     // 相手のターンの表示
     context.read(displayRivalturnSetFlgProvider).state = true;
 
@@ -676,53 +679,47 @@ List<Question> getNextQuestions(
   final target3RandomValue = Random().nextInt(100);
 
   if (turnCount < 3) {
-    question1 = importance1Questions[0];
-    question2 = importance1Questions[1];
+    question1 = importance1Questions[0]; // 重要度1
+    question2 = importance1Questions[1]; // 重要度1
     question3 = target3RandomValue < 90
-        ? importance1Questions[2]
+        ? importance2Questions[0] // 90%で重要度2
         : target3RandomValue < 98
-            ? importance2Questions[2]
-            : importance3Questions[2];
+            ? importance1Questions[2] // 8%で重要度1
+            : importance3Questions[0]; // 2%で重要度3
   } else if (turnCount < 5) {
-    question1 = importance1Questions[0];
+    question1 = importance1Questions[0]; // 重要度1
     question2 = target2RandomValue < 60
-        ? importance1Questions[1]
-        : importance2Questions[1];
-    question3 = target3RandomValue < 30
-        ? importance1Questions[2]
-        : target3RandomValue < 95
-            ? importance2Questions[2]
-            : importance3Questions[2];
+        ? importance1Questions[1] // 60%で重要度1
+        : importance2Questions[0]; // 40%で重要度2
+    question3 = target3RandomValue < 92
+        ? importance2Questions[1] // 92%で重要度2
+        : target3RandomValue < 97
+            ? importance1Questions[2] // 5%で重要度1
+            : importance3Questions[0]; // 3%で重要度3
   } else if (turnCount < 7) {
-    question1 = importance1Questions[0];
-    question2 = target2RandomValue < 10
-        ? importance1Questions[1]
-        : importance2Questions[1];
-    question3 = target3RandomValue < 30
-        ? importance1Questions[2]
+    question1 = importance1Questions[0]; // 重要度1
+    question2 = target2RandomValue < 90
+        ? importance2Questions[0] // 90%で重要度2
+        : importance1Questions[1]; // 10%で重要度1
+    question3 = target3RandomValue < 90
+        ? importance2Questions[1] // 90%で重要度2
         : target3RandomValue < 95
-            ? importance2Questions[2]
-            : importance3Questions[2];
+            ? importance1Questions[2] // 5%で重要度1
+            : importance3Questions[0]; // 5%で重要度3
   } else if (turnCount < 9) {
-    question1 = importance1Questions[0];
-    question2 = target2RandomValue < 10
-        ? importance1Questions[1]
-        : importance2Questions[1];
-    question3 = target3RandomValue < 5
-        ? importance1Questions[2]
-        : target3RandomValue < 60
-            ? importance2Questions[2]
-            : importance3Questions[2];
+    question1 = importance1Questions[0]; // 重要度1
+    question2 = target2RandomValue < 90
+        ? importance2Questions[0] // 90%で重要度2
+        : importance1Questions[1]; // 10%で重要度1
+    question3 = target3RandomValue < 90
+        ? importance2Questions[1] // 80%で重要度2
+        : importance3Questions[0]; // 20%で重要度3
   } else {
-    question1 = importance1Questions[0];
-    question2 = target2RandomValue < 5
-        ? importance1Questions[1]
-        : target2RandomValue < 80
-            ? importance2Questions[1]
-            : importance3Questions[1];
-    question3 = target3RandomValue < 30
-        ? importance2Questions[2]
-        : importance3Questions[2];
+    question1 = importance1Questions[0]; // 重要度1
+    question2 = importance2Questions[0]; // 重要度2
+    question3 = target3RandomValue < 70
+        ? importance3Questions[0] // 70%で重要度3
+        : importance2Questions[1]; // 30%で重要度2
   }
 
   final setQuestions = [

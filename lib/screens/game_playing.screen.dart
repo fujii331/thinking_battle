@@ -284,7 +284,7 @@ class GamePlayingScreen extends HookWidget {
     }, []);
 
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(

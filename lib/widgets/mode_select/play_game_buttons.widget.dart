@@ -24,7 +24,7 @@ class PlayGameButtons extends StatelessWidget {
       children: [
         _playButton(
           context,
-          'トレーニング',
+          'CPUマッチ',
           Colors.lime.shade800,
           1,
         ),

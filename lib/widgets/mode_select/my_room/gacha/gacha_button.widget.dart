@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thinking_battle/data/messages.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/mode_select/get_item.service.dart';
 
@@ -36,7 +37,7 @@ class GachaButton extends HookWidget {
                 ? 24
                 : buttonNumber == 2
                     ? 20
-                    : 20); // ガチャの種類が増えたら要修正
+                    : messageSettings.length); // ガチャの種類が増えたら要修正
 
     return SizedBox(
       width: 130,

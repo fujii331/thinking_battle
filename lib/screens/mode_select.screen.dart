@@ -167,12 +167,12 @@ class ModeSelectScreen extends HookWidget {
                     colorList: colorList,
                     matchedCount: matchedCount,
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 40),
                   PlayGameButtons(
                     soundEffect: soundEffect,
                     seVolume: seVolume,
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 25),
                   BottomIconButtons(
                     soundEffect: soundEffect,
                     seVolume: seVolume,

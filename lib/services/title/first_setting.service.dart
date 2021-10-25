@@ -68,6 +68,8 @@ void firstSetting(BuildContext context) async {
       prefs.getStringList('messageIdsList') ?? ['1', '2', '3', '4'];
   // レート
   context.read(rateProvider).state = prefs.getDouble('rate') ?? 1500.0;
+  // 最大レート
+  context.read(maxRateProvider).state = prefs.getDouble('maxRate') ?? 1500.0;
 
   // スキル
   context.read(mySkillIdsListProvider).state =
@@ -103,14 +105,25 @@ void firstSetting(BuildContext context) async {
   // ガチャカウント
   context.read(gpCountProvider).state = prefs.getInt('gpCount') ?? 5;
 
-  // 日時
-  final todayString = DateFormat('yyyy/MM/dd').format(DateTime.now());
-  final dataString = prefs.getString('dataString') ?? todayString;
+  // スタンプリスト
+  context.read(stampListProvider).state =
+      prefs.getStringList('stampList') ?? ['0', '0', '0', '0', '0', '0'];
 
-  // 日時の更新が行われたらgpカウントを更新
+  // 日時
+  final String todayString = DateFormat('yyyy/MM/dd').format(DateTime.now());
+  final String dataString = prefs.getString('dataString') ?? todayString;
+  final int loginDays = prefs.getInt('loginDays') ?? 1;
+
+  // 日時の更新が行われたらgpカウントとログイン日数を更新
   if (dataString != todayString) {
     context.read(gpCountProvider).state = 5;
     prefs.setInt('gpCount', 5);
+
+    prefs.setInt('loginDays', loginDays + 1);
+    context.read(loginDaysProvider).state = loginDays + 1;
+  } else {
+    // ログイン日数
+    context.read(loginDaysProvider).state = loginDays;
   }
 
   prefs.setString('dataString', todayString);

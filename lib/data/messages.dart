@@ -81,4 +81,24 @@ const messageSettings = <Message>[
     id: 20,
     message: 'キタコレ',
   ),
+  Message(
+    id: 21,
+    message: '嘘つき使ってるかもね',
+  ),
+  Message(
+    id: 22,
+    message: '次解答しようかな',
+  ),
+  Message(
+    id: 23,
+    message: 'この質問は重要だよ',
+  ),
+  Message(
+    id: 24,
+    message: 'それはいや！',
+  ),
+  Message(
+    id: 25,
+    message: '質問隠しすぎ〜',
+  ),
 ];

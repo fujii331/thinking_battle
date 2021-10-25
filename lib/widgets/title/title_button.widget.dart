@@ -9,7 +9,12 @@ import 'package:thinking_battle/services/title//authentication.service.dart';
 import 'package:thinking_battle/widgets/title/first_setting.widget.dart';
 
 class TitleButton extends HookWidget {
-  const TitleButton({Key? key}) : super(key: key);
+  final ValueNotifier<bool> displayFlg;
+
+  const TitleButton({
+    Key? key,
+    required this.displayFlg,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,56 +25,53 @@ class TitleButton extends HookWidget {
 
     final loadingState = useState(false);
 
-    return SizedBox(
-      height: 60,
-      width: 155,
-      child: ElevatedButton(
-        onPressed: !loadingState.value
-            ? () async {
-                loadingState.value = true;
-                soundEffect.play(
-                  'sounds/tap.mp3',
-                  isNotification: true,
-                  volume: seVolume,
-                );
-
-                if (loginId == '') {
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.NO_HEADER,
-                    headerAnimationLoop: false,
-                    dismissOnTouchOutside: false,
-                    dismissOnBackKeyPress: false,
-                    animType: AnimType.SCALE,
-                    width: MediaQuery.of(context).size.width * .86 > 650
-                        ? 650
-                        : null,
-                    body: const FirstSetting(),
-                  ).show();
-                } else {
-                  login(context);
-                }
-
-                loadingState.value = false;
-              }
-            : () {},
-        child: Text(
-          loginId == '' ? '登録する' : '始める',
-          style: const TextStyle(
-            fontSize: 23,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 500),
+      opacity: displayFlg.value ? 1 : 0,
+      child: Container(
+        height: 65,
+        width: 125,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0),
+          borderRadius: BorderRadius.circular(20),
+          image: const DecorationImage(
+            image: AssetImage('assets/images/play.png'),
+            fit: BoxFit.cover,
           ),
         ),
-        style: ElevatedButton.styleFrom(
-          primary: Colors.orange.shade800,
-          padding: const EdgeInsets.only(
-            bottom: 5,
-          ),
-          shape: const StadiumBorder(),
-          side: BorderSide(
-            width: 3,
-            color: Colors.grey.shade900,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: !loadingState.value
+                ? () async {
+                    loadingState.value = true;
+                    soundEffect.play(
+                      'sounds/tap.mp3',
+                      isNotification: true,
+                      volume: seVolume,
+                    );
+
+                    if (loginId == '') {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.NO_HEADER,
+                        headerAnimationLoop: false,
+                        dismissOnTouchOutside: false,
+                        dismissOnBackKeyPress: false,
+                        animType: AnimType.SCALE,
+                        width: MediaQuery.of(context).size.width * .86 > 650
+                            ? 650
+                            : null,
+                        body: const FirstSetting(),
+                      ).show();
+                    } else {
+                      login(context);
+                    }
+
+                    loadingState.value = false;
+                  }
+                : () {},
           ),
         ),
       ),

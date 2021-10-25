@@ -328,7 +328,8 @@ class QuestionModal extends HookWidget {
           targetQuestion.asking,
           style: const TextStyle(
             fontSize: 20,
-            fontFamily: 'NotoSerif',
+            fontFamily: 'ZenKakuGothicNew',
+            fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),

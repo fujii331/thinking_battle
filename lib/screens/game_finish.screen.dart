@@ -145,7 +145,7 @@ class GameFinishScreen extends HookWidget {
           },
           initialActiveIndex: 0,
           style: TabStyle.react,
-          backgroundColor: Colors.indigo.shade800,
+          backgroundColor: Colors.indigo.shade700,
           // currentIndex: screenNo.value,
         ),
         body: PageView(

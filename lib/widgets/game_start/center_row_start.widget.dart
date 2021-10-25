@@ -32,7 +32,6 @@ class CenterRowStart extends HookWidget {
       child: Center(
         child: matchingFinishedFlg
             ? Container(
-                // height: 50,
                 width: 100,
                 decoration: const BoxDecoration(
                   image: DecorationImage(

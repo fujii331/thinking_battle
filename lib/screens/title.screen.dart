@@ -14,6 +14,8 @@ class TitleScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayFlg = useState<bool>(false);
+
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         // await shouldUpdate(context);
@@ -21,6 +23,10 @@ class TitleScreen extends HookWidget {
         // timeStart(
         //   context,
         // );
+        await Future.delayed(
+          const Duration(milliseconds: 1000),
+        );
+        displayFlg.value = true;
       });
       return null;
     }, const []);
@@ -34,12 +40,16 @@ class TitleScreen extends HookWidget {
           const TitleBack(),
           Center(
             child: Column(
-              children: const <Widget>[
-                SizedBox(height: 80),
-                TitleWord(),
-                Spacer(),
-                TitleButton(),
-                SizedBox(height: 180),
+              children: <Widget>[
+                const SizedBox(height: 120),
+                TitleWord(
+                  displayFlg: displayFlg,
+                ),
+                const Spacer(),
+                TitleButton(
+                  displayFlg: displayFlg,
+                ),
+                const SizedBox(height: 160),
               ],
             ),
           ),

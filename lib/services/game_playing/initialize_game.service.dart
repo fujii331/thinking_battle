@@ -14,7 +14,7 @@ void commonInitialAction(
 ) {
   // 初期化
   context.read(bgmProvider).state.stop();
-  context.read(currentSkillPointProvider).state = 5;
+  context.read(currentSkillPointProvider).state = 7;
   context.read(afterMessageTimeProvider).state = 0;
   context.read(alreadyseenQuestionsProvider).state = [];
   context.read(selectableQuestionsProvider).state = [];
@@ -29,7 +29,7 @@ void commonInitialAction(
 void trainingInitialAction(
   BuildContext context,
 ) {
-  context.read(enemySkillPointProvider).state = 5;
+  context.read(enemySkillPointProvider).state = 7;
 
   final bool precedingFlg = Random().nextInt(2) == 0 ? true : false;
   context.read(precedingFlgProvider).state = precedingFlg;
@@ -44,7 +44,7 @@ void trainingInitialAction(
   final List<int> skillList = skillListData[Random().nextInt(5)];
 
   context.read(rivalInfoProvider).state = PlayerInfo(
-    name: '練習くん',
+    name: 'CPU',
     rate: 1500.0,
     imageNumber: Random().nextInt(9) + 1,
     cardNumber: Random().nextInt(5) + 1,

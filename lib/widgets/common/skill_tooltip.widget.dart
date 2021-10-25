@@ -69,7 +69,6 @@ class SkillTooltip extends StatelessWidget {
           color: Colors.white,
         ),
         showDuration: const Duration(seconds: 100),
-        // waitDuration: const Duration(milliseconds: 1),
       ),
     );
   }

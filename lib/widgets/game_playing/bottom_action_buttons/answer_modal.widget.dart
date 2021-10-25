@@ -104,7 +104,7 @@ class AnswerModal extends HookWidget {
                         ),
                       ),
                     ),
-                    onChanged: (String input) {
+                    onFieldSubmitted: (String input) {
                       context.read(inputAnswerProvider).state = input;
                     },
                     inputFormatters: <TextInputFormatter>[
