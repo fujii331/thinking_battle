@@ -5,7 +5,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
-import 'package:thinking_battle/widgets/common/modal_close_button.widget.dart';
 
 class SoundMode extends HookWidget {
   final AudioCache soundEffect;
@@ -22,17 +21,27 @@ class SoundMode extends HookWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-        top: 15,
-        left: 20,
-        right: 20,
-        bottom: 23,
+        left: 5,
+        right: 5,
+        bottom: 35,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          Row(
+            children: [
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.close, size: 25, color: Colors.black),
+              ),
+            ],
+          ),
           const Padding(
             padding: EdgeInsets.only(
-              top: 10,
+              top: 5,
               bottom: 25,
             ),
             child: Text(
@@ -57,22 +66,28 @@ class SoundMode extends HookWidget {
               ),
             ),
           ),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              inactiveTickMarkColor: Colors.blue.shade100,
-              activeTickMarkColor: Colors.blue,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
             ),
-            child: Slider(
-              value: bgmVolume * 100,
-              min: 0,
-              max: 100,
-              divisions: 10,
-              onChanged: (double value) async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                context.read(bgmProvider).state.setVolume(value * 0.01);
-                context.read(bgmVolumeProvider).state = value * 0.01;
-                prefs.setDouble('bgmVolume', value * 0.01);
-              },
+            child: SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                inactiveTickMarkColor: Colors.blue.shade100,
+                activeTickMarkColor: Colors.blue,
+              ),
+              child: Slider(
+                value: bgmVolume * 100,
+                min: 0,
+                max: 100,
+                divisions: 10,
+                onChanged: (double value) async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  context.read(bgmProvider).state.setVolume(value * 0.01);
+                  context.read(bgmVolumeProvider).state = value * 0.01;
+                  prefs.setDouble('bgmVolume', value * 0.01);
+                },
+              ),
             ),
           ),
           const SizedBox(height: 10),
@@ -90,25 +105,29 @@ class SoundMode extends HookWidget {
               ),
             ),
           ),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              inactiveTickMarkColor: Colors.blue.shade100,
-              activeTickMarkColor: Colors.blue,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
             ),
-            child: Slider(
-              value: seVolume * 100,
-              min: 0,
-              max: 100,
-              divisions: 10,
-              onChanged: (double value) async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                context.read(seVolumeProvider).state = value * 0.01;
-                prefs.setDouble('seVolume', value * 0.01);
-              },
+            child: SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                inactiveTickMarkColor: Colors.blue.shade100,
+                activeTickMarkColor: Colors.blue,
+              ),
+              child: Slider(
+                value: seVolume * 100,
+                min: 0,
+                max: 100,
+                divisions: 10,
+                onChanged: (double value) async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  context.read(seVolumeProvider).state = value * 0.01;
+                  prefs.setDouble('seVolume', value * 0.01);
+                },
+              ),
             ),
           ),
-          const SizedBox(height: 25),
-          const ModalCloseButton(),
         ],
       ),
     );

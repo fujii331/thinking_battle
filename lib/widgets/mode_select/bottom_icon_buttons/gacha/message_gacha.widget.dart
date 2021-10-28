@@ -6,8 +6,8 @@ import 'package:thinking_battle/data/messages.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
-import 'package:thinking_battle/widgets/mode_select/my_room/gacha/gacha_button.widget.dart';
-import 'package:thinking_battle/widgets/mode_select/my_room/gacha/gp_change.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha/gacha_button.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha/gp_change.widget.dart';
 
 class MessageGacha extends HookWidget {
   const MessageGacha({Key? key}) : super(key: key);
@@ -22,6 +22,7 @@ class MessageGacha extends HookWidget {
 
     final int gpPoint = useProvider(gpPointProvider).state;
     final int gpCount = useProvider(gpCountProvider).state;
+    final int gachaTicket = useProvider(gachaTicketProvider).state;
 
     final List<List<int>> getitemNumberList = [
       [5, 5],
@@ -107,6 +108,7 @@ class MessageGacha extends HookWidget {
             buttonNumber: 3,
             gpPoint: gpPoint,
             gpCount: gpCount,
+            gachaTicket: gachaTicket,
             itemNumberList: itemNumberList,
             getitemNumberList: getitemNumberList,
             soundEffect: soundEffect,

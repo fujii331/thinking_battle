@@ -78,7 +78,7 @@ Future cpuAction(
           .where((skillId) => skillId != 6 && (searchFlg || skillId != 5))
           .toList();
 
-      // 質問候補が2つの場合でナイス質問を含み、質問調査を含まず、スキルポイントが溜まっている場合
+      // 質問候補が2つの場合でナイス質問を含み、質問サーチを含まず、スキルポイントが溜まっている場合
       if (enemySkillsCandidate.length == 2 &&
           enemySkillsCandidate.contains(2) &&
           !enemySkillsCandidate.contains(5) &&
@@ -98,7 +98,7 @@ Future cpuAction(
               : enemySkillsCandidate[randomNum + 1]
         ];
 
-        // ナイス質問を含み、質問調査を含まず、スキルポイントが溜まっている場合
+        // ナイス質問を含み、質問サーチを含まず、スキルポイントが溜まっている場合
         if (skillsCombination.contains(2) &&
             !skillsCombination.contains(5) &&
             enemySkillPoint >=

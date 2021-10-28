@@ -3,7 +3,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
-import 'package:thinking_battle/widgets/mode_select/my_room/gacha/item_get.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha/item_get.widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 Future getItem(

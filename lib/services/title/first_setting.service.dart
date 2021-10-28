@@ -31,6 +31,7 @@ void firstSetting(BuildContext context) async {
     'sounds/cancel.mp3',
     'sounds/change.mp3',
     'sounds/correct_answer.mp3',
+    'sounds/gacha.mp3',
     'sounds/got_message.mp3',
     'sounds/matching.mp3',
     'sounds/my_turn.mp3',
@@ -99,11 +100,16 @@ void firstSetting(BuildContext context) async {
   // 最大連続勝利数
   context.read(maxContinuousWinCountProvider).state =
       prefs.getInt('maxContinuousWinCount') ?? 0;
+  // スキル使用回数
+  context.read(skillUseCountProvider).state =
+      prefs.getInt('skillUseCount') ?? 0;
 
   // GP
   context.read(gpPointProvider).state = prefs.getInt('gpPoint') ?? 0;
   // ガチャカウント
   context.read(gpCountProvider).state = prefs.getInt('gpCount') ?? 5;
+  // ガチャチケット
+  context.read(gachaTicketProvider).state = prefs.getInt('gachaTicket') ?? 0;
 
   // スタンプリスト
   context.read(stampListProvider).state =

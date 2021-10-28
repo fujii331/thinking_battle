@@ -140,9 +140,6 @@ Future turnAction(
             skillSettings[displaySkillIds[i] - 1].skillPoint;
       }
 
-      print('スキル発動');
-      print(context.read(enemySkillPointProvider).state);
-
       displayContentList.last.displayList.add(0);
       context.read(displayContentListProvider).state = displayContentList;
 
@@ -208,8 +205,8 @@ Future turnAction(
           displayList: displayContentList.last.displayList,
           importance: displayContentList.last.importance,
           specialMessage: changedCount == 0
-              ? '質問調査 (修正なし)'
-              : '質問調査 (' + changedCount.toString() + 'つ修正)',
+              ? '質問サーチ (修正なし)'
+              : '質問サーチ (' + changedCount.toString() + 'つ修正)',
           messageId: displayContentList.last.messageId,
         );
 

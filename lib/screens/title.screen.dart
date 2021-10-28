@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:lottie/lottie.dart';
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:thinking_battle/services/title//first_setting.service.dart';
@@ -37,11 +38,16 @@ class TitleScreen extends HookWidget {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
+          Lottie.asset(
+            'assets/lottie/ReneeNakagawa.json',
+            width: 2,
+            fit: BoxFit.fitWidth,
+          ),
           const TitleBack(),
           Center(
             child: Column(
               children: <Widget>[
-                const SizedBox(height: 120),
+                const SizedBox(height: 60),
                 TitleWord(
                   displayFlg: displayFlg,
                 ),

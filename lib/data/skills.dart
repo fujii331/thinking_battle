@@ -27,14 +27,27 @@ const skillSettings = <Skill>[
   ),
   Skill(
     id: 5,
-    skillName: '質問調査',
-    skillPoint: 8,
-    skillExplanation: '相手がこれまでに「質問隠し」か\n「嘘つき」を行っていた場合、\n正しい情報を表示し直す（SP 8）',
+    skillName: '質問サーチ',
+    skillPoint: 9,
+    skillExplanation: '相手がこれまでに行った「質問隠し」・「嘘\nつき」・「トラップ」をすべて\n正しい情報に表示し直す（SP 9）',
   ),
   Skill(
     id: 6,
     skillName: 'SP溜め',
     skillPoint: 4,
     skillExplanation: '4ターンの間、質問するたびに\nSPが3溜まるようになる（SP 4）',
+  ),
+  Skill(
+    id: 7,
+    skillName: '質問確認',
+    skillPoint: 5,
+    skillExplanation:
+        '相手がこれまでに行った「質問隠し」・「嘘\nつき」・「トラップ」を直近の\n1つだけ正しい情報に表示し直す（SP 5）',
+  ),
+  Skill(
+    id: 8,
+    skillName: 'トラップ',
+    skillPoint: 7,
+    skillExplanation: '次に相手が質問を行った際、\nその質問に対する嘘の返答\nが相手には表示される（SP 8）',
   ),
 ];

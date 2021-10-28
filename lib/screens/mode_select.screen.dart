@@ -137,12 +137,6 @@ class ModeSelectScreen extends HookWidget {
                         colorList: colorList,
                         selectWord: 'メッセージ',
                       ),
-                      MyRoomButton(
-                        soundEffect: soundEffect,
-                        seVolume: seVolume,
-                        colorList: colorList,
-                        selectWord: 'ガチャ',
-                      ),
                     ],
                   ),
                 ),

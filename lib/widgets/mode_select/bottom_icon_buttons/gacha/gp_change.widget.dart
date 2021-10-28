@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-import 'package:thinking_battle/widgets/mode_select/my_room/gacha/item_buy.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha/item_buy.widget.dart';
 
 class GpChange extends HookWidget {
   final int itemNumber;

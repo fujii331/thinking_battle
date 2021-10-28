@@ -41,7 +41,7 @@ Future signUp(
     Navigator.pop(context);
 
     // TODO 遊び方にとぶ
-    await Navigator.of(context).pushNamed(
+    await Navigator.of(context).pushReplacementNamed(
       ModeSelectScreen.routeName,
     );
   } catch (e) {
@@ -82,7 +82,7 @@ Future login(
     );
     // ログインに成功した場合
     // チャット画面に遷移＋ログイン画面を破棄
-    await Navigator.of(context).pushNamed(
+    await Navigator.of(context).pushReplacementNamed(
       ModeSelectScreen.routeName,
     );
   } catch (e) {

@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 import 'package:thinking_battle/providers/player.provider.dart';
-import 'package:thinking_battle/widgets/mode_select/my_room/gacha/image_item_gacha.widget.dart';
-import 'package:thinking_battle/widgets/mode_select/my_room/gacha/message_gacha.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha/image_item_gacha.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha/message_gacha.widget.dart';
 
 class GachaSelect extends HookWidget {
   final AudioCache soundEffect;
@@ -22,70 +22,97 @@ class GachaSelect extends HookWidget {
   Widget build(BuildContext context) {
     final int gpPoint = useProvider(gpPointProvider).state;
     final int gpCount = useProvider(gpCountProvider).state;
+    final int gachaTicket = useProvider(gachaTicketProvider).state;
 
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 5,
-        right: 5,
-        bottom: 35,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            children: [
-              const Spacer(),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(Icons.close, size: 25, color: Colors.black),
+    return Stack(
+      children: [
+        Container(
+          height: 420,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: const DecorationImage(
+              image: AssetImage('assets/images/gacha.jpg'),
+              fit: BoxFit.fitHeight,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            left: 5,
+            right: 5,
+            bottom: 35,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: [
+                  const Spacer(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child:
+                        const Icon(Icons.close, size: 25, color: Colors.white),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                'ガチャでアイテムをゲット！\n溜まったGPと交換も！',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.white,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 18),
+              Text(
+                '所持ガチャチケ：' + gachaTicket.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                ),
+              ),
+              Text(
+                '本日の残り動画ガチャ：' + gpCount.toString() + '回',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                ),
+              ),
+              Text(
+                '所持GP：' + gpPoint.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                ),
+              ),
+              const SizedBox(height: 20),
+              _gachaButton(
+                context,
+                'アイコンガチャ',
+                1,
+              ),
+              const SizedBox(height: 20),
+              _gachaButton(
+                context,
+                'テーマガチャ',
+                2,
+              ),
+              const SizedBox(height: 20),
+              _gachaButton(
+                context,
+                'メッセージガチャ',
+                3,
               ),
             ],
           ),
-          const SizedBox(height: 5),
-          const Text(
-            '短い動画を見てガチャ！\n溜まったGPと交換も！',
-            style: TextStyle(
-              fontSize: 18.0,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 18),
-          Text(
-            '本日の残りガチャ回数：' + gpCount.toString() + '回',
-            style: const TextStyle(
-              fontSize: 15.0,
-            ),
-          ),
-          Text(
-            '所持GP：' + gpPoint.toString(),
-            style: const TextStyle(
-              fontSize: 15.0,
-            ),
-          ),
-          const SizedBox(height: 20),
-          _gachaButton(
-            context,
-            'アイコンガチャ',
-            1,
-          ),
-          const SizedBox(height: 20),
-          _gachaButton(
-            context,
-            'テーマガチャ',
-            2,
-          ),
-          const SizedBox(height: 20),
-          _gachaButton(
-            context,
-            'メッセージガチャ',
-            3,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
