@@ -47,7 +47,9 @@ Future cpuAction(
   List<int> returnSkillIds = [];
 
   for (DisplayContent displayContent in displayContentList) {
-    if (displayContent.skillIds.contains(4) && !displayContent.myTurnFlg) {
+    if ((displayContent.skillIds.contains(4) && !displayContent.myTurnFlg) ||
+        (displayContent.skillIds.contains(108) && displayContent.myTurnFlg)) {
+      // 相手のターンに嘘つきを使ったか、自分の前の相手のターンにトラップを使われたか
       sumImportance -= displayContent.importance;
       searchFlg = true;
     } else if (displayContent.skillIds.contains(1) &&
@@ -75,13 +77,15 @@ Future cpuAction(
       List<int> usingSkills = [];
 
       final List<int> enemySkillsCandidate = enemySkills
-          .where((skillId) => skillId != 6 && (searchFlg || skillId != 5))
+          .where((skillId) =>
+              skillId != 6 && (searchFlg || skillId != 5 || skillId != 7))
           .toList();
 
-      // 質問候補が2つの場合でナイス質問を含み、質問サーチを含まず、スキルポイントが溜まっている場合
+      // 質問候補が2つの場合でナイス質問を含み、質問サーチ・質問確認を含まず、スキルポイントが溜まっている場合
       if (enemySkillsCandidate.length == 2 &&
           enemySkillsCandidate.contains(2) &&
           !enemySkillsCandidate.contains(5) &&
+          !enemySkillsCandidate.contains(7) &&
           enemySkillPoint >=
               skillSettings[enemySkillsCandidate[0] - 1].skillPoint +
                   skillSettings[enemySkillsCandidate[1] - 1].skillPoint) {
@@ -98,9 +102,10 @@ Future cpuAction(
               : enemySkillsCandidate[randomNum + 1]
         ];
 
-        // ナイス質問を含み、質問サーチを含まず、スキルポイントが溜まっている場合
+        // ナイス質問を含み、質問サーチ・質問確認を含まず、スキルポイントが溜まっている場合
         if (skillsCombination.contains(2) &&
             !skillsCombination.contains(5) &&
+            !skillsCombination.contains(7) &&
             enemySkillPoint >=
                 skillSettings[skillsCombination[0] - 1].skillPoint +
                     skillSettings[skillsCombination[1] - 1].skillPoint) {
@@ -162,7 +167,7 @@ Future cpuAction(
   await Future.delayed(
     Duration(
         seconds:
-            cpuTurn < 6 ? 3 + Random().nextInt(3) : 5 + Random().nextInt(6)),
+            cpuTurn < 6 ? 3 + Random().nextInt(4) : 5 + Random().nextInt(6)),
   );
 
   final SendContent sendContent = SendContent(

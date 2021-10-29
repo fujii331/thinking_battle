@@ -24,7 +24,7 @@ class StampCheck extends HookWidget {
     final String iconAndCardCount =
         (imageNumberList.length + cardNumberList.length).toString();
 
-    final ValueNotifier<String> conditionsTextState = useState('');
+    final ValueNotifier<String> conditionsTextState = useState('スタンプをタップして確認');
     final ValueNotifier<String> rewardTextState = useState('');
     final ValueNotifier<int> focusNumberState = useState(0);
 

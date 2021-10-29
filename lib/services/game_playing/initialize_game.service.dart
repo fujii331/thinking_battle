@@ -24,6 +24,8 @@ void commonInitialAction(
   context.read(spChargeTurnProvider).state = 0;
   context.read(turnCountProvider).state = 0;
   context.read(timerCancelFlgProvider).state = false;
+  context.read(myTrapCountProvider).state = 0;
+  context.read(enemyTrapCountProvider).state = 0;
 }
 
 void trainingInitialAction(
@@ -35,11 +37,11 @@ void trainingInitialAction(
   context.read(precedingFlgProvider).state = precedingFlg;
 
   final List<List<int>> skillListData = [
-    [1, 2, 3],
-    [1, 2, 4],
-    [1, 2, 5],
-    [2, 3, 4],
-    [2, 4, 5],
+    [8, 2, 5],
+    [8, 2, 5],
+    [8, 2, 5],
+    [8, 2, 5],
+    [8, 2, 5],
   ];
   final List<int> skillList = skillListData[Random().nextInt(5)];
 

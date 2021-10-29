@@ -84,7 +84,6 @@ Future turnAction(
       importance: targetQuestion.importance,
       specialMessage: '',
       messageId: sendContent.messageId,
-      // messageId: 2, // テスト用
     );
 
     // 表示リストに追加する
@@ -121,8 +120,40 @@ Future turnAction(
     }
 
     final List<int> displaySkillIds = sendContent.skillIds
-        .where((skill) => (myTurnFlg == true || skill != 4))
+        .where(
+          (skill) => (myTurnFlg == true || ![4, 8].contains(skill)),
+        )
         .toList();
+
+    // 相手ターンの場合、嘘つきとトラップを考慮するため別でスキルポイントを減少させる
+    if (!myTurnFlg) {
+      for (int skillId in sendContent.skillIds) {
+        context.read(enemySkillPointProvider).state -=
+            skillSettings[skillId - 1].skillPoint;
+      }
+    }
+
+    if (myTurnFlg) {
+      if (context.read(enemyTrapCountProvider).state > 0) {
+        // 自分のターンでトラップが仕掛けられていた場合、表示を変更するためのスキルを追加する
+        displayContentList.last.skillIds.add(108);
+        context.read(enemyTrapCountProvider).state -= 1;
+      }
+      if (sendContent.skillIds.contains(8)) {
+        // 自分のターンにトラップを使った場合、トラップカウントをプラスする
+        context.read(myTrapCountProvider).state += 1;
+      }
+    } else {
+      if (context.read(myTrapCountProvider).state > 0) {
+        // 相手のターンでトラップが仕掛けられていた場合、表示を変更するためのスキルを追加する
+        displayContentList.last.skillIds.add(108);
+        context.read(myTrapCountProvider).state -= 1;
+      }
+      if (sendContent.skillIds.contains(8)) {
+        // 自分のターンにトラップを使った場合、トラップカウントをプラスする
+        context.read(enemyTrapCountProvider).state += 1;
+      }
+    }
 
     for (int i = 0; i < displaySkillIds.length; i++) {
       soundEffect.play(
@@ -131,12 +162,9 @@ Future turnAction(
         volume: seVolume,
       );
 
-      // スキルポイントを減少
+      // 自分のターンの場合、スキル表示と同時に順番にスキルポイントを減らす
       if (myTurnFlg) {
         context.read(currentSkillPointProvider).state -=
-            skillSettings[displaySkillIds[i] - 1].skillPoint;
-      } else {
-        context.read(enemySkillPointProvider).state -=
             skillSettings[displaySkillIds[i] - 1].skillPoint;
       }
 
@@ -155,7 +183,7 @@ Future turnAction(
           const Duration(milliseconds: 500),
         );
 
-        context.read(displayQuestionResearchProvider).state = true;
+        context.read(displayQuestionResearchProvider).state = 1;
         await Future.delayed(
           const Duration(milliseconds: 200),
         );
@@ -175,10 +203,13 @@ Future turnAction(
             displayContentList.map((displaycontent) {
           if (displaycontent.myTurnFlg != myTurnFlg &&
               (displaycontent.skillIds.contains(1) ||
-                  displaycontent.skillIds.contains(4))) {
+                  displaycontent.skillIds.contains(4) ||
+                  displaycontent.skillIds.contains(8))) {
             changedCount++;
             final changedSkillIds = displaycontent.skillIds.map((skillId) {
-              return (skillId == 1 || skillId == 4) ? -skillId : skillId;
+              return (skillId == 1 || skillId == 4 || skillId == 8)
+                  ? -skillId
+                  : skillId;
             }).toList();
             return DisplayContent(
               content: displaycontent.content,
@@ -186,7 +217,23 @@ Future turnAction(
               answerFlg: displaycontent.answerFlg,
               myTurnFlg: displaycontent.myTurnFlg,
               skillIds: changedSkillIds,
-              displayList: [0, 0, 0, 0, 0, 0],
+              displayList: [0, 0, 0, 0, 0, 0, 0],
+              importance: displaycontent.importance,
+              specialMessage: displaycontent.specialMessage,
+              messageId: displaycontent.messageId,
+            );
+          } else if (displaycontent.myTurnFlg == myTurnFlg &&
+              displaycontent.skillIds.contains(108)) {
+            final changedSkillIds = displaycontent.skillIds.map((skillId) {
+              return (skillId == 108) ? -skillId : skillId;
+            }).toList();
+            return DisplayContent(
+              content: displaycontent.content,
+              reply: displaycontent.reply,
+              answerFlg: displaycontent.answerFlg,
+              myTurnFlg: displaycontent.myTurnFlg,
+              skillIds: changedSkillIds,
+              displayList: displaycontent.displayList,
               importance: displaycontent.importance,
               specialMessage: displaycontent.specialMessage,
               messageId: displaycontent.messageId,
@@ -226,7 +273,119 @@ Future turnAction(
         await Future.delayed(
           const Duration(milliseconds: 600),
         );
-        context.read(displayQuestionResearchProvider).state = false;
+        context.read(displayQuestionResearchProvider).state = 0;
+        displayContentList = context.read(displayContentListProvider).state;
+      } else if (displaySkillIds[i] == 7) {
+        bool changedFlg = false;
+        await Future.delayed(
+          const Duration(milliseconds: 500),
+        );
+
+        context.read(displayQuestionResearchProvider).state = 2;
+        await Future.delayed(
+          const Duration(milliseconds: 200),
+        );
+        context.read(animationQuestionResearchProvider).state = true;
+
+        soundEffect.play(
+          'sounds/question_research.mp3',
+          isNotification: true,
+          volume: seVolume,
+        );
+
+        await Future.delayed(
+          const Duration(milliseconds: 2000),
+        );
+
+        // 変更する番号を取得
+        final int changeNo = displayContentList.lastIndexWhere(
+          (displaycontent) =>
+              displaycontent.myTurnFlg != myTurnFlg &&
+              (displaycontent.skillIds.contains(1) ||
+                  displaycontent.skillIds.contains(4) ||
+                  displaycontent.skillIds.contains(8)),
+        );
+
+        if (changeNo != -1) {
+          changedFlg = true;
+          final changeContent = displayContentList[changeNo];
+          final changedSkillIds = changeContent.skillIds.map((skillId) {
+            return (skillId == 1 || skillId == 4 || skillId == 8)
+                ? -skillId
+                : skillId;
+          }).toList();
+
+          displayContentList[changeNo] = DisplayContent(
+            content: changeContent.content,
+            reply: changeContent.reply,
+            answerFlg: changeContent.answerFlg,
+            myTurnFlg: changeContent.myTurnFlg,
+            skillIds: changedSkillIds,
+            displayList: [0, 0, 0, 0, 0, 0, 0],
+            importance: changeContent.importance,
+            specialMessage: changeContent.specialMessage,
+            messageId: changeContent.messageId,
+          );
+
+          // トラップを更新した場合は次の自分の質問分も修正
+          if (changedSkillIds.contains(-8)) {
+            // 変更する番号を取得
+            final int withChangeNo = displayContentList.lastIndexWhere(
+              (displaycontent) =>
+                  displaycontent.myTurnFlg == myTurnFlg &&
+                  displaycontent.skillIds.contains(108),
+            );
+            final withChangeContent = displayContentList[withChangeNo];
+            final withChangedSkillIds =
+                withChangeContent.skillIds.map((skillId) {
+              return (skillId == 108) ? -skillId : skillId;
+            }).toList();
+
+            displayContentList[withChangeNo] = DisplayContent(
+              content: withChangeContent.content,
+              reply: withChangeContent.reply,
+              answerFlg: withChangeContent.answerFlg,
+              myTurnFlg: withChangeContent.myTurnFlg,
+              skillIds: withChangedSkillIds,
+              displayList: withChangeContent.displayList,
+              importance: withChangeContent.importance,
+              specialMessage: withChangeContent.specialMessage,
+              messageId: withChangeContent.messageId,
+            );
+          }
+
+          context.read(displayContentListProvider).state = displayContentList;
+        }
+
+        context.read(displayContentListProvider).state.last = DisplayContent(
+          content: displayContentList.last.content,
+          reply: displayContentList.last.reply,
+          answerFlg: displayContentList.last.answerFlg,
+          myTurnFlg: displayContentList.last.myTurnFlg,
+          skillIds: displayContentList.last.skillIds,
+          displayList: displayContentList.last.displayList,
+          importance: displayContentList.last.importance,
+          specialMessage: !changedFlg ? '質問確認 (修正なし)' : '質問確認 (1つ修正)',
+          messageId: displayContentList.last.messageId,
+        );
+
+        if (changedFlg) {
+          scrollToBottom(
+            context,
+            scrollController,
+            20,
+          );
+        }
+
+        await Future.delayed(
+          const Duration(milliseconds: 200),
+        );
+
+        context.read(animationQuestionResearchProvider).state = false;
+        await Future.delayed(
+          const Duration(milliseconds: 600),
+        );
+        context.read(displayQuestionResearchProvider).state = 0;
         displayContentList = context.read(displayContentListProvider).state;
       }
 
@@ -287,7 +446,7 @@ Future turnAction(
     }
 
     await Future.delayed(
-      const Duration(milliseconds: 1500),
+      const Duration(milliseconds: 1300),
     );
 
     // 返答表示
@@ -304,7 +463,7 @@ Future turnAction(
     final correctAnswerFlg =
         context.read(correctAnswersProvider).state.contains(sendContent.answer);
 
-    if (correctAnswerFlg) {
+    if (correctAnswerFlg && !myTurnFlg) {
       // 広告の読み込みを行う
     }
 
@@ -534,7 +693,7 @@ void scrollToBottom(
     );
   } else if (context.read(turnCountProvider).state > 2) {
     scrollController.animateTo(
-      50,
+      60,
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
     );

@@ -24,7 +24,7 @@ class TitleWord extends HookWidget {
                 height: 235,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/title_word_back_4.png'),
+                    image: AssetImage('assets/images/title_word_back.png'),
                     fit: BoxFit.fitHeight,
                   ),
                 ),

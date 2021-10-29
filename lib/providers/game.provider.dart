@@ -47,6 +47,8 @@ final forceQuestionFlgProvider = StateProvider((ref) => false);
 final displayMyturnSetFlgProvider = StateProvider((ref) => false);
 final displayRivalturnSetFlgProvider = StateProvider((ref) => false);
 
-final displayQuestionResearchProvider = StateProvider((ref) => false);
+final displayQuestionResearchProvider = StateProvider((ref) => 0);
 final animationQuestionResearchProvider = StateProvider((ref) => false);
 final spChargeTurnProvider = StateProvider((ref) => 0);
+final myTrapCountProvider = StateProvider((ref) => 0);
+final enemyTrapCountProvider = StateProvider((ref) => 0);

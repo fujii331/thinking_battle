@@ -20,7 +20,7 @@ class TitleBack extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/title_back.jpg'),
+                image: AssetImage('assets/images/title_back_monster.jpg'),
                 fit: BoxFit.cover,
               ),
             ),

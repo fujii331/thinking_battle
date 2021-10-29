@@ -89,11 +89,11 @@ class ActionedList extends HookWidget {
                             }
 
                             for (int skillId in targetContent.skillIds) {
-                              if (skillId != 0) {
+                              if (![0, 108, -108].contains(skillId)) {
                                 skillList.add(
                                   _skillMessage(
                                     targetContent.specialMessage != '' &&
-                                            skillId == 5
+                                            (skillId == 5 || skillId == 7)
                                         ? targetContent.specialMessage
                                         : skillId < 0
                                             ? skillSettings[(-1 * skillId) - 1]
@@ -340,9 +340,9 @@ class ActionedList extends HookWidget {
       decoration: BoxDecoration(
         color: targetContent.answerFlg
             ? Colors.blue.shade200
-            : skillIds.contains(4)
+            : skillIds.contains(4) || skillIds.contains(108)
                 ? Colors.purple.shade200
-                : skillIds.contains(-4)
+                : skillIds.contains(-4) || skillIds.contains(-108)
                     ? Colors.yellow.shade200
                     : const Color.fromRGBO(212, 234, 244, 1.0),
         borderRadius: BorderRadius.circular(16),

@@ -7,7 +7,6 @@ import 'package:thinking_battle/data/skills.dart';
 import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
-import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 
 class ContentList extends HookWidget {
@@ -24,7 +23,7 @@ class ContentList extends HookWidget {
   Widget build(BuildContext context) {
     final List<DisplayContent> displayContentList =
         useProvider(displayContentListProvider).state;
-    final bool displayQuestionResearch =
+    final int displayQuestionResearch =
         useProvider(displayQuestionResearchProvider).state;
     final bool animationQuestionResearch =
         useProvider(animationQuestionResearchProvider).state;
@@ -83,13 +82,16 @@ class ContentList extends HookWidget {
                 }
 
                 for (int skillId in targetContent.skillIds) {
-                  if (skillId != 0 &&
-                      !(skillId == 4 && !targetContent.myTurnFlg)) {
+                  // スキルがない場合、またはトラップを仕掛けられた場合はスキルを表示しない
+                  if (![0, 108, -108].contains(skillId) &&
+                      !((skillId == 4 || skillId == 8) &&
+                          !targetContent.myTurnFlg)) {
                     displayNumber++;
 
                     skillList.add(
                       _skillMessage(
-                        targetContent.specialMessage != '' && skillId == 5
+                        targetContent.specialMessage != '' &&
+                                (skillId == 5 || skillId == 7)
                             ? targetContent.specialMessage
                             : skillId < 0
                                 ? skillSettings[(-1 * skillId) - 1].skillName
@@ -136,15 +138,18 @@ class ContentList extends HookWidget {
               itemCount: displayContentList.length,
             ),
           ),
-          displayQuestionResearch
+          displayQuestionResearch != 0
               ? AnimatedOpacity(
                   duration: const Duration(milliseconds: 500),
                   opacity: animationQuestionResearch ? 1 : 0,
                   child: Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
-                        image:
-                            AssetImage('assets/images/question_research.png'),
+                        image: AssetImage('assets/images/' +
+                            (displayQuestionResearch == 1
+                                ? 'question_research'
+                                : 'question_click') +
+                            '.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -364,9 +369,10 @@ class ContentList extends HookWidget {
       decoration: BoxDecoration(
         color: targetContent.answerFlg
             ? Colors.blue.shade200
-            : skillIds.contains(4) && myTurnFlg
+            : (skillIds.contains(4) && myTurnFlg) ||
+                    (skillIds.contains(108) && !myTurnFlg)
                 ? Colors.purple.shade100
-                : skillIds.contains(-4)
+                : skillIds.contains(-4) || skillIds.contains(-108)
                     ? Colors.yellow.shade200
                     : const Color.fromRGBO(212, 234, 244, 1.0),
         borderRadius: BorderRadius.circular(16),
@@ -383,7 +389,8 @@ class ContentList extends HookWidget {
           bottom: 5.5,
         ),
         child: Text(
-          targetContent.skillIds.contains(4) && !myTurnFlg
+          (skillIds.contains(4) && !myTurnFlg) ||
+                  (skillIds.contains(108) && myTurnFlg)
               ? targetContent.reply == 'はい'
                   ? 'いいえ'
                   : 'はい'

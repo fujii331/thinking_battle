@@ -98,6 +98,18 @@ class SettingMySkills extends HookWidget {
             skillSettings[5],
             judgeFlgState,
           ),
+          _skillRow(
+            context,
+            selectingSkillList,
+            skillSettings[6],
+            judgeFlgState,
+          ),
+          _skillRow(
+            context,
+            selectingSkillList,
+            skillSettings[7],
+            judgeFlgState,
+          ),
           Padding(
             padding: const EdgeInsets.only(
               top: 15,
