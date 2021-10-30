@@ -10,6 +10,7 @@ import 'package:thinking_battle/data/quiz_data.dart';
 import 'package:thinking_battle/models/matching_info.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'package:thinking_battle/models/quiz.model.dart';
+import 'package:thinking_battle/providers/common.provider.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
@@ -76,7 +77,8 @@ Future mainMatchingAction(
   String friendMatchWord,
   ValueNotifier<bool> interruptionFlgState,
 ) async {
-  final randomMatchFlg = friendMatchWord == '';
+  final bool randomMatchFlg = friendMatchWord == '';
+  final int buildNumber = context.read(buildNumberProvider).state;
 
   if (randomMatchFlg) {
     // ランダムマッチ
@@ -85,6 +87,7 @@ Future mainMatchingAction(
 
     await matchingRoomRef
         .where('matchingStatus', isEqualTo: 1)
+        // .where('buildNumber', isEqualTo: buildNumber) // TODO バージョン2から導入
         .where('rate', isLessThan: userRate + 300.0)
         .where('rate', isGreaterThan: userRate - 300.0)
         .limit(1)
@@ -101,6 +104,7 @@ Future mainMatchingAction(
           cardNumber,
           matchedCount,
           continuousWinCount,
+          buildNumber,
           userSkillIdsList,
           matchingQuitFlgState,
           context.read(loginIdProvider).state,
@@ -119,6 +123,7 @@ Future mainMatchingAction(
     // フレンドマッチ
     await friendMatchingRoomRef
         .where('matchingStatus', isEqualTo: 1)
+        // .where('buildNumber', isEqualTo: buildNumber) // TODO バージョン2から導入
         .where('customData', isEqualTo: friendMatchWord)
         .limit(1)
         .get()
@@ -134,6 +139,7 @@ Future mainMatchingAction(
           cardNumber,
           matchedCount,
           continuousWinCount,
+          buildNumber,
           userSkillIdsList,
           matchingQuitFlgState,
           context.read(loginIdProvider).state,
@@ -158,6 +164,7 @@ Future actionAfterSearch(
   int cardNumber,
   int matchedCount,
   int continuousWinCount,
+  int buildNumber,
   List<int> userSkillIdsList,
   ValueNotifier<bool> matchingQuitFlgState,
   String matchingId,
@@ -175,6 +182,7 @@ Future actionAfterSearch(
       cardNumber,
       matchedCount,
       continuousWinCount,
+      buildNumber,
       userSkillIdsList,
       matchingQuitFlgState,
       friendMatchWord,
@@ -209,6 +217,7 @@ Future matchingPreparation(
   int cardNumber,
   int matchedCount,
   int continuousWinCount,
+  int buildNumber,
   List<int> userSkillIdsList,
   ValueNotifier<bool> matchingQuitFlgState,
   String friendMatchWord,
@@ -229,6 +238,7 @@ Future matchingPreparation(
       'skillList': userSkillIdsList,
       'matchingStatus': 1, // 待機中
       'precedingFlg': precedingFlg,
+      'buildNumber': buildNumber,
       'customData':
           randomMatchFlg ? DateTime.now().toString() : friendMatchWord,
     }).then((_) async {
@@ -325,7 +335,7 @@ Future matchingPreparation(
           return;
         }
       } else {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 60; i++) {
           if (matchingQuitFlgState.value ||
               context.read(matchingWaitingIdProvider).state == '') {
             break;
@@ -354,7 +364,7 @@ Future matchingPreparation(
             width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
             body: const FaildMatching(
               topText: 'マッチング失敗',
-              secondText: 'あいことばは一致していますか？\nメニュー画面に戻ります。',
+              secondText: '・あいことばは一致していますか？\n・アプリバージョンは最新ですか？\nメニュー画面に戻ります。',
             ),
           ).show();
 

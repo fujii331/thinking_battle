@@ -33,6 +33,7 @@ void firstSetting(BuildContext context) async {
     'sounds/correct_answer.mp3',
     'sounds/gacha.mp3',
     'sounds/got_message.mp3',
+    'sounds/hint.mp3',
     'sounds/matching.mp3',
     'sounds/my_turn.mp3',
     'sounds/new_item.mp3',
@@ -115,24 +116,9 @@ void firstSetting(BuildContext context) async {
   context.read(stampListProvider).state =
       prefs.getStringList('stampList') ?? ['0', '0', '0', '0', '0', '0'];
 
-  // 日時
-  final String todayString = DateFormat('yyyy/MM/dd').format(DateTime.now());
-  final String dataString = prefs.getString('dataString') ?? todayString;
-  final int loginDays = prefs.getInt('loginDays') ?? 1;
-
-  // 日時の更新が行われたらgpカウントとログイン日数を更新
-  if (dataString != todayString) {
-    context.read(gpCountProvider).state = 5;
-    prefs.setInt('gpCount', 5);
-
-    prefs.setInt('loginDays', loginDays + 1);
-    context.read(loginDaysProvider).state = loginDays + 1;
-  } else {
-    // ログイン日数
-    context.read(loginDaysProvider).state = loginDays;
-  }
-
-  prefs.setString('dataString', todayString);
+  // 選択可能スキルリスト
+  context.read(settableSkillsListProvider).state =
+      prefs.getStringList('settableSkillsList') ?? ['1', '2', '3'];
 
   // ライフ
   // if (prefs.getString('saveTime') != null) {

@@ -52,3 +52,4 @@ final animationQuestionResearchProvider = StateProvider((ref) => false);
 final spChargeTurnProvider = StateProvider((ref) => 0);
 final myTrapCountProvider = StateProvider((ref) => 0);
 final enemyTrapCountProvider = StateProvider((ref) => 0);
+final skillUseCountInGameProvider = StateProvider((ref) => 0);

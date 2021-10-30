@@ -6,7 +6,7 @@ Widget background() {
       Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/title_back.png'),
+            image: AssetImage('assets/images/background/common_back.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -16,7 +16,7 @@ Widget background() {
         child: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/background.jpg'),
+              image: AssetImage('assets/images/background/background.jpg'),
               fit: BoxFit.cover,
             ),
           ),

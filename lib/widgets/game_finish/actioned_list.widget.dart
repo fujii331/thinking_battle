@@ -50,7 +50,7 @@ class ActionedList extends HookWidget {
                           borderRadius: BorderRadius.circular(10),
                           image: const DecorationImage(
                             image: AssetImage(
-                                'assets/images/content_background.png'),
+                                'assets/images/background/content_background.png'),
                             fit: BoxFit.cover,
                           ),
                         ),

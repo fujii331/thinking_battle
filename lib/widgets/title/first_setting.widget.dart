@@ -3,7 +3,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:thinking_battle/widgets/title/profile_update_area.widget.dart';
 
 class FirstSetting extends HookWidget {
-  const FirstSetting({Key? key}) : super(key: key);
+  final ValueNotifier<bool> buttonPressedState;
+
+  const FirstSetting({Key? key, required this.buttonPressedState})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class FirstSetting extends HookWidget {
               ),
             ),
           ),
-          const ProfileUpdateArea(),
+          ProfileUpdateArea(buttonPressedState: buttonPressedState),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.only(

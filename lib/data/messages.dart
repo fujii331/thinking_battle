@@ -101,4 +101,24 @@ const messageSettings = <Message>[
     id: 25,
     message: '質問隠しすぎ〜',
   ),
+  Message(
+    id: 26,
+    message: 'orz',
+  ),
+  Message(
+    id: 27,
+    message: '百戦錬磨です',
+  ),
+  Message(
+    id: 28,
+    message: '勝利の方程式だ',
+  ),
+  Message(
+    id: 29,
+    message: '私は強い',
+  ),
+  Message(
+    id: 30,
+    message: 'スキル使うけど許してね',
+  ),
 ];

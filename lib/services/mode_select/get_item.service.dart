@@ -59,15 +59,19 @@ Future getItem(
     context: context,
     dialogType: DialogType.NO_HEADER,
     headerAnimationLoop: false,
-    dismissOnTouchOutside: true,
-    dismissOnBackKeyPress: true,
-    showCloseIcon: true,
+    dismissOnTouchOutside: false,
+    dismissOnBackKeyPress: false,
+    showCloseIcon: false,
     animType: AnimType.SCALE,
     width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
     body: ItemGet(
+      preWidgetContext: context,
+      prefs: prefs,
       itemNumber: itemNumber,
       newFlg: newItemFlg,
       buttonNumber: buttonNumber,
+      soundEffect: soundEffect,
+      seVolume: seVolume,
     ),
   ).show();
 }

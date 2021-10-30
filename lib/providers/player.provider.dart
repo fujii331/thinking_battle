@@ -11,6 +11,7 @@ final gachaTicketProvider = StateProvider((ref) => 0);
 final loginDaysProvider = StateProvider((ref) => 1);
 final skillUseCountProvider = StateProvider((ref) => 0);
 final stampListProvider = StateProvider((ref) => <String>[]);
+final settableSkillsListProvider = StateProvider((ref) => <String>[]);
 
 final playerNameProvider = StateProvider((ref) => '');
 

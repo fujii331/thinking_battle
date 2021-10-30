@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
+import 'package:thinking_battle/services/mode_select/check_stamp.service.dart';
 
 import 'package:thinking_battle/widgets/game_finish/actioned_list.widget.dart';
 import 'package:thinking_battle/widgets/game_finish/result.widget.dart';
@@ -24,6 +25,7 @@ class GameFinishScreen extends HookWidget {
     final bool? winFlg = ModalRoute.of(context)?.settings.arguments as bool?;
 
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
+    final double seVolume = useProvider(seVolumeProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
     final bool trainingFlg = useProvider(trainingProvider).state;
     final bool changedTraining = useProvider(changedTrainingProvider).state;
@@ -59,6 +61,11 @@ class GameFinishScreen extends HookWidget {
             context.read(matchedCountProvider).state += 1;
             prefs.setInt(
                 'matchCount', context.read(matchedCountProvider).state);
+            // スキル使用回数
+            context.read(skillUseCountProvider).state +=
+                context.read(skillUseCountInGameProvider).state;
+            prefs.setInt(
+                'skillUseCount', context.read(skillUseCountProvider).state);
           }
 
           if (winFlg == true) {
@@ -95,6 +102,16 @@ class GameFinishScreen extends HookWidget {
           } else if (!friendMatchFlg) {
             context.read(continuousWinCountProvider).state = 0;
             prefs.setInt('continuousWinCount', 0);
+          }
+
+          if (!friendMatchFlg) {
+            checkStamp(
+              context,
+              prefs,
+              2,
+              soundEffect,
+              seVolume,
+            );
           }
         }
 

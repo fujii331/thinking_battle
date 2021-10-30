@@ -28,8 +28,8 @@ const skillSettings = <Skill>[
   Skill(
     id: 5,
     skillName: '質問サーチ',
-    skillPoint: 9,
-    skillExplanation: '相手がこれまでに行った「質問隠し\n・嘘つき・トラップ」をすべて\n正しい情報で表示しなおす（SP 9）',
+    skillPoint: 10,
+    skillExplanation: '相手がこれまでに行った「質問隠し\n・嘘つき・トラップ」をすべて\n正しい情報で表示しなおす（SP 10）',
   ),
   Skill(
     id: 6,
@@ -42,7 +42,7 @@ const skillSettings = <Skill>[
     skillName: '質問確認',
     skillPoint: 5,
     skillExplanation:
-        '相手が「質問隠し・嘘つき・トラップ」\nを行っていた場合、一番新しい1つだ\nけ正しい情報で表示しなおす（SP 5）',
+        '相手が「質問隠し・嘘つき・トラップ」\nを行っていた場合、一番新しい1つを\n正しい情報で表示しなおす（SP 5）',
   ),
   Skill(
     id: 8,

@@ -27,12 +27,12 @@ const stamps = [
   // 1 対戦回数
   <Stamp>[
     Stamp(
-      needCount: 5,
+      needCount: 3,
       reward: 'スキル「嘘つき」を解放',
     ),
     Stamp(
       needCount: 20,
-      reward: 'スキル「確認です」を解放',
+      reward: 'スキル「質問確認」を解放',
     ),
     Stamp(
       needCount: 100,
@@ -82,7 +82,7 @@ const stamps = [
     ),
     Stamp(
       needCount: 1800,
-      reward: 'アイコン「アイスマン」獲得',
+      reward: 'アイコン「ウルフ」獲得',
     ),
     Stamp(
       needCount: 1900,
@@ -105,7 +105,7 @@ const stamps = [
     ),
     Stamp(
       needCount: 200,
-      reward: 'アイコン「サングラスオレンジ」獲得',
+      reward: 'アイコン「きゅうりマン」獲得',
     ),
     Stamp(
       needCount: 500,
@@ -132,7 +132,7 @@ const stamps = [
     ),
     Stamp(
       needCount: 55,
-      reward: 'アイコン「ラブリーピンク」獲得',
+      reward: 'アイコン「どらきゅらさん」獲得',
     ),
     Stamp(
       needCount: 75,

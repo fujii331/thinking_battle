@@ -15,6 +15,8 @@ Future shouldUpdate(
 
   final PackageInfo packageInfo = await PackageInfo.fromPlatform();
   int currentVersion = int.parse(packageInfo.buildNumber);
+  // ビルド番号を保持
+  context.read(buildNumberProvider).state = currentVersion;
 
   // remoteConfigの初期化
   final RemoteConfig remoteConfig = RemoteConfig.instance;

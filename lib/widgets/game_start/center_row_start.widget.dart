@@ -36,7 +36,7 @@ class CenterRowStart extends HookWidget {
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.fitWidth,
-                    image: AssetImage('assets/images/vs.png'),
+                    image: AssetImage('assets/images/game/vs.png'),
                   ),
                 ),
               )

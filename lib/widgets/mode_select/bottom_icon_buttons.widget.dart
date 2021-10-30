@@ -34,7 +34,7 @@ class BottomIconButtons extends HookWidget {
             1,
             seVolume,
           ),
-          const SizedBox(width: 5),
+          const SizedBox(width: 8),
           _iconButton(
             context,
             'stamp_icon',
@@ -42,7 +42,7 @@ class BottomIconButtons extends HookWidget {
             2,
             seVolume,
           ),
-          const SizedBox(width: 5),
+          const SizedBox(width: 8),
           _iconButton(
             context,
             'gacha_icon',
@@ -50,7 +50,7 @@ class BottomIconButtons extends HookWidget {
             3,
             seVolume,
           ),
-          const SizedBox(width: 5),
+          const SizedBox(width: 8),
           _iconButton(
             context,
             'book_icon',
@@ -77,7 +77,7 @@ class BottomIconButtons extends HookWidget {
       width: 35,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/' + imagePath + '.png'),
+          image: AssetImage('assets/images/bottom_icons/' + imagePath + '.png'),
           fit: BoxFit.cover,
         ),
       ),

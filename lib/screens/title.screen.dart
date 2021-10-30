@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:lottie/lottie.dart';
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:thinking_battle/services/title//first_setting.service.dart';
-// import 'package:thinking_battle/services/title//time_start.service.dart';
+import 'package:thinking_battle/services/title/should_update.service.dart';
 
 import 'package:thinking_battle/widgets/title/title_back.widget.dart';
 import 'package:thinking_battle/widgets/title/title_button.widget.dart';
@@ -19,7 +18,7 @@ class TitleScreen extends HookWidget {
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
-        // await shouldUpdate(context);
+        // await shouldUpdate(context); // バージョン2から導入
 
         // timeStart(
         //   context,

@@ -91,6 +91,9 @@ class GachaButton extends HookWidget {
                   context.read(gpCountProvider).state -= 1;
                   prefs.setInt('gpCount', context.read(gpCountProvider).state);
                 }
+                await Future.delayed(
+                  const Duration(milliseconds: 200),
+                );
 
                 AwesomeDialog(
                   context: context,
@@ -108,7 +111,7 @@ class GachaButton extends HookWidget {
                 ).show();
 
                 await Future.delayed(
-                  const Duration(milliseconds: 4050),
+                  const Duration(milliseconds: 3850),
                 );
 
                 final int randomNum = Random().nextInt(100);

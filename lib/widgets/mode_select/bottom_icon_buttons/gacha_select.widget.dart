@@ -31,7 +31,7 @@ class GachaSelect extends HookWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             image: const DecorationImage(
-              image: AssetImage('assets/images/gacha.jpg'),
+              image: AssetImage('assets/images/background/gacha.jpg'),
               fit: BoxFit.fitHeight,
             ),
           ),

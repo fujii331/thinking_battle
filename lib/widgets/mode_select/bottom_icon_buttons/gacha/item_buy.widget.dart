@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -52,7 +53,7 @@ class ItemBuy extends HookWidget {
                       : buttonNumber == 2
                           ? 'テーマ'
                           : 'メッセージ') +
-                  'を交換する？',
+                  'と交換する？',
               style: const TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -69,11 +70,25 @@ class ItemBuy extends HookWidget {
           ),
           const SizedBox(height: 10),
           buttonNumber == 3
-              ? Text(
-                  messageSettings[itemNumber - 1].message,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
+              ? Bubble(
+                  borderWidth: 1,
+                  borderColor: Colors.black,
+                  elevation: 2.0,
+                  shadowColor: Colors.grey,
+                  nipOffset: 10,
+                  nipWidth: 12,
+                  nipHeight: 8,
+                  nip: BubbleNip.rightBottom,
+                  color: Colors.grey.shade700,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 2.5),
+                    child: Text(
+                      messageSettings[itemNumber - 1].message,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 )
               : Container(

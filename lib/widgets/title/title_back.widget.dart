@@ -10,7 +10,7 @@ class TitleBack extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/title_back.png'),
+              image: AssetImage('assets/images/background/common_back.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -20,7 +20,8 @@ class TitleBack extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/title_back_monster.jpg'),
+                image: AssetImage(
+                    'assets/images/background/title_back_monster.jpg'),
                 fit: BoxFit.cover,
               ),
             ),

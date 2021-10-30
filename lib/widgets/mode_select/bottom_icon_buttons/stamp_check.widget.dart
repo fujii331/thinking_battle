@@ -35,7 +35,7 @@ class StampCheck extends HookWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             image: const DecorationImage(
-              image: AssetImage('assets/images/stamp_sheet.jpg'),
+              image: AssetImage('assets/images/background/stamp_sheet.jpg'),
               fit: BoxFit.fitHeight,
             ),
           ),
@@ -365,12 +365,13 @@ class StampCheck extends HookWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-            borderRadius: BorderRadius.circular(50),
-            onTap: () {
-              focusNumberState.value = focusNumber;
-              conditionsTextState.value = conditionsText;
-              rewardTextState.value = rewardText;
-            }),
+          borderRadius: BorderRadius.circular(50),
+          onTap: () {
+            focusNumberState.value = focusNumber;
+            conditionsTextState.value = conditionsText;
+            rewardTextState.value = rewardText;
+          },
+        ),
       ),
     );
   }

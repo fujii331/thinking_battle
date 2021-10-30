@@ -26,6 +26,7 @@ void commonInitialAction(
   context.read(timerCancelFlgProvider).state = false;
   context.read(myTrapCountProvider).state = 0;
   context.read(enemyTrapCountProvider).state = 0;
+  context.read(skillUseCountInGameProvider).state = 0;
 }
 
 void trainingInitialAction(
@@ -37,13 +38,14 @@ void trainingInitialAction(
   context.read(precedingFlgProvider).state = precedingFlg;
 
   final List<List<int>> skillListData = [
-    [8, 2, 5],
-    [8, 2, 5],
-    [8, 2, 5],
-    [8, 2, 5],
-    [8, 2, 5],
+    [1, 2, 3],
+    [2, 3, 4],
+    [1, 2, 5],
+    [1, 2, 7],
+    [2, 4, 7],
+    [4, 7, 8],
   ];
-  final List<int> skillList = skillListData[Random().nextInt(5)];
+  final List<int> skillList = skillListData[Random().nextInt(6)];
 
   context.read(rivalInfoProvider).state = PlayerInfo(
     name: 'CPU',

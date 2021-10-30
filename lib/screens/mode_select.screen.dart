@@ -2,9 +2,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
+import 'package:thinking_battle/services/mode_select/check_stamp.service.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
 
@@ -28,6 +31,46 @@ class ModeSelectScreen extends HookWidget {
     final int matchedCount = useProvider(matchedCountProvider).state;
 
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+    useEffect(() {
+      WidgetsBinding.instance!.addPostFrameCallback((_) async {
+        // 日時
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        final String todayString =
+            DateFormat('yyyy/MM/dd').format(DateTime.now());
+        final String dataString = prefs.getString('dataString') ?? todayString;
+        final int loginDays = prefs.getInt('loginDays') ?? 1;
+
+        // 日時の更新が行われたらgpカウントとログイン日数を更新
+        if (dataString != todayString) {
+          context.read(gpCountProvider).state = 5;
+          prefs.setInt('gpCount', 5);
+
+          prefs.setInt('loginDays', loginDays + 1);
+          context.read(loginDaysProvider).state = loginDays + 1;
+          prefs.setString('dataString', todayString);
+
+          checkStamp(
+            context,
+            prefs,
+            1,
+            soundEffect,
+            seVolume,
+          );
+        } else {
+          // ログイン日数
+          context.read(loginDaysProvider).state = loginDays;
+        }
+        checkStamp(
+          context,
+          prefs,
+          1,
+          soundEffect,
+          seVolume,
+        );
+      });
+      return null;
+    }, const []);
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -166,7 +209,7 @@ class ModeSelectScreen extends HookWidget {
                     soundEffect: soundEffect,
                     seVolume: seVolume,
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 30),
                   BottomIconButtons(
                     soundEffect: soundEffect,
                     seVolume: seVolume,

@@ -13,7 +13,10 @@ import 'package:thinking_battle/services/title/authentication.service.dart';
 import 'package:thinking_battle/widgets/common/edit_image.widget.dart';
 
 class ProfileUpdateArea extends HookWidget {
-  const ProfileUpdateArea({Key? key}) : super(key: key);
+  final ValueNotifier<bool> buttonPressedState;
+
+  const ProfileUpdateArea({Key? key, required this.buttonPressedState})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +158,10 @@ class ProfileUpdateArea extends HookWidget {
                                   'playerName', playerNameState.value);
 
                               // ユーザー登録を行う
-                              signUp(context);
+                              signUp(
+                                context,
+                                buttonPressedState,
+                              );
                             }
                           : () {},
                       child: const Text(

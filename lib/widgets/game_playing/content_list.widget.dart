@@ -39,7 +39,8 @@ class ContentList extends HookWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(
-                image: AssetImage('assets/images/content_background.png'),
+                image: AssetImage(
+                    'assets/images/background/content_background.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -145,7 +146,7 @@ class ContentList extends HookWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/' +
+                        image: AssetImage('assets/images/game/' +
                             (displayQuestionResearch == 1
                                 ? 'question_research'
                                 : 'question_click') +

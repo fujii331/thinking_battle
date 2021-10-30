@@ -11,6 +11,7 @@ import 'package:thinking_battle/widgets/common/loading_modal.widget.dart';
 
 Future signUp(
   BuildContext context,
+  ValueNotifier<bool> buttonPressedState,
 ) async {
   showDialog<int>(
     context: context,
@@ -45,6 +46,7 @@ Future signUp(
       ModeSelectScreen.routeName,
     );
   } catch (e) {
+    buttonPressedState.value = false;
     Navigator.pop(context);
     // ユーザー登録に失敗した場合
     AwesomeDialog(
@@ -66,6 +68,7 @@ Future signUp(
 
 Future login(
   BuildContext context,
+  ValueNotifier<bool> buttonPressedState,
 ) async {
   try {
     // メール/パスワードでログイン
@@ -87,6 +90,8 @@ Future login(
     );
   } catch (e) {
     // ログインに失敗した場合
+    buttonPressedState.value = false;
+
     AwesomeDialog(
       context: context,
       dialogType: DialogType.NO_HEADER,

@@ -166,6 +166,8 @@ Future turnAction(
       if (myTurnFlg) {
         context.read(currentSkillPointProvider).state -=
             skillSettings[displaySkillIds[i] - 1].skillPoint;
+        // スキル使用回数を増加する
+        context.read(skillUseCountInGameProvider).state += 1;
       }
 
       displayContentList.last.displayList.add(0);

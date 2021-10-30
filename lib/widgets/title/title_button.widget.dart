@@ -23,7 +23,7 @@ class TitleButton extends HookWidget {
 
     final String loginId = useProvider(loginIdProvider).state;
 
-    final loadingState = useState(false);
+    final buttonPressedState = useState(false);
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 500),
@@ -32,7 +32,9 @@ class TitleButton extends HookWidget {
         height: 65,
         width: 125,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0),
+          color: !buttonPressedState.value
+              ? Colors.white.withOpacity(0)
+              : Colors.black.withOpacity(0.2),
           borderRadius: BorderRadius.circular(20),
           image: const DecorationImage(
             image: AssetImage('assets/images/play.png'),
@@ -43,9 +45,9 @@ class TitleButton extends HookWidget {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(20),
-            onTap: !loadingState.value
+            onTap: !buttonPressedState.value
                 ? () async {
-                    loadingState.value = true;
+                    buttonPressedState.value = true;
                     soundEffect.play(
                       'sounds/tap.mp3',
                       isNotification: true,
@@ -63,15 +65,15 @@ class TitleButton extends HookWidget {
                         width: MediaQuery.of(context).size.width * .86 > 650
                             ? 650
                             : null,
-                        body: const FirstSetting(),
+                        body: FirstSetting(
+                          buttonPressedState: buttonPressedState,
+                        ),
                       ).show();
                     } else {
-                      login(context);
+                      login(context, buttonPressedState);
                     }
-
-                    loadingState.value = false;
                   }
-                : () {},
+                : null,
           ),
         ),
       ),

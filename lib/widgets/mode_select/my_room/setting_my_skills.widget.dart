@@ -26,6 +26,8 @@ class SettingMySkills extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final judgeFlgState = useState(true);
+    final List<String> settableSkillsList =
+        useProvider(settableSkillsListProvider).state;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -67,48 +69,56 @@ class SettingMySkills extends HookWidget {
             selectingSkillList,
             skillSettings[0],
             judgeFlgState,
+            settableSkillsList.contains('1'),
           ),
           _skillRow(
             context,
             selectingSkillList,
             skillSettings[1],
             judgeFlgState,
+            settableSkillsList.contains('2'),
           ),
           _skillRow(
             context,
             selectingSkillList,
             skillSettings[2],
             judgeFlgState,
+            settableSkillsList.contains('3'),
           ),
           _skillRow(
             context,
             selectingSkillList,
             skillSettings[3],
             judgeFlgState,
+            settableSkillsList.contains('4'),
           ),
           _skillRow(
             context,
             selectingSkillList,
             skillSettings[4],
             judgeFlgState,
+            settableSkillsList.contains('5'),
           ),
           _skillRow(
             context,
             selectingSkillList,
             skillSettings[5],
             judgeFlgState,
+            settableSkillsList.contains('6'),
           ),
           _skillRow(
             context,
             selectingSkillList,
             skillSettings[6],
             judgeFlgState,
+            settableSkillsList.contains('7'),
           ),
           _skillRow(
             context,
             selectingSkillList,
             skillSettings[7],
             judgeFlgState,
+            settableSkillsList.contains('8'),
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -167,25 +177,46 @@ class SettingMySkills extends HookWidget {
     List<int> selectingSkillList,
     Skill skill,
     ValueNotifier<bool> judgeFlgState,
+    bool enableCheck,
   ) {
     int skillNumber = skill.id;
 
     return SizedBox(
-      height: 40,
+      height: 39,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Checkbox(
-            value: selectingSkillList.contains(skillNumber),
-            onChanged: (bool? checked) {
-              if (checked!) {
-                selectingSkillList.add(skillNumber);
-              } else {
-                selectingSkillList
-                    .removeWhere((int number) => number == skillNumber);
-              }
-              judgeFlgState.value = !judgeFlgState.value;
-            },
+          Stack(
+            children: [
+              enableCheck
+                  ? Checkbox(
+                      value: selectingSkillList.contains(skillNumber),
+                      onChanged: (bool? checked) {
+                        if (checked!) {
+                          selectingSkillList.add(skillNumber);
+                        } else {
+                          selectingSkillList.removeWhere(
+                              (int number) => number == skillNumber);
+                        }
+                        judgeFlgState.value = !judgeFlgState.value;
+                      },
+                    )
+                  : Container(
+                      width: 48,
+                      padding: const EdgeInsets.only(
+                        left: 9.3,
+                        top: 13,
+                      ),
+                      height: 43,
+                      child: Text(
+                        '未入手',
+                        style: TextStyle(
+                          fontSize: 10.0,
+                          color: Colors.red.shade300,
+                        ),
+                      ),
+                    ),
+            ],
           ),
           SkillTooltip(
             skill: skill,
