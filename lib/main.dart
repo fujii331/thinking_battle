@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -19,7 +20,7 @@ import 'package:thinking_battle/providers/game.provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // MobileAds.instance.initialize();
+  MobileAds.instance.initialize();
 
   runApp(
     ProviderScope(
@@ -138,8 +139,8 @@ class MyApp extends HookWidget {
         fontFamily: 'KiwiMaru',
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+            TargetPlatform.iOS: OpenUpwardsPageTransitionsBuilder(),
           },
         ),
         textTheme: ThemeData.light().textTheme.copyWith(

@@ -46,9 +46,10 @@ Future signUp(
       ModeSelectScreen.routeName,
     );
   } catch (e) {
+    // ユーザー登録に失敗した場合
+
     buttonPressedState.value = false;
     Navigator.pop(context);
-    // ユーザー登録に失敗した場合
     AwesomeDialog(
       context: context,
       dialogType: DialogType.NO_HEADER,
@@ -57,10 +58,11 @@ Future signUp(
       dismissOnBackKeyPress: true,
       showCloseIcon: true,
       animType: AnimType.SCALE,
-      width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+      width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
       body: const CommentModal(
         topText: '読み込み失敗！',
         secondText: 'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
+        closeButtonFlg: true,
       ),
     ).show();
   }
@@ -70,6 +72,14 @@ Future login(
   BuildContext context,
   ValueNotifier<bool> buttonPressedState,
 ) async {
+  showDialog<int>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return const LoadingModal();
+    },
+  );
+
   try {
     // メール/パスワードでログイン
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -84,6 +94,8 @@ Future login(
       password: password!,
     );
     // ログインに成功した場合
+    Navigator.pop(context);
+
     // チャット画面に遷移＋ログイン画面を破棄
     await Navigator.of(context).pushReplacementNamed(
       ModeSelectScreen.routeName,
@@ -91,6 +103,7 @@ Future login(
   } catch (e) {
     // ログインに失敗した場合
     buttonPressedState.value = false;
+    Navigator.pop(context);
 
     AwesomeDialog(
       context: context,
@@ -100,10 +113,11 @@ Future login(
       dismissOnBackKeyPress: true,
       showCloseIcon: true,
       animType: AnimType.SCALE,
-      width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+      width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
       body: const CommentModal(
         topText: '読み込み失敗！',
         secondText: 'データ通信に失敗しました。\n電波の良いところで再度お試しください。',
+        closeButtonFlg: true,
       ),
     ).show();
   }

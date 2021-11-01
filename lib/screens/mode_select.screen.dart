@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +13,7 @@ import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
 
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/info_modal.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_info.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/play_game_buttons.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_room_button.widget.dart';
@@ -32,6 +34,8 @@ class ModeSelectScreen extends HookWidget {
 
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+    final bool heightOk = MediaQuery.of(context).size.height > 600;
+
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         // 日時
@@ -43,8 +47,8 @@ class ModeSelectScreen extends HookWidget {
 
         // 日時の更新が行われたらgpカウントとログイン日数を更新
         if (dataString != todayString) {
-          context.read(gpCountProvider).state = 5;
-          prefs.setInt('gpCount', 5);
+          context.read(gachaCountProvider).state = 5;
+          prefs.setInt('gachaCount', 5);
 
           prefs.setInt('loginDays', loginDays + 1);
           context.read(loginDaysProvider).state = loginDays + 1;
@@ -96,6 +100,35 @@ class ModeSelectScreen extends HookWidget {
           ),
           centerTitle: true,
           backgroundColor: colorList[0][1].withOpacity(0.3),
+          leading: IconButton(
+            iconSize: 25,
+            icon: Icon(
+              Icons.info,
+              color: Colors.grey.shade200,
+            ),
+            onPressed: () {
+              soundEffect.play(
+                'sounds/tap.mp3',
+                isNotification: true,
+                volume: seVolume,
+              );
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.NO_HEADER,
+                headerAnimationLoop: false,
+                dismissOnTouchOutside: true,
+                dismissOnBackKeyPress: true,
+                showCloseIcon: true,
+                animType: AnimType.SCALE,
+                width:
+                    MediaQuery.of(context).size.width * .86 > 450 ? 450 : null,
+                body: InfoModal(
+                  soundEffect: soundEffect,
+                  seVolume: seVolume,
+                ),
+              ).show();
+            },
+          ),
           actions: <Widget>[
             IconButton(
               iconSize: 25,
@@ -197,22 +230,34 @@ class ModeSelectScreen extends HookWidget {
                 children: <Widget>[
                   // const Stamina(),
                   const SizedBox(height: 95),
-                  MyInfo(
-                    soundEffect: soundEffect,
-                    seVolume: seVolume,
-                    cardNumber: cardNumber,
-                    colorList: colorList,
-                    matchedCount: matchedCount,
-                  ),
-                  const SizedBox(height: 40),
-                  PlayGameButtons(
-                    soundEffect: soundEffect,
-                    seVolume: seVolume,
-                  ),
-                  const SizedBox(height: 30),
-                  BottomIconButtons(
-                    soundEffect: soundEffect,
-                    seVolume: seVolume,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height > 600
+                        ? 480
+                        : MediaQuery.of(context).size.height * 0.8,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          MyInfo(
+                            soundEffect: soundEffect,
+                            seVolume: seVolume,
+                            cardNumber: cardNumber,
+                            colorList: colorList,
+                            matchedCount: matchedCount,
+                          ),
+                          SizedBox(height: heightOk ? 50 : 30),
+                          PlayGameButtons(
+                            soundEffect: soundEffect,
+                            seVolume: seVolume,
+                            betweenHeight: heightOk ? 24 : 20,
+                          ),
+                          SizedBox(height: heightOk ? 50 : 30),
+                          BottomIconButtons(
+                            soundEffect: soundEffect,
+                            seVolume: seVolume,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),

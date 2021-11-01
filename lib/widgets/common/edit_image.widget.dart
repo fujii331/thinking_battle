@@ -113,6 +113,8 @@ class EditImage extends HookWidget {
     BuildContext context,
     int imageNumber,
   ) {
+    final double minusSize = MediaQuery.of(context).size.width > 400 ? 0 : 5;
+
     return InkWell(
       onTap: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -127,8 +129,8 @@ class EditImage extends HookWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(2),
-        width: 60,
-        height: 60,
+        width: 60 - minusSize,
+        height: 60 - minusSize,
         decoration: BoxDecoration(
           color: Colors.grey.shade50,
           border: Border.all(

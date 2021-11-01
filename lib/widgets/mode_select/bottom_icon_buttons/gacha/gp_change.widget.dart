@@ -8,7 +8,7 @@ import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha/it
 class GpChange extends HookWidget {
   final int itemNumber;
   final int needGpPoint;
-  final int gpPoint;
+  final int gachaPoint;
   final List<String> itemNumberList;
   final AudioCache soundEffect;
   final double seVolume;
@@ -18,7 +18,7 @@ class GpChange extends HookWidget {
     Key? key,
     required this.itemNumber,
     required this.needGpPoint,
-    required this.gpPoint,
+    required this.gachaPoint,
     required this.itemNumberList,
     required this.soundEffect,
     st,
@@ -28,7 +28,7 @@ class GpChange extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool enableGet = gpPoint >= needGpPoint;
+    final bool enableGet = gachaPoint >= needGpPoint;
     final bool alreadyGotFlg = itemNumberList.contains(itemNumber.toString());
 
     return !alreadyGotFlg
@@ -47,8 +47,7 @@ class GpChange extends HookWidget {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary:
-                    enableGet ? Colors.brown.shade500 : Colors.brown.shade200,
+                primary: Colors.brown.shade500,
                 textStyle: Theme.of(context).textTheme.button,
                 padding: const EdgeInsets.only(
                   bottom: 2,
@@ -75,8 +74,8 @@ class GpChange extends HookWidget {
                         dismissOnBackKeyPress: true,
                         showCloseIcon: true,
                         animType: AnimType.SCALE,
-                        width: MediaQuery.of(context).size.width * .86 > 650
-                            ? 650
+                        width: MediaQuery.of(context).size.width * .86 > 550
+                            ? 550
                             : null,
                         body: ItemBuy(
                           itemNumber: itemNumber,
@@ -87,7 +86,7 @@ class GpChange extends HookWidget {
                         ),
                       ).show();
                     }
-                  : () {},
+                  : null,
             ),
           )
         : Text(

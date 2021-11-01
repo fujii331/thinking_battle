@@ -361,7 +361,7 @@ Future matchingPreparation(
             dismissOnTouchOutside: false,
             dismissOnBackKeyPress: false,
             animType: AnimType.SCALE,
-            width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+            width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
             body: const FaildMatching(
               topText: 'マッチング失敗',
               secondText: '・あいことばは一致していますか？\n・アプリバージョンは最新ですか？\nメニュー画面に戻ります。',

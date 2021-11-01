@@ -62,8 +62,8 @@ class TitleButton extends HookWidget {
                         dismissOnTouchOutside: false,
                         dismissOnBackKeyPress: false,
                         animType: AnimType.SCALE,
-                        width: MediaQuery.of(context).size.width * .86 > 650
-                            ? 650
+                        width: MediaQuery.of(context).size.width > 500
+                            ? 400
                             : null,
                         body: FirstSetting(
                           buttonPressedState: buttonPressedState,

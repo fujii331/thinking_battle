@@ -69,7 +69,7 @@ class TopRow extends HookWidget {
                 ),
                 animType: AnimType.SCALE,
                 width:
-                    MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+                    MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
                 body: RivalInfo(rivalInfo: rivalInfo),
               ).show();
             },
@@ -188,7 +188,7 @@ class TopRow extends HookWidget {
           ),
           const Spacer(),
           SizedBox(
-            width: 47,
+            width: 50,
             child: Row(
               children: [
                 Text(

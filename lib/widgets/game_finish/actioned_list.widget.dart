@@ -1,8 +1,10 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:thinking_battle/data/messages.dart';
+import 'package:thinking_battle/services/admob/bannar_action.service.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 
 import 'package:thinking_battle/widgets/common/background.widget.dart';
@@ -13,7 +15,9 @@ import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/data/skills.dart';
 
 class ActionedList extends HookWidget {
-  const ActionedList({Key? key}) : super(key: key);
+  const ActionedList({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +28,29 @@ class ActionedList extends HookWidget {
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
     final List colorList = returnCardColorList(rivalInfo.cardNumber);
 
+    final BannerAd bannerAd = getBanner(2);
+
+    final bool widthOk = MediaQuery.of(context).size.width > 350;
+    final double fontSize = widthOk ? 16 : 14;
+    final double widthSetting = MediaQuery.of(context).size.width > 650.0
+        ? 585
+        : MediaQuery.of(context).size.width * 0.9;
+
     return Stack(
       children: <Widget>[
         background(),
         Padding(
-          padding: const EdgeInsets.only(top: 38),
+          padding: const EdgeInsets.only(top: 30),
           child: Center(
             child: Column(
               children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: AdWidget(ad: bannerAd),
+                  width: bannerAd.size.width.toDouble(),
+                  height: bannerAd.size.height.toDouble(),
+                ),
+                const SizedBox(height: 13),
                 Text(
                   '答え：' + correctAnswers[0],
                   style: TextStyle(
@@ -39,10 +58,10 @@ class ActionedList extends HookWidget {
                     fontSize: 22,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height - 180,
-                  width: MediaQuery.of(context).size.width * .9,
+                  height: MediaQuery.of(context).size.height - 230,
+                  width: widthSetting,
                   child: Stack(
                     children: [
                       Container(
@@ -56,11 +75,6 @@ class ActionedList extends HookWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.only(
-                          right: 10,
-                          left: 10,
-                          bottom: 10,
-                        ),
                         decoration: BoxDecoration(
                           color: Colors.indigo.shade700.withOpacity(0.80),
                           borderRadius: BorderRadius.circular(10),
@@ -75,74 +89,84 @@ class ActionedList extends HookWidget {
                             )
                           ],
                         ),
-                        child: ListView.builder(
-                          itemBuilder: (context, index) {
-                            final DisplayContent targetContent =
-                                displayContentList[index];
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                            right: 8,
+                            left: 8,
+                            bottom: 10,
+                          ),
+                          child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              final DisplayContent targetContent =
+                                  displayContentList[index];
 
-                            final List<Widget> skillList = [];
+                              final List<Widget> skillList = [];
 
-                            Widget messageWidget = Container();
+                              Widget messageWidget = Container();
 
-                            if (targetContent.messageId != 0) {
-                              messageWidget = _message(targetContent);
-                            }
-
-                            for (int skillId in targetContent.skillIds) {
-                              if (![0, 108, -108].contains(skillId)) {
-                                skillList.add(
-                                  _skillMessage(
-                                    targetContent.specialMessage != '' &&
-                                            (skillId == 5 || skillId == 7)
-                                        ? targetContent.specialMessage
-                                        : skillId < 0
-                                            ? skillSettings[(-1 * skillId) - 1]
-                                                .skillName
-                                            : skillSettings[skillId - 1]
-                                                .skillName,
-                                    targetContent.myTurnFlg,
-                                    targetContent.displayList,
-                                    skillId < 0 ? true : false,
-                                  ),
-                                );
+                              if (targetContent.messageId != 0) {
+                                messageWidget = _message(targetContent);
                               }
-                            }
 
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                bottom: 10,
-                                top: index == 0
-                                    ? 0
-                                    : skillList.isNotEmpty
-                                        ? 2
-                                        : 10,
-                                left: 2,
-                                right: 2,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: targetContent.myTurnFlg
-                                    ? CrossAxisAlignment.start
-                                    : CrossAxisAlignment.end,
-                                children: [
-                                  messageWidget,
-                                  skillList.isNotEmpty
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 4),
-                                          child: Column(children: skillList),
-                                        )
-                                      : Container(),
-                                  _contentRow(
-                                    context,
-                                    targetContent,
-                                    rivalInfo.imageNumber,
-                                    colorList,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          itemCount: displayContentList.length,
+                              for (int skillId in targetContent.skillIds) {
+                                if (![0, 108, -108].contains(skillId)) {
+                                  skillList.add(
+                                    _skillMessage(
+                                      targetContent.specialMessage != '' &&
+                                              (skillId == 5 || skillId == 7)
+                                          ? targetContent.specialMessage
+                                          : skillId < 0
+                                              ? skillSettings[
+                                                      (-1 * skillId) - 1]
+                                                  .skillName
+                                              : skillSettings[skillId - 1]
+                                                  .skillName,
+                                      targetContent.myTurnFlg,
+                                      targetContent.displayList,
+                                      skillId < 0 ? true : false,
+                                      fontSize,
+                                    ),
+                                  );
+                                }
+                              }
+
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: 10,
+                                  top: index == 0
+                                      ? 0
+                                      : skillList.isNotEmpty
+                                          ? 2
+                                          : 10,
+                                  left: 2,
+                                  right: 2,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: targetContent.myTurnFlg
+                                      ? CrossAxisAlignment.start
+                                      : CrossAxisAlignment.end,
+                                  children: [
+                                    messageWidget,
+                                    skillList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 4),
+                                            child: Column(children: skillList),
+                                          )
+                                        : Container(),
+                                    _contentRow(
+                                      context,
+                                      targetContent,
+                                      rivalInfo.imageNumber,
+                                      colorList,
+                                      fontSize,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            itemCount: displayContentList.length,
+                          ),
                         ),
                       ),
                     ],
@@ -162,8 +186,7 @@ class ActionedList extends HookWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(
-        left: 36.0,
-        right: 4.0,
+        left: 35.0,
         bottom: 10,
       ),
       child: Bubble(
@@ -171,11 +194,7 @@ class ActionedList extends HookWidget {
             targetContent.myTurnFlg ? Alignment.topRight : Alignment.topLeft,
         borderWidth: 1,
         borderColor: Colors.black,
-        elevation: 2.0,
-        shadowColor: Colors.grey,
         nipOffset: 14,
-        nipWidth: 12,
-        nipHeight: 8,
         nip: targetContent.myTurnFlg
             ? BubbleNip.rightBottom
             : BubbleNip.leftBottom,
@@ -199,11 +218,12 @@ class ActionedList extends HookWidget {
     bool myTurnFlg,
     List displayList,
     bool lineThroughFlg,
+    double fontSize,
   ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(
-        left: 38.0,
+        left: 40.0,
         right: 12.0,
         bottom: 4,
       ),
@@ -211,7 +231,7 @@ class ActionedList extends HookWidget {
         skillName,
         textAlign: myTurnFlg ? TextAlign.right : TextAlign.left,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: fontSize,
           color: myTurnFlg ? Colors.orange.shade200 : Colors.blueGrey.shade100,
           fontFamily: 'KaiseiOpti',
           fontWeight: FontWeight.bold,
@@ -226,6 +246,7 @@ class ActionedList extends HookWidget {
     DisplayContent targetContent,
     int rivalImageNumber,
     List colorList,
+    double fontSize,
   ) {
     return targetContent.myTurnFlg
         ? Row(
@@ -233,10 +254,12 @@ class ActionedList extends HookWidget {
             children: [
               _replyMessage(
                 targetContent,
+                fontSize,
               ),
               _sendMessage(
                 context,
                 targetContent,
+                fontSize,
               )
             ],
           )
@@ -272,13 +295,15 @@ class ActionedList extends HookWidget {
                       '.png',
                 ),
               ),
-              const SizedBox(width: 3),
+              const SizedBox(width: 5),
               _sendMessage(
                 context,
                 targetContent,
+                fontSize,
               ),
               _replyMessage(
                 targetContent,
+                fontSize,
               ),
             ],
           );
@@ -287,19 +312,17 @@ class ActionedList extends HookWidget {
   Widget _sendMessage(
     BuildContext context,
     DisplayContent targetContent,
+    double fontSize,
   ) {
     final bool myTurnFlg = targetContent.myTurnFlg;
-
     final double restrictWidth = myTurnFlg
         ? MediaQuery.of(context).size.width * .56
         : MediaQuery.of(context).size.width * .47;
-    const double fontSize = 16;
     final bool answerFlg = targetContent.answerFlg;
     final String message = targetContent.content;
     final List<int> skillIds = targetContent.skillIds;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 3),
+    return SizedBox(
       width: message.length * (fontSize + 1) > restrictWidth
           ? restrictWidth
           : null,
@@ -307,11 +330,7 @@ class ActionedList extends HookWidget {
         alignment: myTurnFlg ? Alignment.topRight : Alignment.topLeft,
         borderWidth: 2,
         borderColor: Colors.black,
-        elevation: 2.0,
-        shadowColor: Colors.grey,
         nipOffset: message.length * (fontSize + 1) > restrictWidth ? 20 : 14,
-        nipWidth: 12,
-        nipHeight: 8,
         nip: myTurnFlg ? BubbleNip.rightBottom : BubbleNip.leftBottom,
         color: answerFlg
             ? Colors.red.shade100
@@ -324,7 +343,7 @@ class ActionedList extends HookWidget {
           padding: const EdgeInsets.only(bottom: 2.5),
           child: Text(
             message,
-            style: const TextStyle(fontSize: fontSize),
+            style: TextStyle(fontSize: fontSize),
           ),
         ),
       ),
@@ -333,6 +352,7 @@ class ActionedList extends HookWidget {
 
   Widget _replyMessage(
     DisplayContent targetContent,
+    double fontSize,
   ) {
     final List<int> skillIds = targetContent.skillIds;
 
@@ -353,14 +373,14 @@ class ActionedList extends HookWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.only(
-          left: 7.0,
-          right: 7.0,
-          top: 2.5,
-          bottom: 5.5,
+          left: 6,
+          right: 6,
+          top: 1.5,
+          bottom: 4.5,
         ),
         child: Text(
           targetContent.reply,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: fontSize),
         ),
       ),
     );

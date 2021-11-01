@@ -34,8 +34,8 @@ const skillSettings = <Skill>[
   Skill(
     id: 6,
     skillName: 'SP溜め',
-    skillPoint: 4,
-    skillExplanation: '4ターンの間、質問するたびに\nSPが3溜まるようになる（SP 4）',
+    skillPoint: 5,
+    skillExplanation: '4ターンの間、質問するたびに\nSPが3溜まるようになる（SP 5）',
   ),
   Skill(
     id: 7,

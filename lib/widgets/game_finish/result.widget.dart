@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:thinking_battle/services/admob/bannar_action.service.dart';
 
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
@@ -65,7 +67,7 @@ class Result extends HookWidget {
                     ),
                     const SizedBox(height: 15),
                     CenterRowFinish(winFlg: winFlg),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 18),
                     UserProfileFinish(
                       imageNumber: imageNumber,
                       cardNumber: cardNumber,

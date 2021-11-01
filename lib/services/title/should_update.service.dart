@@ -43,7 +43,7 @@ Future shouldUpdate(
       dialogType: DialogType.INFO_REVERSED,
       headerAnimationLoop: false,
       animType: AnimType.BOTTOMSLIDE,
-      width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+      width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
       dismissOnTouchOutside: false,
       dismissOnBackKeyPress: false,
       body: const UpdateVersionModal(),

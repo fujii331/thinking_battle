@@ -20,8 +20,8 @@ class GachaSelect extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int gpPoint = useProvider(gpPointProvider).state;
-    final int gpCount = useProvider(gpCountProvider).state;
+    final int gachaPoint = useProvider(gachaPointProvider).state;
+    final int gachaCount = useProvider(gachaCountProvider).state;
     final int gachaTicket = useProvider(gachaTicketProvider).state;
 
     return Stack(
@@ -39,8 +39,8 @@ class GachaSelect extends HookWidget {
         Padding(
           padding: const EdgeInsets.only(
             top: 10,
-            left: 5,
-            right: 5,
+            left: 10,
+            right: 10,
             bottom: 35,
           ),
           child: Column(
@@ -61,7 +61,7 @@ class GachaSelect extends HookWidget {
               ),
               const SizedBox(height: 5),
               const Text(
-                'ガチャでアイテムをゲット！\n溜まったGPと交換も！',
+                'ガチャでアイテム取得！\n溜まったGPと交換も！',
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.white,
@@ -78,14 +78,14 @@ class GachaSelect extends HookWidget {
                 ),
               ),
               Text(
-                '本日の残り動画ガチャ：' + gpCount.toString() + '回',
+                '本日の残り動画ガチャ：' + gachaCount.toString() + '回',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
                 ),
               ),
               Text(
-                '所持GP：' + gpPoint.toString(),
+                '所持GP：' + gachaPoint.toString(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
@@ -137,7 +137,7 @@ class GachaSelect extends HookWidget {
           dismissOnBackKeyPress: true,
           showCloseIcon: true,
           animType: AnimType.SCALE,
-          width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+          width: MediaQuery.of(context).size.width * .86 > 400 ? 400 : null,
           body: buttonNumber == 3
               ? const MessageGacha()
               : ImageItemGacha(
@@ -243,7 +243,7 @@ class GachaSelect extends HookWidget {
     //         dismissOnBackKeyPress: true,
     //         showCloseIcon: true,
     //         animType: AnimType.SCALE,
-    //         width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+    //         width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
     //         body: buttonNumber == 3
     //             ? const MessageGacha()
     //             : ImageItemGacha(buttonNumber),

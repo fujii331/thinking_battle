@@ -14,8 +14,18 @@ Future getItem(
   List<String> itemNumberList,
   AudioCache soundEffect,
   double seVolume,
+  int patternValue,
 ) async {
   bool newItemFlg = false;
+
+  if (patternValue == 1) {
+    // チケット消費
+    context.read(gachaTicketProvider).state -= 1;
+    prefs.setInt('gachaTicket', context.read(gachaTicketProvider).state);
+  } else if (patternValue == 2) {
+    context.read(gachaCountProvider).state -= 1;
+    prefs.setInt('gachaCount', context.read(gachaCountProvider).state);
+  }
 
   if (itemNumberList.contains(itemNumber.toString())) {
     soundEffect.play(
@@ -26,8 +36,8 @@ Future getItem(
 
     // すでに持っている場合
     // GPを更新
-    context.read(gpPointProvider).state += 1;
-    prefs.setInt('gpPoint', context.read(gpPointProvider).state);
+    context.read(gachaPointProvider).state += 1;
+    prefs.setInt('gachaPoint', context.read(gachaPointProvider).state);
   } else {
     soundEffect.play(
       'sounds/new_item.mp3',
@@ -63,7 +73,7 @@ Future getItem(
     dismissOnBackKeyPress: false,
     showCloseIcon: false,
     animType: AnimType.SCALE,
-    width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+    width: MediaQuery.of(context).size.width * .86 > 450 ? 450 : null,
     body: ItemGet(
       preWidgetContext: context,
       prefs: prefs,

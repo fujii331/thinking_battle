@@ -32,6 +32,7 @@ class MyInfo extends HookWidget {
     final double rate = useProvider(rateProvider).state;
     final int continuousWinCount =
         useProvider(continuousWinCountProvider).state;
+    final bool widthOk = MediaQuery.of(context).size.width > 350;
 
     return Container(
       decoration: BoxDecoration(
@@ -50,7 +51,7 @@ class MyInfo extends HookWidget {
       width: MediaQuery.of(context).size.width * 0.9 > 275.0
           ? 275.0
           : MediaQuery.of(context).size.width * 0.9,
-      height: 120,
+      height: widthOk ? 120 : 110,
       child: Stack(
         children: [
           Container(
@@ -64,7 +65,7 @@ class MyInfo extends HookWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
-              vertical: 11,
+              vertical: 8,
               horizontal: 5,
             ),
             child: Row(
@@ -74,8 +75,8 @@ class MyInfo extends HookWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(6),
-                      width: 85,
-                      height: 85,
+                      width: widthOk ? 85 : 82,
+                      height: widthOk ? 85 : 82,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: FractionalOffset.topLeft,
@@ -161,7 +162,7 @@ class MyInfo extends HookWidget {
                   children: [
                     const Spacer(),
                     Padding(
-                      padding: const EdgeInsets.only(right: 3),
+                      padding: EdgeInsets.only(top: widthOk ? 2 : 0, right: 3),
                       child: ContinuousWin(
                         continuousWinCount: continuousWinCount,
                         wordMinusSize: 0,

@@ -17,9 +17,6 @@ class GameFinishScreen extends HookWidget {
   const GameFinishScreen({Key? key}) : super(key: key);
   static const routeName = '/game-finish';
 
-  // final bool? winFlg;
-  // const GameFinishScreen({Key? key, required this.winFlg}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final bool? winFlg = ModalRoute.of(context)?.settings.arguments as bool?;
@@ -48,7 +45,6 @@ class GameFinishScreen extends HookWidget {
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
-        context.read(bgmProvider).state.stop();
         await Future.delayed(
           const Duration(milliseconds: 500),
         );
@@ -115,11 +111,8 @@ class GameFinishScreen extends HookWidget {
           }
         }
 
-        context.read(bgmProvider).state = await soundEffect.loop(
-          'sounds/title.mp3',
-          volume: bgmVolume,
-          isNotification: true,
-        );
+        // 音楽の音量を設定し直す。
+        context.read(bgmProvider).state.setVolume(bgmVolume);
       });
       return null;
     }, const []);
@@ -154,6 +147,7 @@ class GameFinishScreen extends HookWidget {
               title: '振り返り',
             ),
           ],
+          top: -18,
           onTap: (int selectIndex) {
             screenNo.value = selectIndex;
             pageController.animateToPage(selectIndex,

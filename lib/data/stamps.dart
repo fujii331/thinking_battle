@@ -44,7 +44,7 @@ const stamps = [
     ),
     Stamp(
       needCount: 2000,
-      reward: 'テーマ「ふしぎな空間」獲得',
+      reward: 'テーマ「すてきな夜空」獲得',
     ),
   ],
   // 2 勝利回数

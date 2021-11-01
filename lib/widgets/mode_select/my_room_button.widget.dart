@@ -59,8 +59,8 @@ class MyRoomButton extends HookWidget {
                   dismissOnBackKeyPress: true,
                   showCloseIcon: false,
                   animType: AnimType.SCALE,
-                  width: MediaQuery.of(context).size.width * .86 > 650
-                      ? 650
+                  width: MediaQuery.of(context).size.width * .86 > 400
+                      ? 400
                       : null,
                   body: const MyData(),
                 ).show()
@@ -72,8 +72,8 @@ class MyRoomButton extends HookWidget {
                   dismissOnBackKeyPress: true,
                   showCloseIcon: true,
                   animType: AnimType.SCALE,
-                  width: MediaQuery.of(context).size.width * .86 > 650
-                      ? 650
+                  width: MediaQuery.of(context).size.width * .86 > 450
+                      ? 450
                       : null,
                   body: selectWord == 'アイコン'
                       ? EditImage(

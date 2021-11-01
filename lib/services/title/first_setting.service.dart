@@ -32,6 +32,7 @@ void firstSetting(BuildContext context) async {
     'sounds/change.mp3',
     'sounds/correct_answer.mp3',
     'sounds/gacha.mp3',
+    'sounds/gacha_start.mp3',
     'sounds/got_message.mp3',
     'sounds/hint.mp3',
     'sounds/matching.mp3',
@@ -106,9 +107,9 @@ void firstSetting(BuildContext context) async {
       prefs.getInt('skillUseCount') ?? 0;
 
   // GP
-  context.read(gpPointProvider).state = prefs.getInt('gpPoint') ?? 0;
+  context.read(gachaPointProvider).state = prefs.getInt('gachaPoint') ?? 0;
   // ガチャカウント
-  context.read(gpCountProvider).state = prefs.getInt('gpCount') ?? 5;
+  context.read(gachaCountProvider).state = prefs.getInt('gachaCount') ?? 5;
   // ガチャチケット
   context.read(gachaTicketProvider).state = prefs.getInt('gachaTicket') ?? 0;
 

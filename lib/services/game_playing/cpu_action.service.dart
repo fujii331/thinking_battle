@@ -68,7 +68,7 @@ Future cpuAction(
   // 強制質問されていない場合
   if (displayContentList.isNotEmpty &&
       !displayContentList.last.skillIds.contains(3)) {
-    if (sumImportance >= (60 - rivalInfo.rate / 100)) {
+    if (sumImportance >= (60 - rivalInfo.rate / 90)) {
       // 重要度が溜まっていたら解答
       // 相手のレートによって応える早さが変わる
       returnAnswer = context.read(correctAnswersProvider).state[0];
@@ -78,7 +78,7 @@ Future cpuAction(
 
       final List<int> enemySkillsCandidate = enemySkills
           .where((skillId) =>
-              skillId != 6 && (searchFlg || skillId != 5 || skillId != 7))
+              skillId != 6 && (searchFlg || (skillId != 5 && skillId != 7)))
           .toList();
 
       // 質問候補が2つの場合でナイス質問を含み、質問サーチ・質問確認を含まず、スキルポイントが溜まっている場合

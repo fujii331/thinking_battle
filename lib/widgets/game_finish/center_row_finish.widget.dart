@@ -120,9 +120,6 @@ class CenterRowFinish extends HookWidget {
                       context.read(trainingProvider).state = false;
                     }
 
-                    // Navigator.of(context).pushReplacementNamed(
-                    //   GameStartScreen.routeName,
-                    // );
                     Navigator.popUntil(
                       context,
                       ModalRoute.withName(ModeSelectScreen.routeName),

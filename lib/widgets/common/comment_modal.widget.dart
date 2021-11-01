@@ -5,21 +5,23 @@ import 'package:thinking_battle/widgets/common/modal_close_button.widget.dart';
 class CommentModal extends HookWidget {
   final String topText;
   final String secondText;
+  final bool closeButtonFlg;
 
   const CommentModal({
     Key? key,
     required this.topText,
     required this.secondText,
+    required this.closeButtonFlg,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
+      padding: EdgeInsets.only(
         top: 15,
         left: 20,
         right: 20,
-        bottom: 23,
+        bottom: closeButtonFlg ? 23 : 15,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -36,11 +38,10 @@ class CommentModal extends HookWidget {
             secondText,
             style: const TextStyle(
               fontSize: 18.0,
-              fontFamily: 'Stick',
             ),
           ),
           const SizedBox(height: 30),
-          const ModalCloseButton(),
+          closeButtonFlg ? const ModalCloseButton() : Container(),
         ],
       ),
     );

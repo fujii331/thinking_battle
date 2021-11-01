@@ -36,6 +36,8 @@ class UserProfileFinish extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List colorList = returnCardColorList(cardNumber);
+    final bool widthOk = MediaQuery.of(context).size.width > 350;
+    final double wordMinusSize = widthOk ? 0 : 1.5;
 
     return Stack(
       children: [
@@ -58,7 +60,7 @@ class UserProfileFinish extends StatelessWidget {
               : MediaQuery.of(context).size.width * 0.8 < 250
                   ? MediaQuery.of(context).size.width * 0.9
                   : MediaQuery.of(context).size.width * 0.8,
-          height: 158,
+          height: widthOk ? 158 : 148,
           child: Stack(
             children: [
               mySkillIdsList.isNotEmpty
@@ -90,12 +92,13 @@ class UserProfileFinish extends StatelessWidget {
                           child: ProfileName(
                             playerName: playerName,
                             darkColorFlg: colorList[1],
-                            wordMinusSize: 0,
+                            wordMinusSize: wordMinusSize,
                           ),
                         ),
                         UserProfileImage(
                           imageNumber: imageNumber,
                           colorList: colorList,
+                          widthOk: widthOk,
                         ),
                       ],
                     ),
@@ -108,6 +111,7 @@ class UserProfileFinish extends StatelessWidget {
                       winFlg,
                       notRateChangeFlg,
                       myDataFlg,
+                      wordMinusSize,
                     ),
                   ],
                 ),
@@ -136,6 +140,7 @@ class UserProfileFinish extends StatelessWidget {
     bool? winFlg,
     bool notRateChangeFlg,
     bool myDataFlg,
+    double wordMinusSize,
   ) {
     return SizedBox(
       child: Column(
@@ -154,9 +159,9 @@ class UserProfileFinish extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const StackLabel(
+                StackLabel(
                   word: 'match',
-                  wordMinusSize: 0,
+                  wordMinusSize: wordMinusSize,
                 ),
                 const SizedBox(
                   width: 10,
@@ -167,7 +172,7 @@ class UserProfileFinish extends StatelessWidget {
                               .toString() +
                           ' 回',
                   wordColor: Colors.white,
-                  wordMinusSize: 0,
+                  wordMinusSize: wordMinusSize,
                 ),
               ],
             ),
@@ -186,9 +191,9 @@ class UserProfileFinish extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const StackLabel(
+                StackLabel(
                   word: 'rate',
-                  wordMinusSize: 0,
+                  wordMinusSize: wordMinusSize,
                 ),
                 const SizedBox(
                   width: 10,
@@ -205,17 +210,9 @@ class UserProfileFinish extends StatelessWidget {
                       : winFlg
                           ? Colors.blue.shade100
                           : Colors.red.shade100,
-                  wordMinusSize: 0,
+                  wordMinusSize: wordMinusSize,
                 ),
                 const SizedBox(width: 5),
-                notRateChangeFlg || winFlg == null
-                    ? Container()
-                    : Icon(
-                        winFlg ? Icons.arrow_upward : Icons.arrow_downward,
-                        color:
-                            winFlg ? Colors.blue.shade200 : Colors.red.shade200,
-                        size: 17,
-                      ),
               ],
             ),
           ),
@@ -223,7 +220,7 @@ class UserProfileFinish extends StatelessWidget {
           mySkillIdsList.isNotEmpty
               ? SkillColumn(
                   mySkillIdsList: mySkillIdsList,
-                  wordMinusSize: 0,
+                  wordMinusSize: wordMinusSize,
                 )
               : Container(),
         ],

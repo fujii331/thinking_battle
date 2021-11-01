@@ -148,10 +148,10 @@ List returnCardColorList(
                                       : [
                                           [
                                             Colors.blue.shade100,
-                                            Colors.lightBlue.shade50,
-                                            Colors.blue.shade200,
+                                            Colors.pink.shade50,
+                                            Colors.pink.shade100,
                                           ],
-                                          Colors.yellow.shade100
+                                          Colors.blue.shade200
                                         ])
           : cardNumber < 24
               ? cardNumber == 16
@@ -220,10 +220,10 @@ List returnCardColorList(
                       ? [
                           [
                             Colors.black,
-                            Colors.purple.shade700,
-                            Colors.lightBlue.shade500,
+                            Colors.purple.shade900,
+                            Colors.blue.shade900,
                           ],
-                          Colors.purple.shade600
+                          Colors.deepPurple.shade900
                         ]
                       : cardNumber == 1003
                           ? [

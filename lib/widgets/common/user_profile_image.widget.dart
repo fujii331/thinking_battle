@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 class UserProfileImage extends StatelessWidget {
   final int imageNumber;
   final List colorList;
+  final bool widthOk;
 
   const UserProfileImage({
     Key? key,
     required this.imageNumber,
     required this.colorList,
+    required this.widthOk,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 25),
+      padding: EdgeInsets.only(top: widthOk ? 10 : 5, left: 25),
       child: Container(
         padding: const EdgeInsets.all(6),
-        width: 85,
-        height: 85,
+        width: widthOk ? 85 : 80,
+        height: widthOk ? 85 : 80,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: FractionalOffset.topLeft,

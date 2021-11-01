@@ -73,11 +73,7 @@ class ItemBuy extends HookWidget {
               ? Bubble(
                   borderWidth: 1,
                   borderColor: Colors.black,
-                  elevation: 2.0,
-                  shadowColor: Colors.grey,
                   nipOffset: 10,
-                  nipWidth: 12,
-                  nipHeight: 8,
                   nip: BubbleNip.rightBottom,
                   color: Colors.grey.shade700,
                   child: Padding(
@@ -129,23 +125,28 @@ class ItemBuy extends HookWidget {
                 ),
               ),
               onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                // GPを更新
-                previousContext.read(gpPointProvider).state -= needGpPoint;
-                prefs.setInt(
-                    'gpPoint', previousContext.read(gpPointProvider).state);
+                if (previousContext.read(gachaPointProvider).state >=
+                    needGpPoint) {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  // GPを更新
+                  previousContext.read(gachaPointProvider).state -= needGpPoint;
+                  prefs.setInt('gachaPoint',
+                      previousContext.read(gachaPointProvider).state);
 
-                Navigator.pop(previousContext);
+                  Navigator.pop(previousContext);
 
-                getItem(
-                  previousContext,
-                  prefs,
-                  buttonNumber,
-                  itemNumber,
-                  cardNumberList,
-                  soundEffect,
-                  seVolume,
-                );
+                  getItem(
+                    previousContext,
+                    prefs,
+                    buttonNumber,
+                    itemNumber,
+                    cardNumberList,
+                    soundEffect,
+                    seVolume,
+                    0,
+                  );
+                }
               },
             ),
           ),

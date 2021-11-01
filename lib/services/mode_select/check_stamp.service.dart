@@ -100,8 +100,8 @@ Future checkStamp(
     } else if (loginStampValue == 4 &&
         loginDays >= loginStampJudge[4].needCount) {
       // 10GP獲得
-      context.read(gpPointProvider).state += 10;
-      prefs.setInt('gpPoint', context.read(gpPointProvider).state);
+      context.read(gachaPointProvider).state += 10;
+      prefs.setInt('gachaPoint', context.read(gachaPointProvider).state);
       title = 'ログイン日数' + loginStampJudge[4].needCount.toString() + '日達成';
       title2 = loginStampJudge[4].reward + '！';
       message = '好きなアイテムと交換しよう！';
@@ -200,7 +200,7 @@ Future checkStamp(
       nextActionNumber = 4;
     } else if (matchedCountStampValue == 4 &&
         matchedCount >= matchedCountStampJudge[4].needCount) {
-      // テーマ「ふしぎな空間」獲得
+      // テーマ「きれいな夜空」獲得
       itemNumber = 1002;
       cardNumberList.add(itemNumber.toString());
       cardNumberList.sort((a, b) => int.parse(a) - int.parse(b));
@@ -531,7 +531,7 @@ Future checkStamp(
       dismissOnBackKeyPress: false,
       showCloseIcon: false,
       animType: AnimType.SCALE,
-      width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+      width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
       body: StampGet(
         screenContext: context,
         prefs: prefs,
@@ -585,8 +585,8 @@ List checkIconThemeCountStamp(
   } else if (iconThemeCountStampValue == 1 &&
       iconThemeCount >= iconThemeCountStampJudge[1].needCount) {
     // 5GP獲得
-    context.read(gpPointProvider).state += 5;
-    prefs.setInt('gpPoint', context.read(gpPointProvider).state);
+    context.read(gachaPointProvider).state += 5;
+    prefs.setInt('gachaPoint', context.read(gachaPointProvider).state);
     title =
         'アイコン・テーマ数' + iconThemeCountStampJudge[1].needCount.toString() + '個達成';
     title2 = iconThemeCountStampJudge[1].reward + '！';

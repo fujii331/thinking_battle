@@ -10,12 +10,13 @@ class FirstSetting extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(
         left: 18,
         right: 18,
         bottom: 25,
       ),
+      width: MediaQuery.of(context).size.width > 500 ? 300 : null,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -37,6 +38,7 @@ class FirstSetting extends HookWidget {
             width: double.infinity,
             padding: const EdgeInsets.only(
               top: 18,
+              left: 8,
             ),
             child: Text(
               '※ 後から変更できます',

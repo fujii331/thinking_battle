@@ -79,6 +79,9 @@ class GameStartScreen extends HookWidget {
     final matchingFlg = useState(false);
     final interruptionFlgState = useState(false);
 
+    final bool widthOk = MediaQuery.of(context).size.width > 350;
+    final double wordMinusSize = widthOk ? 0 : 1.5;
+
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         context.read(rivalInfoProvider).state = dummyPlayerInfo;
@@ -142,7 +145,7 @@ class GameStartScreen extends HookWidget {
                 dismissOnBackKeyPress: false,
                 animType: AnimType.SCALE,
                 width:
-                    MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+                    MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
                 body: const FaildMatching(
                   topText: '通信失敗',
                   secondText: '電波状況をご確認ください。\nメニュー画面に戻ります。',
@@ -200,11 +203,11 @@ class GameStartScreen extends HookWidget {
                                 playerName: rivalInfo.name,
                                 userRate: rivalInfo.rate,
                                 mySkillIdsList: rivalInfo.skillList,
-                                wordMinusSize: 0,
+                                wordMinusSize: wordMinusSize,
                               ),
                             )
                           : SizedBox(
-                              height: 158,
+                              height: widthOk ? 158 : 148,
                               child: fiendMatchWord != ''
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -252,7 +255,7 @@ class GameStartScreen extends HookWidget {
                         playerName: playerName,
                         userRate: rate,
                         mySkillIdsList: mySkillIdsList,
-                        wordMinusSize: 0,
+                        wordMinusSize: wordMinusSize,
                       ),
                     ],
                   ),

@@ -128,7 +128,7 @@ class GamePlayingScreen extends HookWidget {
                 dismissOnBackKeyPress: false,
                 animType: AnimType.SCALE,
                 width:
-                    MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+                    MediaQuery.of(context).size.width * .86 > 600 ? 600 : null,
                 body: const AttentionModal(
                   topText: '対戦相手の接続が切れました',
                   secondText: '結果画面に移ります。',
@@ -306,7 +306,6 @@ class GamePlayingScreen extends HookWidget {
             Center(
               child: SizedBox(
                 width: widthSetting,
-                height: MediaQuery.of(context).size.height > 800 ? 800 : null,
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 500),
                   opacity: displayFlgState.value ? 1 : 0,

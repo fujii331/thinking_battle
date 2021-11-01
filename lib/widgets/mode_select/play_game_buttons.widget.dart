@@ -11,11 +11,13 @@ import 'package:thinking_battle/widgets/mode_select/password_setting.widget.dart
 class PlayGameButtons extends StatelessWidget {
   final AudioCache soundEffect;
   final double seVolume;
+  final double betweenHeight;
 
   const PlayGameButtons({
     Key? key,
     required this.soundEffect,
     required this.seVolume,
+    required this.betweenHeight,
   }) : super(key: key);
 
   @override
@@ -28,14 +30,14 @@ class PlayGameButtons extends StatelessWidget {
           Colors.lime.shade800,
           1,
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: betweenHeight),
         _playButton(
           context,
           'ランダムマッチ',
           Colors.lightBlue.shade600,
           2,
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: betweenHeight),
         _playButton(
           context,
           'フレンドマッチ',
@@ -52,8 +54,11 @@ class PlayGameButtons extends StatelessWidget {
     Color color,
     int buttonNumber,
   ) {
+    final bool widthOk = MediaQuery.of(context).size.width > 350;
+
     return SizedBox(
-      width: 210,
+      width: widthOk ? 210 : 180,
+      height: widthOk ? null : 46,
       child: ElevatedButton(
         onPressed: () async {
           soundEffect.play(
@@ -71,7 +76,7 @@ class PlayGameButtons extends StatelessWidget {
               dismissOnBackKeyPress: true,
               showCloseIcon: true,
               animType: AnimType.SCALE,
-              width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+              width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
               body: const PasswordSetting(),
             ).show();
           } else {
@@ -92,13 +97,13 @@ class PlayGameButtons extends StatelessWidget {
         },
         child: Text(
           text,
-          style: const TextStyle(
-            fontSize: 24,
+          style: TextStyle(
+            fontSize: widthOk ? 24 : 20,
           ),
         ),
         style: ElevatedButton.styleFrom(
           primary: color,
-          elevation: 8,
+          elevation: 5,
           shadowColor: Colors.grey,
           padding: const EdgeInsets.symmetric(
             horizontal: 20,

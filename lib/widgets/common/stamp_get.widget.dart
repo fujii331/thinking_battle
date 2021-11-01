@@ -91,11 +91,7 @@ class StampGet extends HookWidget {
                       ? Bubble(
                           borderWidth: 1,
                           borderColor: Colors.black,
-                          elevation: 2.0,
-                          shadowColor: Colors.grey,
                           nipOffset: 10,
-                          nipWidth: 12,
-                          nipHeight: 8,
                           nip: BubbleNip.rightBottom,
                           color: Colors.grey.shade700,
                           child: Padding(

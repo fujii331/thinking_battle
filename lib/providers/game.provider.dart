@@ -1,3 +1,4 @@
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
@@ -53,3 +54,6 @@ final spChargeTurnProvider = StateProvider((ref) => 0);
 final myTrapCountProvider = StateProvider((ref) => 0);
 final enemyTrapCountProvider = StateProvider((ref) => 0);
 final skillUseCountInGameProvider = StateProvider((ref) => 0);
+
+// 広告用
+final interstitialAdProvider = StateProvider<InterstitialAd?>((ref) => null);

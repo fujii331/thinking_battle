@@ -20,8 +20,8 @@ class MessageGacha extends HookWidget {
     final List<String> itemNumberList =
         useProvider(messageIdsListProvider).state;
 
-    final int gpPoint = useProvider(gpPointProvider).state;
-    final int gpCount = useProvider(gpCountProvider).state;
+    final int gachaPoint = useProvider(gachaPointProvider).state;
+    final int gachaCount = useProvider(gachaCountProvider).state;
     final int gachaTicket = useProvider(gachaTicketProvider).state;
 
     final List<List<int>> getitemNumberList = [
@@ -56,7 +56,7 @@ class MessageGacha extends HookWidget {
           context,
           getItemNumber[0],
           getItemNumber[1],
-          gpPoint,
+          gachaPoint,
           itemNumberList,
           soundEffect,
           seVolume,
@@ -106,8 +106,8 @@ class MessageGacha extends HookWidget {
           const SizedBox(height: 25),
           GachaButton(
             buttonNumber: 3,
-            gpPoint: gpPoint,
-            gpCount: gpCount,
+            gachaPoint: gachaPoint,
+            gachaCount: gachaCount,
             gachaTicket: gachaTicket,
             itemNumberList: itemNumberList,
             getitemNumberList: getitemNumberList,
@@ -123,7 +123,7 @@ class MessageGacha extends HookWidget {
     BuildContext context,
     int itemNumber,
     int cardParcentage,
-    int gpPoint,
+    int gachaPoint,
     List<String> itemNumberList,
     AudioCache soundEffect,
     double seVolume,
@@ -154,7 +154,7 @@ class MessageGacha extends HookWidget {
                 GpChange(
                   itemNumber: itemNumber,
                   needGpPoint: needGpPoint,
-                  gpPoint: gpPoint,
+                  gachaPoint: gachaPoint,
                   itemNumberList: itemNumberList,
                   soundEffect: soundEffect,
                   seVolume: seVolume,

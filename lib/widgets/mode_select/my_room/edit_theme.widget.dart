@@ -119,6 +119,8 @@ class EditTheme extends HookWidget {
     BuildContext context,
     int themeNumber,
   ) {
+    final double minusSize = MediaQuery.of(context).size.width > 400 ? 0 : 5;
+
     return InkWell(
       onTap: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -132,8 +134,8 @@ class EditTheme extends HookWidget {
         Navigator.pop(context);
       },
       child: Container(
-        width: 63,
-        height: 36,
+        width: 63 - minusSize,
+        height: 36 - minusSize,
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.fitWidth,

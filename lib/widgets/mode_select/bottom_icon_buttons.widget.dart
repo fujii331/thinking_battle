@@ -101,7 +101,7 @@ class BottomIconButtons extends HookWidget {
                 showCloseIcon: false,
                 animType: AnimType.SCALE,
                 width:
-                    MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+                    MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
                 body: SoundMode(
                   soundEffect: soundEffect,
                 ),
@@ -117,7 +117,7 @@ class BottomIconButtons extends HookWidget {
                 dialogBackgroundColor: Colors.black.withOpacity(0.0),
                 animType: AnimType.SCALE,
                 width:
-                    MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+                    MediaQuery.of(context).size.width * .86 > 350 ? 350 : null,
                 body: buttonPuttern == 2
                     ? const StampCheck()
                     : GachaSelect(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +17,7 @@ import 'package:thinking_battle/providers/game.provider.dart';
 
 import 'package:thinking_battle/models/quiz.model.dart';
 import 'package:thinking_battle/screens/game_finish.screen.dart';
+import 'package:thinking_battle/services/admob/interstitial_action.service.dart';
 import 'package:thinking_battle/services/game_playing/cpu_action.service.dart';
 import 'package:thinking_battle/services/game_playing/update_rate.service.dart';
 
@@ -42,7 +44,8 @@ Future turnAction(
   ];
 
   // スクロール量決定用
-  const double fontSize = 16;
+  final bool widthOk = MediaQuery.of(context).size.width > 350;
+  final double fontSize = widthOk ? 16 : 14;
   final double restrictWidth = myTurnFlg
       ? MediaQuery.of(context).size.width * .56
       : MediaQuery.of(context).size.width * .47;
@@ -108,14 +111,17 @@ Future turnAction(
         context.read(afterMessageTimeProvider).state = 60;
       }
 
+      await Future.delayed(
+        const Duration(milliseconds: 50),
+      );
+
       scrollToBottom(
         context,
         scrollController,
-        50,
       );
 
       await Future.delayed(
-        const Duration(milliseconds: 700),
+        const Duration(milliseconds: 650),
       );
     }
 
@@ -173,16 +179,19 @@ Future turnAction(
       displayContentList.last.displayList.add(0);
       context.read(displayContentListProvider).state = displayContentList;
 
+      await Future.delayed(
+        const Duration(milliseconds: 50),
+      );
+
       scrollToBottom(
         context,
         scrollController,
-        i > 0 ? 15 : 35,
       );
 
       if (displaySkillIds[i] == 5) {
         int changedCount = 0;
         await Future.delayed(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 450),
         );
 
         context.read(displayQuestionResearchProvider).state = 1;
@@ -259,16 +268,19 @@ Future turnAction(
           messageId: displayContentList.last.messageId,
         );
 
+        await Future.delayed(
+          const Duration(milliseconds: 50),
+        );
+
         if (changedCount > 0) {
           scrollToBottom(
             context,
             scrollController,
-            changedCount * 20,
           );
         }
 
         await Future.delayed(
-          const Duration(milliseconds: 200),
+          const Duration(milliseconds: 150),
         );
 
         context.read(animationQuestionResearchProvider).state = false;
@@ -280,7 +292,7 @@ Future turnAction(
       } else if (displaySkillIds[i] == 7) {
         bool changedFlg = false;
         await Future.delayed(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 470),
         );
 
         context.read(displayQuestionResearchProvider).state = 2;
@@ -371,16 +383,19 @@ Future turnAction(
           messageId: displayContentList.last.messageId,
         );
 
+        await Future.delayed(
+          const Duration(milliseconds: 50),
+        );
+
         if (changedFlg) {
           scrollToBottom(
             context,
             scrollController,
-            20,
           );
         }
 
         await Future.delayed(
-          const Duration(milliseconds: 200),
+          const Duration(milliseconds: 150),
         );
 
         context.read(animationQuestionResearchProvider).state = false;
@@ -392,7 +407,7 @@ Future turnAction(
       }
 
       await Future.delayed(
-        const Duration(milliseconds: 700),
+        const Duration(milliseconds: 650),
       );
     }
 
@@ -405,15 +420,6 @@ Future turnAction(
 
     displayContentList.last.displayList.add(0);
     context.read(displayContentListProvider).state = displayContentList;
-
-    scrollToBottom(
-      context,
-      scrollController,
-      sendContent.skillIds.isEmpty &&
-              targetQuestion.asking.length * (fontSize + 1) > restrictWidth
-          ? 145
-          : 50,
-    );
 
     if (myTurnFlg) {
       // 解答禁止状態の場合、解除する
@@ -448,7 +454,16 @@ Future turnAction(
     }
 
     await Future.delayed(
-      const Duration(milliseconds: 1300),
+      const Duration(milliseconds: 50),
+    );
+
+    scrollToBottom(
+      context,
+      scrollController,
+    );
+
+    await Future.delayed(
+      const Duration(milliseconds: 1250),
     );
 
     // 返答表示
@@ -466,7 +481,10 @@ Future turnAction(
         context.read(correctAnswersProvider).state.contains(sendContent.answer);
 
     if (correctAnswerFlg && !myTurnFlg) {
-      // 広告の読み込みを行う
+      // 負けた時の広告の読み込みを行う
+      await interstitialLoading(
+        context,
+      );
     }
 
     final String answerText = '答えは' + sendContent.answer + 'だ！';
@@ -474,7 +492,7 @@ Future turnAction(
     // 解答実行
     final DisplayContent displayContent = DisplayContent(
       content: answerText,
-      reply: '．',
+      reply: '.',
       answerFlg: true,
       myTurnFlg: myTurnFlg,
       skillIds: [],
@@ -488,12 +506,6 @@ Future turnAction(
     displayContentList.add(displayContent);
     context.read(displayContentListProvider).state = displayContentList;
 
-    scrollToBottom(
-      context,
-      scrollController,
-      answerText.length * (fontSize + 1) > restrictWidth ? 138 : 50,
-    );
-
     // 解答表示
     soundEffect.play(
       'sounds/got_message.mp3',
@@ -505,7 +517,16 @@ Future turnAction(
     context.read(displayContentListProvider).state = displayContentList;
 
     await Future.delayed(
-      const Duration(milliseconds: 1500),
+      const Duration(milliseconds: 50),
+    );
+
+    scrollToBottom(
+      context,
+      scrollController,
+    );
+
+    await Future.delayed(
+      const Duration(milliseconds: 1450),
     );
 
     for (int i = 0; i < 3; i++) {
@@ -518,7 +539,7 @@ Future turnAction(
       if (i > 0) {
         displayContentList.last = DisplayContent(
           content: answerText,
-          reply: i == 1 ? '．．' : '．．．',
+          reply: i == 1 ? '. .' : '. . .',
           answerFlg: true,
           myTurnFlg: myTurnFlg,
           skillIds: [],
@@ -547,8 +568,36 @@ Future turnAction(
         isNotification: true,
         volume: seVolume,
       );
+      if ((!context.read(trainingProvider).state &&
+              context.read(friendMatchWordProvider).state == '') ||
+          context.read(changedTrainingProvider).state) {
+        // レート計算
+        await updateRate(
+          context,
+          myTurnFlg,
+        );
+      }
+
+      if (rivalListenSubscription != null) {
+        rivalListenSubscription.cancel();
+      }
+
+      // 音楽停止し、新しい音楽の準備
+      // 広告時に音を流さないためにここで先に設定する
+      context.read(bgmProvider).state.stop();
+      context.read(bgmProvider).state =
+          await context.read(soundEffectProvider).state.loop(
+                'sounds/title.mp3',
+                volume: 0,
+                isNotification: true,
+              );
+
       if (!myTurnFlg) {
         // 広告を表示する
+        showInterstitialAd(context);
+        await Future.delayed(
+          const Duration(milliseconds: 200),
+        );
       }
 
       displayContentList.last = DisplayContent(
@@ -568,20 +617,6 @@ Future turnAction(
       await Future.delayed(
         const Duration(milliseconds: 1300),
       );
-
-      if ((!context.read(trainingProvider).state &&
-              context.read(friendMatchWordProvider).state == '') ||
-          context.read(changedTrainingProvider).state) {
-        // レート計算
-        await updateRate(
-          context,
-          myTurnFlg,
-        );
-      }
-
-      if (rivalListenSubscription != null) {
-        rivalListenSubscription.cancel();
-      }
 
       Navigator.of(context).pushReplacementNamed(
         GameFinishScreen.routeName,
@@ -620,6 +655,10 @@ Future turnAction(
   );
 
   if (allQuestions.length < 3) {
+    // 広告の読み込みを行う
+    await interstitialLoading(
+      context,
+    );
     await Future.delayed(
       const Duration(milliseconds: 1500),
     );
@@ -640,6 +679,10 @@ Future turnAction(
     displayContentList.add(displayContent);
     context.read(displayContentListProvider).state = displayContentList;
 
+    await Future.delayed(
+      const Duration(milliseconds: 50),
+    );
+
     // 質問表示
     soundEffect.play(
       'sounds/got_message.mp3',
@@ -650,7 +693,6 @@ Future turnAction(
     scrollToBottom(
       context,
       scrollController,
-      50,
     );
 
     if (rivalListenSubscription != null) {
@@ -659,8 +701,20 @@ Future turnAction(
     context.read(timerCancelFlgProvider).state = true;
 
     await Future.delayed(
-      const Duration(milliseconds: 2000),
+      const Duration(milliseconds: 1950),
     );
+
+    // 音楽停止し、新しい音楽の準備
+    // 広告時に音を流さないためにここで先に設定する
+    context.read(bgmProvider).state.stop();
+    context.read(bgmProvider).state =
+        await context.read(soundEffectProvider).state.loop(
+              'sounds/title.mp3',
+              volume: 0,
+              isNotification: true,
+            );
+
+    showInterstitialAd(context);
 
     Navigator.of(context).pushReplacementNamed(
       GameFinishScreen.routeName,
@@ -683,23 +737,13 @@ Future turnAction(
 void scrollToBottom(
   BuildContext context,
   ScrollController scrollController,
-  int scrollHeight,
 ) {
-  if (scrollController.position.maxScrollExtent > 0) {
-    final bottomOffset =
-        scrollController.position.maxScrollExtent + scrollHeight;
-    scrollController.animateTo(
-      bottomOffset,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeInOut,
-    );
-  } else if (context.read(turnCountProvider).state > 2) {
-    scrollController.animateTo(
-      60,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeInOut,
-    );
-  }
+  final bottomOffset = scrollController.position.maxScrollExtent;
+  scrollController.animateTo(
+    bottomOffset,
+    duration: const Duration(milliseconds: 250),
+    curve: Curves.easeInOut,
+  );
 }
 
 Future initializeAction(

@@ -27,6 +27,7 @@ void commonInitialAction(
   context.read(myTrapCountProvider).state = 0;
   context.read(enemyTrapCountProvider).state = 0;
   context.read(skillUseCountInGameProvider).state = 0;
+  context.read(interstitialAdProvider).state = null;
 }
 
 void trainingInitialAction(

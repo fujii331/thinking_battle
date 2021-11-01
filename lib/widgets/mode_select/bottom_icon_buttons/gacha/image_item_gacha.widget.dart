@@ -26,8 +26,8 @@ class ImageItemGacha extends HookWidget {
         ? useProvider(imageNumberListProvider).state
         : useProvider(cardNumberListProvider).state;
 
-    final int gpPoint = useProvider(gpPointProvider).state;
-    final int gpCount = useProvider(gpCountProvider).state;
+    final int gachaPoint = useProvider(gachaPointProvider).state;
+    final int gachaCount = useProvider(gachaCountProvider).state;
     final int gachaTicket = useProvider(gachaTicketProvider).state;
 
     final List<List<int>> getitemNumberList = iconGachaFlg
@@ -80,7 +80,7 @@ class ImageItemGacha extends HookWidget {
           iconGachaFlg,
           getItemNumber[0],
           getItemNumber[1],
-          gpPoint,
+          gachaPoint,
           itemNumberList,
           soundEffect,
           seVolume,
@@ -144,13 +144,13 @@ class ImageItemGacha extends HookWidget {
             ),
           ),
           SizedBox(
-            height: 200,
+            height: 210,
             width: 230,
             child: ListView.builder(
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(
-                    bottom: 12,
+                    bottom: 10,
                   ),
                   child: cardRowList[index],
                 );
@@ -161,8 +161,8 @@ class ImageItemGacha extends HookWidget {
           const SizedBox(height: 25),
           GachaButton(
             buttonNumber: buttonNumber,
-            gpPoint: gpPoint,
-            gpCount: gpCount,
+            gachaPoint: gachaPoint,
+            gachaCount: gachaCount,
             gachaTicket: gachaTicket,
             itemNumberList: itemNumberList,
             getitemNumberList: getitemNumberList,
@@ -179,12 +179,13 @@ class ImageItemGacha extends HookWidget {
     bool iconGachaFlg,
     int itemNumber,
     int itemParcentage,
-    int gpPoint,
+    int gachaPoint,
     List<String> itemNumberList,
     AudioCache soundEffect,
     double seVolume,
   ) {
     final int needGpPoint = (50 / itemParcentage).round();
+    final double minusSize = MediaQuery.of(context).size.width > 400 ? 0 : 5;
 
     return Column(
       children: [
@@ -196,8 +197,8 @@ class ImageItemGacha extends HookWidget {
         ),
         const SizedBox(height: 5),
         Container(
-          width: iconGachaFlg ? 60 : 63,
-          height: iconGachaFlg ? 60 : 36,
+          width: (iconGachaFlg ? 60 : 63) - minusSize,
+          height: (iconGachaFlg ? 60 : 36) - minusSize,
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.fitWidth,
@@ -219,7 +220,7 @@ class ImageItemGacha extends HookWidget {
         GpChange(
           itemNumber: itemNumber,
           needGpPoint: needGpPoint,
-          gpPoint: gpPoint,
+          gachaPoint: gachaPoint,
           itemNumberList: itemNumberList,
           soundEffect: soundEffect,
           seVolume: seVolume,

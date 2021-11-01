@@ -26,60 +26,64 @@ class ProfileUpdateArea extends HookWidget {
     final int imageNumber = useProvider(imageNumberProvider).state;
     final judgeFlgState = useState(false);
     final playerNameState = useState('');
+    final bool widthOk = MediaQuery.of(context).size.width > 400;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
+          padding: EdgeInsets.symmetric(horizontal: widthOk ? 15 : 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
-                  InkWell(
-                    onTap: () {
-                      soundEffect.play(
-                        'sounds/tap.mp3',
-                        isNotification: true,
-                        volume: seVolume,
-                      );
-                      AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.NO_HEADER,
-                        headerAnimationLoop: false,
-                        dismissOnTouchOutside: true,
-                        dismissOnBackKeyPress: true,
-                        showCloseIcon: true,
-                        animType: AnimType.SCALE,
-                        width: MediaQuery.of(context).size.width * .86 > 650
-                            ? 650
-                            : null,
-                        body: EditImage(
-                          soundEffect: soundEffect,
-                          seVolume: seVolume,
+                  Padding(
+                    padding: EdgeInsets.only(left: widthOk ? 15 : 0),
+                    child: InkWell(
+                      onTap: () {
+                        soundEffect.play(
+                          'sounds/tap.mp3',
+                          isNotification: true,
+                          volume: seVolume,
+                        );
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.NO_HEADER,
+                          headerAnimationLoop: false,
+                          dismissOnTouchOutside: true,
+                          dismissOnBackKeyPress: true,
+                          showCloseIcon: true,
+                          animType: AnimType.SCALE,
+                          width: MediaQuery.of(context).size.width * .86 > 550
+                              ? 550
+                              : null,
+                          body: EditImage(
+                            soundEffect: soundEffect,
+                            seVolume: seVolume,
+                          ),
+                        ).show();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        width: 72,
+                        height: 72,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          border: Border.all(
+                            color: Colors.grey.shade800,
+                            width: 2,
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
                         ),
-                      ).show();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(2),
-                      width: 72,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        border: Border.all(
-                          color: Colors.grey.shade800,
-                          width: 2,
+                        child: Image.asset(
+                          'assets/images/characters/' +
+                              imageNumber.toString() +
+                              '.png',
+                          height: 50,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      child: Image.asset(
-                        'assets/images/characters/' +
-                            imageNumber.toString() +
-                            '.png',
-                        height: 50,
                       ),
                     ),
                   ),
@@ -93,7 +97,7 @@ class ProfileUpdateArea extends HookWidget {
                   ),
                 ],
               ),
-              const SizedBox(width: 25),
+              SizedBox(width: widthOk ? 60 : 20),
               Column(
                 children: [
                   Column(
@@ -110,22 +114,21 @@ class ProfileUpdateArea extends HookWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 120,
+                        width: widthOk ? 120 : 100,
                         height: 35,
                         child: TextFormField(
                           decoration: const InputDecoration(
                             hintText: 'タップして入力',
                           ),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'KaiseiOpti',
-                            fontSize: 14.5,
+                            fontSize: widthOk ? 14.5 : 12,
                             fontWeight: FontWeight.bold,
                           ),
                           initialValue: context.read(playerNameProvider).state,
                           onChanged: (String input) {
                             playerNameState.value = input;
-                            judgeFlgState.value = input != '' &&
-                                context.read(playerNameProvider).state != input;
+                            judgeFlgState.value = input != '';
                           },
                           inputFormatters: <TextInputFormatter>[
                             LengthLimitingTextInputFormatter(

@@ -166,13 +166,14 @@ class StampCheck extends HookWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
                 Container(
-                  height: 115,
+                  height: 130,
                   width: 230,
                   color: Colors.white.withOpacity(0.5),
                   child: Column(
                     children: [
+                      const SizedBox(height: 5),
                       Text(
                         '条件',
                         style: TextStyle(
@@ -199,7 +200,7 @@ class StampCheck extends HookWidget {
                         ),
                       ),
                       Container(
-                        height: 50,
+                        height: 55,
                         padding: const EdgeInsets.only(
                           left: 20,
                           right: 20,

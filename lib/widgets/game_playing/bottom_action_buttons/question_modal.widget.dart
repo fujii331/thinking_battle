@@ -49,6 +49,13 @@ class QuestionModal extends HookWidget {
 
     final changeFlgState = useState(false);
 
+    final double paddingWidth = MediaQuery.of(context).size.width > 550.0
+        ? (MediaQuery.of(context).size.width - 550) / 2
+        : 5;
+
+    final bool widthOk = MediaQuery.of(context).size.width > 350;
+    final double fontSize = widthOk ? 20 : 18;
+
     for (int skillId in selectSkillIds) {
       skillList.add(
         Container(
@@ -70,14 +77,11 @@ class QuestionModal extends HookWidget {
 
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.only(
-          left: 5,
-          right: 5,
+        padding: EdgeInsets.only(
+          left: paddingWidth,
+          right: paddingWidth,
           bottom: 25,
         ),
-        width: MediaQuery.of(context).size.width * 0.8 > 600.0
-            ? 600.0
-            : MediaQuery.of(context).size.width * 0.8,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -109,7 +113,7 @@ class QuestionModal extends HookWidget {
             ),
             const SizedBox(height: 10),
             selectSkillIds.contains(2)
-                ? _niceQuestionButton(context)
+                ? _niceQuestionButton(context, fontSize)
                 : _selectQuestionColumn(
                     context,
                     selectableQuestions,
@@ -117,6 +121,7 @@ class QuestionModal extends HookWidget {
                     seVolume,
                     selectQuestionId,
                     changeFlgState,
+                    fontSize,
                   ),
             const SizedBox(height: 20),
             SizedBox(
@@ -272,6 +277,7 @@ class QuestionModal extends HookWidget {
     double seVolume,
     int selectQuestionId,
     ValueNotifier<bool> changeFlgState,
+    double fontSize,
   ) {
     return Column(
       children: [
@@ -282,6 +288,7 @@ class QuestionModal extends HookWidget {
           seVolume,
           selectableQuestions[0].id == selectQuestionId,
           changeFlgState,
+          fontSize,
         ),
         _selectQuestionButton(
           context,
@@ -290,6 +297,7 @@ class QuestionModal extends HookWidget {
           seVolume,
           selectableQuestions[1].id == selectQuestionId,
           changeFlgState,
+          fontSize,
         ),
         _selectQuestionButton(
           context,
@@ -298,6 +306,7 @@ class QuestionModal extends HookWidget {
           seVolume,
           selectableQuestions[2].id == selectQuestionId,
           changeFlgState,
+          fontSize,
         ),
       ],
     );
@@ -310,6 +319,7 @@ class QuestionModal extends HookWidget {
     double seVolume,
     bool selectedFlg,
     ValueNotifier<bool> changeFlgState,
+    double fontSize,
   ) {
     return Container(
       padding: const EdgeInsets.only(
@@ -326,8 +336,8 @@ class QuestionModal extends HookWidget {
         },
         child: Text(
           targetQuestion.asking,
-          style: const TextStyle(
-            fontSize: 20,
+          style: TextStyle(
+            fontSize: fontSize,
             fontFamily: 'ZenKakuGothicNew',
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -346,6 +356,7 @@ class QuestionModal extends HookWidget {
 
   Widget _niceQuestionButton(
     BuildContext context,
+    double fontSize,
   ) {
     return Container(
       padding: const EdgeInsets.only(
@@ -369,8 +380,8 @@ class QuestionModal extends HookWidget {
             ),
             style: ElevatedButton.styleFrom(
               primary: Colors.yellow.shade200,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
+              padding: EdgeInsets.symmetric(
+                horizontal: fontSize,
                 vertical: 5,
               ),
               textStyle: Theme.of(context).textTheme.button,

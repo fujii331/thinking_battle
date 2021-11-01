@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -30,8 +32,11 @@ class ContentList extends HookWidget {
 
     final List colorList = returnCardColorList(rivalInfo.cardNumber);
 
+    final bool widthOk = MediaQuery.of(context).size.width > 350;
+    final double fontSize = widthOk ? 16 : 14;
+
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 260,
+      height: MediaQuery.of(context).size.height - 250,
       width: MediaQuery.of(context).size.width * .9,
       child: Stack(
         children: [
@@ -63,8 +68,8 @@ class ContentList extends HookWidget {
           ),
           Container(
             padding: const EdgeInsets.only(
-              right: 10,
-              left: 10,
+              right: 8,
+              left: 8,
               top: 4,
               bottom: 10,
             ),
@@ -79,7 +84,9 @@ class ContentList extends HookWidget {
 
                 if (targetContent.messageId != 0) {
                   displayNumber++;
-                  messageWidget = _message(targetContent);
+                  messageWidget = _message(
+                    targetContent,
+                  );
                 }
 
                 for (int skillId in targetContent.skillIds) {
@@ -101,6 +108,7 @@ class ContentList extends HookWidget {
                         targetContent.displayList,
                         displayNumber,
                         skillId < 0 ? true : false,
+                        fontSize,
                       ),
                     );
                   }
@@ -131,6 +139,7 @@ class ContentList extends HookWidget {
                         rivalInfo.imageNumber,
                         displayNumber,
                         colorList,
+                        fontSize,
                       ),
                     ],
                   ),
@@ -167,11 +176,9 @@ class ContentList extends HookWidget {
   ) {
     return targetContent.displayList.isNotEmpty
         ? Container(
-            height: 43,
             width: double.infinity,
             padding: const EdgeInsets.only(
-              left: 36.0,
-              right: 4.0,
+              left: 35.0,
               bottom: 10,
             ),
             child: Bubble(
@@ -180,17 +187,13 @@ class ContentList extends HookWidget {
                   : Alignment.topLeft,
               borderWidth: 1,
               borderColor: Colors.black,
-              elevation: 2.0,
-              shadowColor: Colors.grey,
               nipOffset: 10,
-              nipWidth: 12,
-              nipHeight: 8,
               nip: targetContent.myTurnFlg
                   ? BubbleNip.rightBottom
                   : BubbleNip.leftBottom,
               color: Colors.grey.shade700,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 2.5),
+                padding: EdgeInsets.only(bottom: Platform.isAndroid ? 2.5 : 0),
                 child: Text(
                   messageSettings[targetContent.messageId - 1].message,
                   style: const TextStyle(
@@ -210,12 +213,13 @@ class ContentList extends HookWidget {
     List displayList,
     int displayNumber,
     bool lineThroughFlg,
+    double fontSize,
   ) {
     return displayList.length >= displayNumber
         ? Container(
             width: double.infinity,
             padding: const EdgeInsets.only(
-              left: 38.0,
+              left: 40.0,
               right: 12.0,
               bottom: 4,
             ),
@@ -223,7 +227,7 @@ class ContentList extends HookWidget {
               skillName,
               textAlign: myTurnFlg ? TextAlign.right : TextAlign.left,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: fontSize,
                 color: myTurnFlg
                     ? Colors.orange.shade200
                     : Colors.blueGrey.shade100,
@@ -242,6 +246,7 @@ class ContentList extends HookWidget {
     int rivalImageNumber,
     int displayNumber,
     List colorList,
+    double fontSize,
   ) {
     return targetContent.myTurnFlg
         ? Row(
@@ -250,12 +255,14 @@ class ContentList extends HookWidget {
               targetContent.displayList.length >= displayNumber + 2
                   ? _replyMessage(
                       targetContent,
+                      fontSize,
                     )
                   : Container(),
               targetContent.displayList.length >= displayNumber + 1
                   ? _sendMessage(
                       context,
                       targetContent,
+                      fontSize,
                     )
                   : Container(),
             ],
@@ -299,6 +306,7 @@ class ContentList extends HookWidget {
                         _sendMessage(
                           context,
                           targetContent,
+                          fontSize,
                         )
                       ],
                     )
@@ -306,6 +314,7 @@ class ContentList extends HookWidget {
               targetContent.displayList.length >= displayNumber + 2
                   ? _replyMessage(
                       targetContent,
+                      fontSize,
                     )
                   : Container(),
             ],
@@ -313,21 +322,17 @@ class ContentList extends HookWidget {
   }
 
   Widget _sendMessage(
-    BuildContext context,
-    DisplayContent targetContent,
-  ) {
+      BuildContext context, DisplayContent targetContent, double fontSize) {
     final bool myTurnFlg = targetContent.myTurnFlg;
 
     final double restrictWidth = myTurnFlg
         ? MediaQuery.of(context).size.width * .56
         : MediaQuery.of(context).size.width * .47;
-    const double fontSize = 16;
     final bool answerFlg = targetContent.answerFlg;
     final String message = targetContent.content;
     final List<int> skillIds = targetContent.skillIds;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 3),
+    return SizedBox(
       width: message.length * (fontSize + 1) > restrictWidth &&
               !(skillIds.contains(1) && !myTurnFlg)
           ? restrictWidth
@@ -336,11 +341,7 @@ class ContentList extends HookWidget {
         alignment: myTurnFlg ? Alignment.topRight : Alignment.topLeft,
         borderWidth: 2,
         borderColor: Colors.black,
-        elevation: 2.0,
-        shadowColor: Colors.grey,
         nipOffset: message.length * (fontSize + 1) > restrictWidth ? 23 : 14,
-        nipWidth: 12,
-        nipHeight: 8,
         nip: myTurnFlg ? BubbleNip.rightBottom : BubbleNip.leftBottom,
         color: answerFlg
             ? Colors.red.shade100
@@ -350,10 +351,10 @@ class ContentList extends HookWidget {
                     ? Colors.yellow.shade200
                     : Colors.white,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 2.5),
+          padding: EdgeInsets.only(bottom: Platform.isAndroid ? 2.5 : 0),
           child: Text(
             skillIds.contains(1) && !myTurnFlg ? ' ？？？' : message,
-            style: const TextStyle(fontSize: fontSize),
+            style: TextStyle(fontSize: fontSize),
           ),
         ),
       ),
@@ -362,6 +363,7 @@ class ContentList extends HookWidget {
 
   Widget _replyMessage(
     DisplayContent targetContent,
+    double fontSize,
   ) {
     final List<int> skillIds = targetContent.skillIds;
     final bool myTurnFlg = targetContent.myTurnFlg;
@@ -383,11 +385,11 @@ class ContentList extends HookWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(
-          left: 7.0,
-          right: 7.0,
-          top: 2.5,
-          bottom: 5.5,
+        padding: EdgeInsets.only(
+          left: 6,
+          right: 6,
+          top: 1.5,
+          bottom: Platform.isAndroid ? 4.5 : 2,
         ),
         child: Text(
           (skillIds.contains(4) && !myTurnFlg) ||
@@ -396,7 +398,7 @@ class ContentList extends HookWidget {
                   ? 'いいえ'
                   : 'はい'
               : targetContent.reply,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: fontSize),
         ),
       ),
     );

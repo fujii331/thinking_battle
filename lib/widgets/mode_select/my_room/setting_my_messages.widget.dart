@@ -69,7 +69,9 @@ class SettingMyMessages extends HookWidget {
           const SizedBox(height: 5),
           SizedBox(
             height: 210,
-            width: 230,
+            width: MediaQuery.of(context).size.width * .86 > 450
+                ? 350
+                : MediaQuery.of(context).size.width * .60,
             child: ListView.builder(
               itemBuilder: (context, index) {
                 return messageList[index];
@@ -152,16 +154,11 @@ class SettingMyMessages extends HookWidget {
             judgeFlgState.value = !judgeFlgState.value;
           },
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * .86 > 650
-              ? 360
-              : MediaQuery.of(context).size.width * .48,
-          child: Text(
-            message.message,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 17,
-            ),
+        Text(
+          message.message,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 17,
           ),
         ),
       ],

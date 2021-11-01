@@ -39,16 +39,17 @@ class SkillModal extends HookWidget {
 
     final selectSkillIdsState = useState([...selectSkillIdsList]);
 
+    final double paddingWidth = MediaQuery.of(context).size.width > 450.0
+        ? (MediaQuery.of(context).size.width - 450) / 2
+        : 5;
+
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.only(
-          left: 5,
-          right: 5,
+        padding: EdgeInsets.only(
+          left: paddingWidth,
+          right: paddingWidth,
           bottom: 25,
         ),
-        width: MediaQuery.of(context).size.width * 0.8 > 600.0
-            ? 600.0
-            : MediaQuery.of(context).size.width * 0.8,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

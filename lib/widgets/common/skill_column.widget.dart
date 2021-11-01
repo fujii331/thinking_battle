@@ -18,11 +18,11 @@ class SkillColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
+        SizedBox(
           height: 17,
           child: StackLabel(
             word: 'skills',
-            wordMinusSize: 0,
+            wordMinusSize: wordMinusSize,
           ),
         ),
         SkillTooltip(

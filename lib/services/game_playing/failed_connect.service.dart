@@ -18,7 +18,7 @@ Future failedConnect(
     dismissOnTouchOutside: false,
     dismissOnBackKeyPress: false,
     animType: AnimType.SCALE,
-    width: MediaQuery.of(context).size.width * .86 > 650 ? 650 : null,
+    width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
     body: const AttentionModal(
       topText: '外部に接続できません',
       secondText: '電波の状態をご確認ください。\n結果画面に移ります。',
