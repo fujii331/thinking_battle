@@ -154,11 +154,16 @@ class SettingMyMessages extends HookWidget {
             judgeFlgState.value = !judgeFlgState.value;
           },
         ),
-        Text(
-          message.message,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 17,
+        SizedBox(
+          width: MediaQuery.of(context).size.width * .86 > 450
+              ? 250
+              : MediaQuery.of(context).size.width * .42,
+          child: Text(
+            message.message,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 17,
+            ),
           ),
         ),
       ],

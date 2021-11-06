@@ -16,6 +16,7 @@ import 'package:thinking_battle/providers/player.provider.dart';
 
 import 'package:thinking_battle/widgets/game_start/center_row_start.widget.dart';
 import 'package:thinking_battle/widgets/game_start/failed_matching.widget.dart';
+import 'package:thinking_battle/widgets/game_start/initial_tutorial_start_modal.widget.dart';
 import 'package:thinking_battle/widgets/game_start/top_row_start.widget.dart';
 import 'package:thinking_battle/widgets/common/user_profile_common.widget.dart';
 
@@ -54,6 +55,45 @@ class GameStartScreen extends HookWidget {
     );
   }
 
+  Future tutorialGameStart(
+    BuildContext context,
+    ValueNotifier<bool> matchingFlg,
+    AudioCache soundEffect,
+    double seVolume,
+  ) async {
+    soundEffect.play(
+      'sounds/matching.mp3',
+      isNotification: true,
+      volume: seVolume,
+    );
+
+    await Future.delayed(
+      const Duration(milliseconds: 100),
+    );
+
+    matchingFlg.value = true;
+
+    await Future.delayed(
+      const Duration(milliseconds: 2500),
+    );
+
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.NO_HEADER,
+      headerAnimationLoop: false,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      showCloseIcon: false,
+      animType: AnimType.SCALE,
+      width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
+      body: InitialTutorialStartModal(
+        screenContext: context,
+        soundEffect: soundEffect,
+        seVolume: seVolume,
+      ),
+    ).show();
+  }
+
   @override
   Widget build(BuildContext context) {
     final String fiendMatchWord = useProvider(friendMatchWordProvider).state;
@@ -74,6 +114,8 @@ class GameStartScreen extends HookWidget {
     final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
     final bool trainingFlg = context.read(trainingProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
+    final bool initialTutorialFlg =
+        context.read(initialTutorialFlgProvider).state;
 
     final matchingQuitFlg = useState(false);
     final matchingFlg = useState(false);
@@ -102,7 +144,18 @@ class GameStartScreen extends HookWidget {
             await Future.delayed(
               const Duration(milliseconds: 1500),
             );
-            if (!matchingQuitFlg.value) {
+            if (initialTutorialFlg) {
+              tutorialTrainingInitialAction(
+                context,
+              );
+
+              tutorialGameStart(
+                context,
+                matchingFlg,
+                soundEffect,
+                seVolume,
+              );
+            } else if (!matchingQuitFlg.value) {
               trainingInitialAction(
                 context,
               );
@@ -246,6 +299,7 @@ class GameStartScreen extends HookWidget {
                         soundEffect: soundEffect,
                         seVolume: seVolume,
                         matchingQuitFlg: matchingQuitFlg,
+                        initialTutorialFlg: initialTutorialFlg,
                       ),
                       UserProfileCommon(
                         imageNumber: imageNumber,

@@ -33,8 +33,8 @@ final myTurnTimeProvider = StateProvider((ref) => 30);
 final rivalTurnTimeProvider = StateProvider((ref) => 45);
 
 final myTurnFlgProvider = StateProvider((ref) => false);
-final currentSkillPointProvider = StateProvider((ref) => 5);
-final enemySkillPointProvider = StateProvider((ref) => 5);
+final currentSkillPointProvider = StateProvider((ref) => 7);
+final enemySkillPointProvider = StateProvider((ref) => 7);
 
 final inputAnswerProvider = StateProvider((ref) => '');
 final selectableQuestionsProvider = StateProvider((ref) => <Question>[]);
@@ -57,3 +57,5 @@ final skillUseCountInGameProvider = StateProvider((ref) => 0);
 
 // 広告用
 final interstitialAdProvider = StateProvider<InterstitialAd?>((ref) => null);
+
+final initialTutorialFlgProvider = StateProvider((ref) => false);

@@ -5,6 +5,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thinking_battle/data/info_contents.dart';
+import 'package:thinking_battle/models/info.model.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
@@ -23,12 +25,50 @@ class ModeSelectScreen extends HookWidget {
 
   static const routeName = '/mode-select';
 
+  void openInfoListModal(
+    AudioCache soundEffect,
+    double seVolume,
+    BuildContext context,
+    List<String> watchedInfoList,
+  ) {
+    soundEffect.play(
+      'sounds/tap.mp3',
+      isNotification: true,
+      volume: seVolume,
+    );
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.NO_HEADER,
+      headerAnimationLoop: false,
+      dismissOnTouchOutside: true,
+      dismissOnBackKeyPress: true,
+      showCloseIcon: true,
+      animType: AnimType.SCALE,
+      width: MediaQuery.of(context).size.width * .86 > 450 ? 450 : null,
+      body: InfoModal(
+        soundEffect: soundEffect,
+        seVolume: seVolume,
+        watchedInfoList: watchedInfoList,
+      ),
+    ).show();
+  }
+
   @override
   Widget build(BuildContext context) {
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
     final int cardNumber = useProvider(cardNumberProvider).state;
     final List colorList = returnCardColorList(cardNumber);
+    final List<String> watchedInfoList =
+        useProvider(watchedInfoListProvider).state;
+
+    bool existNotWatchedInfoFlg = false;
+
+    for (Info infoContent in infoContents) {
+      if (!watchedInfoList.contains(infoContent.id.toString())) {
+        existNotWatchedInfoFlg = true;
+      }
+    }
 
     final int matchedCount = useProvider(matchedCountProvider).state;
 
@@ -100,38 +140,46 @@ class ModeSelectScreen extends HookWidget {
           ),
           centerTitle: true,
           backgroundColor: colorList[0][1].withOpacity(0.3),
-          leading: IconButton(
-            iconSize: 25,
-            icon: Icon(
-              Icons.info,
-              color: Colors.grey.shade200,
-            ),
-            onPressed: () {
-              soundEffect.play(
-                'sounds/tap.mp3',
-                isNotification: true,
-                volume: seVolume,
-              );
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.NO_HEADER,
-                headerAnimationLoop: false,
-                dismissOnTouchOutside: true,
-                dismissOnBackKeyPress: true,
-                showCloseIcon: true,
-                animType: AnimType.SCALE,
-                width:
-                    MediaQuery.of(context).size.width * .86 > 450 ? 450 : null,
-                body: InfoModal(
-                  soundEffect: soundEffect,
-                  seVolume: seVolume,
+          leading: Center(
+            child: Stack(
+              children: [
+                IconButton(
+                  iconSize: 27,
+                  icon: Icon(
+                    Icons.info,
+                    color: Colors.grey.shade200,
+                  ),
+                  onPressed: () => openInfoListModal(
+                    soundEffect,
+                    seVolume,
+                    context,
+                    watchedInfoList,
+                  ),
                 ),
-              ).show();
-            },
+                Padding(
+                  padding: const EdgeInsets.only(left: 25, top: 10),
+                  child: InkWell(
+                    onTap: () => openInfoListModal(
+                      soundEffect,
+                      seVolume,
+                      context,
+                      watchedInfoList,
+                    ),
+                    child: Icon(
+                      Icons.circle,
+                      color: existNotWatchedInfoFlg
+                          ? Colors.red
+                          : Colors.red.withOpacity(0),
+                      size: 13,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
             IconButton(
-              iconSize: 25,
+              iconSize: 28,
               icon: Icon(
                 Icons.home,
                 color: Colors.grey.shade200,
@@ -178,7 +226,7 @@ class ModeSelectScreen extends HookWidget {
                         height: 80,
                         color: colorList[0][1],
                         child: StackWord(
-                          word: 'マイルーム',
+                          word: 'ホーム',
                           wordColor: Colors.grey.shade200,
                           wordMinusSize: -4,
                         ),

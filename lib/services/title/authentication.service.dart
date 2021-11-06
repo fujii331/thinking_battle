@@ -4,8 +4,11 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:thinking_battle/providers/game.provider.dart';
 
 import 'package:thinking_battle/screens/mode_select.screen.dart';
+import 'package:thinking_battle/screens/tutorial/tutorial_game_system.screen.dart';
 import 'package:thinking_battle/widgets/common/comment_modal.widget.dart';
 import 'package:thinking_battle/widgets/common/loading_modal.widget.dart';
 
@@ -41,9 +44,9 @@ Future signUp(
 
     Navigator.pop(context);
 
-    // TODO 遊び方にとぶ
-    await Navigator.of(context).pushReplacementNamed(
-      ModeSelectScreen.routeName,
+    Navigator.of(context).pushReplacementNamed(
+      TutorialGameSystemScreen.routeName,
+      arguments: true,
     );
   } catch (e) {
     // ユーザー登録に失敗した場合
@@ -96,8 +99,7 @@ Future login(
     // ログインに成功した場合
     Navigator.pop(context);
 
-    // チャット画面に遷移＋ログイン画面を破棄
-    await Navigator.of(context).pushReplacementNamed(
+    Navigator.of(context).pushReplacementNamed(
       ModeSelectScreen.routeName,
     );
   } catch (e) {

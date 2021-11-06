@@ -12,19 +12,21 @@ class MessagePopUpMenu extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
   final bool myTurnFlg;
+  final int afterMessageTime;
+  final int selectMessageId;
 
   const MessagePopUpMenu({
     Key? key,
     required this.soundEffect,
     required this.seVolume,
     required this.myTurnFlg,
+    required this.afterMessageTime,
+    required this.selectMessageId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final int afterMessageTime = context.read(afterMessageTimeProvider).state;
     final bool enableMessageFlg = myTurnFlg && afterMessageTime == 0;
-    final int selectMessageId = context.read(selectMessageIdProvider).state;
     final List<int> myMessageIdsList =
         context.read(myMessageIdsListProvider).state;
 

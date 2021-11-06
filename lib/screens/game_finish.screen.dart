@@ -148,8 +148,9 @@ class GameFinishScreen extends HookWidget {
             ),
           ],
           top: -18,
+          // controller: screenNo,
           onTap: (int selectIndex) {
-            screenNo.value = selectIndex;
+            // screenNo.value = selectIndex;
             pageController.animateToPage(selectIndex,
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeOut);
@@ -160,10 +161,11 @@ class GameFinishScreen extends HookWidget {
           // currentIndex: screenNo.value,
         ),
         body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           // ページ切り替え時に実行する処理
           onPageChanged: (index) {
-            screenNo.value = index;
+            // screenNo.value = index;
           },
           children: [
             Result(

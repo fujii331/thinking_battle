@@ -27,19 +27,20 @@ class ProfileUpdateArea extends HookWidget {
     final judgeFlgState = useState(false);
     final playerNameState = useState('');
     final bool widthOk = MediaQuery.of(context).size.width > 400;
+    final bool widthMinimum = MediaQuery.of(context).size.width < 335;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: widthOk ? 15 : 0),
+          padding: EdgeInsets.symmetric(horizontal: widthOk ? 5 : 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: widthOk ? 15 : 0),
+                    padding: EdgeInsets.only(left: widthOk ? 12 : 0),
                     child: InkWell(
                       onTap: () {
                         soundEffect.play(
@@ -97,7 +98,12 @@ class ProfileUpdateArea extends HookWidget {
                   ),
                 ],
               ),
-              SizedBox(width: widthOk ? 60 : 20),
+              SizedBox(
+                  width: widthOk
+                      ? 40
+                      : widthMinimum
+                          ? 20
+                          : 30),
               Column(
                 children: [
                   Column(

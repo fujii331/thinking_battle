@@ -1,16 +1,17 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:intl/intl.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'dart:async';
 
 import 'package:thinking_battle/models/send_content.model.dart';
-import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/screens/game_finish.screen.dart';
+import 'package:thinking_battle/screens/tutorial/tutorial_top.screen.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 import 'package:thinking_battle/services/game_playing/common_action.service.dart';
 import 'package:thinking_battle/services/game_playing/failed_connect.service.dart';
@@ -161,8 +162,7 @@ class GamePlayingScreen extends HookWidget {
         }
 
         if (context.read(afterMessageTimeProvider).state > 0) {
-          final int afterMessageTime =
-              context.read(afterMessageTimeProvider).state -= 1;
+          context.read(afterMessageTimeProvider).state -= 1;
         }
 
         if (timer.isActive && context.read(timerCancelFlgProvider).state) {
@@ -180,8 +180,9 @@ class GamePlayingScreen extends HookWidget {
     final double seVolume = useProvider(seVolumeProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
     final bool precedingFlg = useProvider(precedingFlgProvider).state;
+    final bool initialTutorialFlg =
+        context.read(initialTutorialFlgProvider).state;
 
-    final int myTurnTime = useProvider(myTurnTimeProvider).state;
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
     final bool myTurnFlg = useProvider(myTurnFlgProvider).state;
 
@@ -211,6 +212,8 @@ class GamePlayingScreen extends HookWidget {
                 .doc(precedingFlg ? '先行' : '後攻')
             : null;
 
+    final List rivalColorList = returnCardColorList(rivalInfo.cardNumber);
+
     StreamSubscription<DocumentSnapshot>? rivalListenSubscription;
 
     useEffect(() {
@@ -237,20 +240,23 @@ class GamePlayingScreen extends HookWidget {
             );
           }, onError: (Object o) {
             // 接続失敗
-            // TODO 相手から更新されたタイミングで電波が切れてたけど、すぐ戻った場合は更新されるのか試す必要あり
             failedConnect(context);
           });
         }
 
-        timeStart(
-          context,
-          scrollController,
-          myActionDoc,
-          rivalActionDoc,
-          rivalListenSubscription,
-          soundEffect,
-          seVolume,
-        );
+        if (!initialTutorialFlg) {
+          // チュートリアルではタイマーなし
+          timeStart(
+            context,
+            scrollController,
+            myActionDoc,
+            rivalActionDoc,
+            rivalListenSubscription,
+            soundEffect,
+            seVolume,
+          );
+        }
+
         await showDialog<int>(
           context: context,
           barrierDismissible: false,
@@ -286,7 +292,7 @@ class GamePlayingScreen extends HookWidget {
     }, []);
 
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -299,6 +305,19 @@ class GamePlayingScreen extends HookWidget {
           ),
           centerTitle: true,
           backgroundColor: Colors.blueGrey.shade900.withOpacity(0.9),
+          actions: <Widget>[
+            initialTutorialFlg
+                ? TextButton(
+                    onPressed: () => Navigator.of(context).pushNamed(
+                      TutorialTopScreen.routeName,
+                    ),
+                    child: const Text(
+                      "ヘルプ",
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  )
+                : Container(),
+          ],
         ),
         body: Stack(
           children: <Widget>[
@@ -322,13 +341,15 @@ class GamePlayingScreen extends HookWidget {
                           soundEffect: soundEffect,
                           seVolume: seVolume,
                           rivalInfo: rivalInfo,
-                          myTurnTime: myTurnTime,
                           myTurnFlg: myTurnFlg,
+                          colorList: rivalColorList,
+                          initialTutorialFlg: initialTutorialFlg,
                         ),
                         const SizedBox(height: 15),
                         ContentList(
                           scrollController: scrollController,
                           rivalInfo: rivalInfo,
+                          rivalColorList: rivalColorList,
                         ),
                         const SizedBox(height: 20),
                         BottomActionButtons(
@@ -340,6 +361,9 @@ class GamePlayingScreen extends HookWidget {
                           seVolume: seVolume,
                           myTurnFlg: myTurnFlg,
                         ),
+                        Platform.isAndroid
+                            ? Container()
+                            : const SizedBox(height: 20),
                       ],
                     ),
                   ),

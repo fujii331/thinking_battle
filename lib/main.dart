@@ -3,13 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:thinking_battle/screens/game_finish.screen.dart';
 import 'package:thinking_battle/screens/game_playing.screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/screens/game_start.screen.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:thinking_battle/screens/tutorial/tutorial_game_system.screen.dart';
+import 'package:thinking_battle/screens/tutorial/tutorial_page.screen.dart';
+import 'package:thinking_battle/screens/tutorial/tutorial_tips.screen.dart';
+import 'package:thinking_battle/screens/tutorial/tutorial_top.screen.dart';
 
 import './screens/title.screen.dart';
 import './screens/mode_select.screen.dart';
@@ -161,6 +164,14 @@ class MyApp extends HookWidget {
             const GamePlayingScreen(),
         GameFinishScreen.routeName: (BuildContext context) =>
             const GameFinishScreen(),
+        TutorialTopScreen.routeName: (BuildContext context) =>
+            const TutorialTopScreen(),
+        TutorialTipsScreen.routeName: (BuildContext context) =>
+            const TutorialTipsScreen(),
+        TutorialGameSystemScreen.routeName: (BuildContext context) =>
+            const TutorialGameSystemScreen(),
+        TutorialPageScreen.routeName: (BuildContext context) =>
+            const TutorialPageScreen(),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(

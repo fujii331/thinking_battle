@@ -224,56 +224,5 @@ class GachaSelect extends HookWidget {
         ),
       ),
     );
-    // SizedBox(
-    //   width: 170,
-    //   height: 50,
-    //   child: ElevatedButton(
-    //     onPressed: () async {
-    //       soundEffect.play(
-    //         'sounds/tap.mp3',
-    //         isNotification: true,
-    //         volume: seVolume,
-    //       );
-
-    //       AwesomeDialog(
-    //         context: context,
-    //         dialogType: DialogType.NO_HEADER,
-    //         headerAnimationLoop: false,
-    //         dismissOnTouchOutside: true,
-    //         dismissOnBackKeyPress: true,
-    //         showCloseIcon: true,
-    //         animType: AnimType.SCALE,
-    //         width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
-    //         body: buttonNumber == 3
-    //             ? const MessageGacha()
-    //             : ImageItemGacha(buttonNumber),
-    //       ).show();
-    //     },
-    //     child: Text(
-    //       text,
-    //       style: const TextStyle(
-    //         fontSize: 17,
-    //         color: Colors.black,
-    //       ),
-    //     ),
-    //     style: ElevatedButton.styleFrom(
-    //       primary: color,
-    //       elevation: 4,
-    //       shadowColor: Colors.grey,
-    //       padding: const EdgeInsets.symmetric(
-    //         horizontal: 10,
-    //         vertical: 5,
-    //       ),
-    //       textStyle: Theme.of(context).textTheme.button,
-    //       shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(20),
-    //       ),
-    //       side: BorderSide(
-    //         width: 2,
-    //         color: Colors.grey.shade800,
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

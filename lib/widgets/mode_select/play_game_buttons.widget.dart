@@ -80,7 +80,7 @@ class PlayGameButtons extends StatelessWidget {
               body: const PasswordSetting(),
             ).show();
           } else {
-            context.read(rivalInfoProvider).state = dummyPlayerInfo;
+            // context.read(rivalInfoProvider).state = dummyPlayerInfo;
             context.read(friendMatchWordProvider).state = '';
             context.read(bgmProvider).state.stop();
 

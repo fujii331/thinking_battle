@@ -22,6 +22,8 @@ class CenterRowFinish extends HookWidget {
     final double seVolume = useProvider(seVolumeProvider).state;
     final String friendMatchWord = useProvider(friendMatchWordProvider).state;
     final bool friendMatchFlg = friendMatchWord != '';
+    final bool initialTutorialFlg =
+        context.read(initialTutorialFlgProvider).state;
 
     return Column(
       children: [
@@ -52,86 +54,118 @@ class CenterRowFinish extends HookWidget {
         const SizedBox(height: 15),
         SizedBox(
           height: 40,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 80,
-                height: 40,
-                child: ElevatedButton(
-                  child: const Text('戻る'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red.shade600,
-                    padding: const EdgeInsets.only(
-                      bottom: 3,
+          child: initialTutorialFlg
+              ? SizedBox(
+                  width: 120,
+                  height: 40,
+                  child: ElevatedButton(
+                    child: const Text('メニューへ'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue.shade500,
+                      padding: const EdgeInsets.only(
+                        bottom: 3,
+                      ),
+                      shape: const StadiumBorder(),
+                      side: BorderSide(
+                        width: 2,
+                        color: Colors.blue.shade700,
+                      ),
                     ),
-                    shape: const StadiumBorder(),
-                    side: BorderSide(
-                      width: 2,
-                      color: Colors.red.shade700,
-                    ),
+                    onPressed: () {
+                      soundEffect.play(
+                        'sounds/tap.mp3',
+                        isNotification: true,
+                        volume: seVolume,
+                      );
+
+                      context.read(initialTutorialFlgProvider).state = false;
+
+                      Navigator.of(context).pushReplacementNamed(
+                        ModeSelectScreen.routeName,
+                      );
+                    },
                   ),
-                  onPressed: () {
-                    soundEffect.play(
-                      'sounds/tap.mp3',
-                      isNotification: true,
-                      volume: seVolume,
-                    );
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 80,
+                      height: 40,
+                      child: ElevatedButton(
+                        child: const Text('戻る'),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red.shade600,
+                          padding: const EdgeInsets.only(
+                            bottom: 3,
+                          ),
+                          shape: const StadiumBorder(),
+                          side: BorderSide(
+                            width: 2,
+                            color: Colors.red.shade700,
+                          ),
+                        ),
+                        onPressed: () {
+                          soundEffect.play(
+                            'sounds/tap.mp3',
+                            isNotification: true,
+                            volume: seVolume,
+                          );
 
-                    if (context.read(changedTrainingProvider).state) {
-                      context.read(changedTrainingProvider).state = false;
-                      context.read(trainingProvider).state = false;
-                    }
+                          if (context.read(changedTrainingProvider).state) {
+                            context.read(changedTrainingProvider).state = false;
+                            context.read(trainingProvider).state = false;
+                          }
 
-                    Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(ModeSelectScreen.routeName),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 20),
-              SizedBox(
-                width: 120,
-                height: 40,
-                child: ElevatedButton(
-                  child: Text(friendMatchFlg ? 'もう一回' : '次のゲーム'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue.shade500,
-                    padding: const EdgeInsets.only(
-                      bottom: 3,
+                          Navigator.popUntil(
+                            context,
+                            ModalRoute.withName(ModeSelectScreen.routeName),
+                          );
+                        },
+                      ),
                     ),
-                    shape: const StadiumBorder(),
-                    side: BorderSide(
-                      width: 2,
-                      color: Colors.blue.shade700,
+                    const SizedBox(width: 20),
+                    SizedBox(
+                      width: 120,
+                      height: 40,
+                      child: ElevatedButton(
+                        child: Text(friendMatchFlg ? 'もう一回' : '次のゲーム'),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue.shade500,
+                          padding: const EdgeInsets.only(
+                            bottom: 3,
+                          ),
+                          shape: const StadiumBorder(),
+                          side: BorderSide(
+                            width: 2,
+                            color: Colors.blue.shade700,
+                          ),
+                        ),
+                        onPressed: () {
+                          context.read(bgmProvider).state.stop();
+                          soundEffect.play(
+                            'sounds/tap.mp3',
+                            isNotification: true,
+                            volume: seVolume,
+                          );
+
+                          if (context.read(changedTrainingProvider).state) {
+                            context.read(changedTrainingProvider).state = false;
+                            context.read(trainingProvider).state = false;
+                          }
+
+                          Navigator.popUntil(
+                            context,
+                            ModalRoute.withName(ModeSelectScreen.routeName),
+                          );
+                          Navigator.of(context).pushNamed(
+                            GameStartScreen.routeName,
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    context.read(bgmProvider).state.stop();
-                    soundEffect.play(
-                      'sounds/tap.mp3',
-                      isNotification: true,
-                      volume: seVolume,
-                    );
-
-                    if (context.read(changedTrainingProvider).state) {
-                      context.read(changedTrainingProvider).state = false;
-                      context.read(trainingProvider).state = false;
-                    }
-
-                    Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(ModeSelectScreen.routeName),
-                    );
-                    Navigator.of(context).pushNamed(
-                      GameStartScreen.routeName,
-                    );
-                  },
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ],
     );

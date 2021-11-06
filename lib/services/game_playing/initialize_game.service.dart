@@ -64,3 +64,27 @@ void trainingInitialAction(
   context.read(allQuestionsProvider).state = quiz.questions;
   context.read(correctAnswersProvider).state = quiz.correctAnswers;
 }
+
+void tutorialTrainingInitialAction(
+  BuildContext context,
+) {
+  context.read(enemySkillPointProvider).state = 7;
+
+  context.read(precedingFlgProvider).state = true;
+
+  context.read(rivalInfoProvider).state = const PlayerInfo(
+    name: 'CPU',
+    rate: 1000.0,
+    imageNumber: 6,
+    cardNumber: 4,
+    matchedCount: 0,
+    continuousWinCount: 0,
+    skillList: [1, 2, 3],
+  );
+
+  final Quiz quiz = quizData[0];
+  // 問題を設定
+  context.read(quizThemaProvider).state = quiz.thema;
+  context.read(allQuestionsProvider).state = quiz.questions;
+  context.read(correctAnswersProvider).state = quiz.correctAnswers;
+}

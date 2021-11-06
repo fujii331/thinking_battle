@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
@@ -50,6 +49,9 @@ void firstSetting(BuildContext context) async {
     'sounds/waiting_answer.mp3',
     'sounds/fault.mp3',
   ]);
+  // 閲覧済み情報リスト
+  context.read(watchedInfoListProvider).state =
+      prefs.getStringList('watchedInfoList') ?? [];
 
   // プレイヤー名
   context.read(playerNameProvider).state = prefs.getString('playerName') ?? '';

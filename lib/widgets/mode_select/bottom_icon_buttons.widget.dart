@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:thinking_battle/screens/tutorial/tutorial_top.screen.dart';
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha_select.widget.dart';
 
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/sound_mode.widget.dart';
@@ -65,8 +66,6 @@ class BottomIconButtons extends HookWidget {
 
   Widget _iconButton(
     BuildContext context,
-    // Color color,
-    // IconData icon,
     String imagePath,
     AudioCache soundEffect,
     int buttonPuttern,
@@ -125,6 +124,10 @@ class BottomIconButtons extends HookWidget {
                         seVolume: seVolume,
                       ),
               ).show();
+            } else if (buttonPuttern == 4) {
+              Navigator.of(context).pushNamed(
+                TutorialTopScreen.routeName,
+              );
             }
           },
         ),
