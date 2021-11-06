@@ -49,3 +49,7 @@ app.*.map.json
 /ios/Runner/GoogleService-Info.plist
 
 lib/data/quiz_data.dart
+
+assets/
+web/splash/
+lib/data/

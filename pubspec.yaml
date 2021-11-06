@@ -18,7 +18,7 @@ dependencies:
   audioplayers: ^0.19.1
   awesome_dialog: ^2.1.1
   flutter_spinkit: "^5.1.0"
-  lottie: ^1.1.0
+  lottie: ^1.2.1
   package_info: ^2.0.2
   url_launcher: ^6.0.10
   app_review: ^2.1.1+1
@@ -28,23 +28,32 @@ dependencies:
   firebase_core: ^1.6.0
   firebase_remote_config: ^0.11.0
   flutter_easyloading: ^3.0.3
+  cloud_firestore: ^2.5.3
+  convex_bottom_bar: ^3.0.0
+  share: ^2.0.4
+  google_mobile_ads: ^0.13.5
+  flutter_sliding_tutorial: ^1.1.0+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_native_splash: ^1.2.1
-
   flutter_lints: ^1.0.0
 
 flutter_native_splash:
-  image: "assets/icons/small-logo.jpg"
-  color: "000000"
+  image: "assets/icons/flash.png"
+  color: "191970"
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
+    - assets/images/background/
+    - assets/images/bottom_icons/
+    - assets/images/cards/
+    - assets/images/characters/
+    - assets/images/game/
     - assets/sounds/
     - assets/lottie/
 
@@ -54,9 +63,15 @@ flutter:
         - asset: assets/fonts/KaiseiOpti-Regular.ttf
         - asset: assets/fonts/KaiseiOpti-Bold.ttf
           weight: 700
-    - family: ReggaeOne
+    - family: Stick
       fonts:
         - asset: assets/fonts/Stick-Regular.ttf
+    - family: ZenKakuGothicNew
+      fonts:
+        - asset: assets/fonts/ZenKakuGothicNew-Regular.ttf
     - family: KiwiMaru
       fonts:
         - asset: assets/fonts/KiwiMaru-Regular.ttf
+    - family: RocknRollOne
+      fonts:
+        - asset: assets/fonts/RocknRollOne-Regular.ttf
