@@ -82,6 +82,7 @@ class CenterRowFinish extends HookWidget {
 
                       Navigator.of(context).pushReplacementNamed(
                         ModeSelectScreen.routeName,
+                        arguments: true,
                       );
                     },
                   ),
@@ -112,9 +113,12 @@ class CenterRowFinish extends HookWidget {
                             volume: seVolume,
                           );
 
-                          if (context.read(changedTrainingProvider).state) {
-                            context.read(changedTrainingProvider).state = false;
-                            context.read(trainingProvider).state = false;
+                          if (context.read(changedTrainingFlgProvider).state) {
+                            context.read(changedTrainingFlgProvider).state =
+                                false;
+                            context.read(rivalDisconnectedFlgProvider).state =
+                                false;
+                            context.read(trainingFlgProvider).state = false;
                           }
 
                           Navigator.popUntil(
@@ -149,9 +153,12 @@ class CenterRowFinish extends HookWidget {
                             volume: seVolume,
                           );
 
-                          if (context.read(changedTrainingProvider).state) {
-                            context.read(changedTrainingProvider).state = false;
-                            context.read(trainingProvider).state = false;
+                          if (context.read(changedTrainingFlgProvider).state) {
+                            context.read(changedTrainingFlgProvider).state =
+                                false;
+                            context.read(rivalDisconnectedFlgProvider).state =
+                                false;
+                            context.read(trainingFlgProvider).state = false;
                           }
 
                           Navigator.popUntil(

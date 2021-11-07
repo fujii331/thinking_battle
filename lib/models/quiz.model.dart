@@ -17,11 +17,13 @@ class Quiz {
   final String thema;
   final List<Question> questions;
   final List<String> correctAnswers;
+  final List<String> wrongAnswers;
 
   const Quiz({
     required this.id,
     required this.thema,
     required this.questions,
     required this.correctAnswers,
+    required this.wrongAnswers,
   });
 }

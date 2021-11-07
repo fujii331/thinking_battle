@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:thinking_battle/services/admob/bannar_action.service.dart';
 
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
@@ -15,10 +13,16 @@ import 'package:thinking_battle/widgets/game_finish/user_profile_finish.widget.d
 
 class Result extends HookWidget {
   final bool? winFlg;
+  final bool trainingFlg;
+  final bool changedTrainingFlg;
+  final bool rivalDisconnectedFlg;
 
   const Result({
     Key? key,
     required this.winFlg,
+    required this.trainingFlg,
+    required this.changedTrainingFlg,
+    required this.rivalDisconnectedFlg,
   }) : super(key: key);
 
   @override
@@ -32,11 +36,9 @@ class Result extends HookWidget {
         useProvider(continuousWinCountProvider).state;
     final String playerName = useProvider(playerNameProvider).state;
     final double rate = useProvider(rateProvider).state;
-    final bool trainingFlg = useProvider(trainingProvider).state;
-    final bool changedTraining = useProvider(changedTrainingProvider).state;
     final String friendMatchWord = useProvider(friendMatchWordProvider).state;
     final bool notRateChangeFlg =
-        (trainingFlg && !changedTraining) || friendMatchWord != '';
+        (trainingFlg && !changedTrainingFlg) || friendMatchWord != '';
     final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
 
     return Scaffold(
@@ -62,7 +64,11 @@ class Result extends HookWidget {
                       userRate: rivalInfo.rate,
                       mySkillIdsList: rivalInfo.skillList,
                       myDataFlg: false,
-                      winFlg: winFlg == null ? null : !winFlg!,
+                      winFlg: rivalDisconnectedFlg
+                          ? false
+                          : winFlg == null
+                              ? null
+                              : !winFlg!,
                       notRateChangeFlg: notRateChangeFlg,
                     ),
                     const SizedBox(height: 15),
@@ -78,7 +84,8 @@ class Result extends HookWidget {
                       mySkillIdsList: mySkillIdsList,
                       myDataFlg: true,
                       winFlg: winFlg,
-                      notRateChangeFlg: notRateChangeFlg,
+                      notRateChangeFlg: notRateChangeFlg ||
+                          (rivalDisconnectedFlg && winFlg == false),
                     ),
                   ],
                 ),

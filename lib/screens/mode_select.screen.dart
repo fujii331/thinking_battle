@@ -16,6 +16,7 @@ import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
 
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/info_modal.widget.dart';
+import 'package:thinking_battle/widgets/mode_select/menu_explain_modal.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_info.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/play_game_buttons.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_room_button.widget.dart';
@@ -55,6 +56,9 @@ class ModeSelectScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool afterTutorialFlg =
+        ModalRoute.of(context)?.settings.arguments as bool;
+
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
     final int cardNumber = useProvider(cardNumberProvider).state;
@@ -112,6 +116,22 @@ class ModeSelectScreen extends HookWidget {
           soundEffect,
           seVolume,
         );
+
+        if (afterTutorialFlg) {
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.NO_HEADER,
+            headerAnimationLoop: false,
+            dismissOnTouchOutside: true,
+            dismissOnBackKeyPress: true,
+            showCloseIcon: true,
+            animType: AnimType.SCALE,
+            width: MediaQuery.of(context).size.width > 420 ? 380 : null,
+            body: const MenuExplainModal(
+              tutorialFlg: true,
+            ),
+          ).show();
+        }
       });
       return null;
     }, const []);

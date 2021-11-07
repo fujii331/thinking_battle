@@ -6,11 +6,11 @@ import 'package:thinking_battle/models/quiz.model.dart';
 
 final quizThemaProvider = StateProvider((ref) => '');
 final correctAnswersProvider = StateProvider((ref) => <String>[]);
+final wrongAnswersProvider = StateProvider((ref) => <String>[]);
+
 final allQuestionsProvider = StateProvider((ref) => <Question>[]);
 final displayContentListProvider = StateProvider((ref) => <DisplayContent>[]);
 final turnCountProvider = StateProvider((ref) => 0);
-final trainingProvider = StateProvider((ref) => false);
-final changedTrainingProvider = StateProvider((ref) => false);
 final friendMatchWordProvider = StateProvider((ref) => '');
 final rivalInfoProvider = StateProvider((ref) => dummyPlayerInfo);
 final matchingWaitingIdProvider = StateProvider((ref) => '');
@@ -51,6 +51,8 @@ final displayRivalturnSetFlgProvider = StateProvider((ref) => false);
 final displayQuestionResearchProvider = StateProvider((ref) => 0);
 final animationQuestionResearchProvider = StateProvider((ref) => false);
 final spChargeTurnProvider = StateProvider((ref) => 0);
+final rivalSpChargeTurnProvider = StateProvider((ref) => 0);
+
 final myTrapCountProvider = StateProvider((ref) => 0);
 final enemyTrapCountProvider = StateProvider((ref) => 0);
 final skillUseCountInGameProvider = StateProvider((ref) => 0);
@@ -59,3 +61,11 @@ final skillUseCountInGameProvider = StateProvider((ref) => 0);
 final interstitialAdProvider = StateProvider<InterstitialAd?>((ref) => null);
 
 final initialTutorialFlgProvider = StateProvider((ref) => false);
+
+final cpuMessageIdsListProvider = StateProvider((ref) => <int>[1, 2, 3, 4]);
+final afterRivalMessageTimeProvider = StateProvider((ref) => 0);
+
+final trainingFlgProvider = StateProvider((ref) => false);
+final changedTrainingFlgProvider = StateProvider((ref) => false);
+final rivalDisconnectedFlgProvider = StateProvider((ref) => false);
+// final trainingStatusProvider = StateProvider((ref) => 0);

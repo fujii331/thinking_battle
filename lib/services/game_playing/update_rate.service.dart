@@ -11,8 +11,12 @@ import 'package:thinking_battle/providers/player.provider.dart';
 Future updateRate(
   BuildContext context,
   bool winFlg,
+  bool rivalDisconnectedFlg,
 ) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  // 接続が切れた場合のレートを更新
+  prefs.setDouble('failedRate', 0.0);
+
   final double myRate = context.read(rateProvider).state;
 
   // 敵のレート
@@ -28,12 +32,14 @@ Future updateRate(
   final double newRivalRate = getNewRate(
     rivalRate,
     myRate,
-    !winFlg,
+    rivalDisconnectedFlg ? false : !winFlg,
   );
 
-  // レート更新
-  context.read(rateProvider).state = newRate;
-  prefs.setDouble('rate', newRate);
+  if (!rivalDisconnectedFlg || winFlg) {
+    // レート更新
+    context.read(rateProvider).state = newRate;
+    prefs.setDouble('rate', newRate);
+  }
 
   // レート更新
   context.read(rivalInfoProvider).state = PlayerInfo(
@@ -45,9 +51,6 @@ Future updateRate(
     continuousWinCount: winFlg ? 0 : rivalInfo.continuousWinCount + 1,
     skillList: rivalInfo.skillList,
   );
-
-  // 接続が切れた場合のレートを更新
-  prefs.setDouble('failedRate', 0.0);
 
   if (winFlg) {
     final double maxRate = context.read(maxRateProvider).state;

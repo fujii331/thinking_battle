@@ -16,6 +16,7 @@ void commonInitialAction(
   context.read(bgmProvider).state.stop();
   context.read(currentSkillPointProvider).state = 7;
   context.read(afterMessageTimeProvider).state = 0;
+  context.read(afterRivalMessageTimeProvider).state = 0;
   context.read(alreadyseenQuestionsProvider).state = [];
   context.read(selectableQuestionsProvider).state = [];
   context.read(displayContentListProvider).state = [];
@@ -63,20 +64,22 @@ void trainingInitialAction(
   context.read(quizThemaProvider).state = quiz.thema;
   context.read(allQuestionsProvider).state = quiz.questions;
   context.read(correctAnswersProvider).state = quiz.correctAnswers;
+  context.read(wrongAnswersProvider).state = quiz.wrongAnswers;
 }
 
 void tutorialTrainingInitialAction(
   BuildContext context,
 ) {
   context.read(enemySkillPointProvider).state = 7;
+  context.read(cpuMessageIdsListProvider).state = [0, 0, 0, 0];
 
   context.read(precedingFlgProvider).state = true;
 
   context.read(rivalInfoProvider).state = const PlayerInfo(
-    name: 'CPU',
+    name: 'チュートリくん',
     rate: 1000.0,
-    imageNumber: 6,
-    cardNumber: 4,
+    imageNumber: 1,
+    cardNumber: 1,
     matchedCount: 0,
     continuousWinCount: 0,
     skillList: [1, 2, 3],
@@ -87,4 +90,5 @@ void tutorialTrainingInitialAction(
   context.read(quizThemaProvider).state = quiz.thema;
   context.read(allQuestionsProvider).state = quiz.questions;
   context.read(correctAnswersProvider).state = quiz.correctAnswers;
+  context.read(wrongAnswersProvider).state = quiz.wrongAnswers;
 }

@@ -91,7 +91,7 @@ class PasswordSetting extends HookWidget {
                       );
                       // context.read(rivalInfoProvider).state = dummyPlayerInfo;
                       context.read(bgmProvider).state.stop();
-                      context.read(trainingProvider).state = false;
+                      context.read(trainingFlgProvider).state = false;
 
                       context.read(friendMatchWordProvider).state =
                           passwordState.value;

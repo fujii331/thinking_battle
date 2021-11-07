@@ -24,12 +24,15 @@ class GameFinishScreen extends HookWidget {
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
-    final bool trainingFlg = useProvider(trainingProvider).state;
-    final bool changedTraining = useProvider(changedTrainingProvider).state;
+    final bool trainingFlg = useProvider(trainingFlgProvider).state;
+    final bool changedTrainingFlg =
+        useProvider(changedTrainingFlgProvider).state;
     final String friendMatchWord = useProvider(friendMatchWordProvider).state;
     final bool friendMatchFlg = friendMatchWord != '';
+    final bool rivalDisconnectedFlg =
+        useProvider(rivalDisconnectedFlgProvider).state;
 
-    final screenNo = useState<int>(0);
+    // final screenNo = useState<int>(0);
     final pageController = usePageController(initialPage: 0, keepPage: true);
 
     final resultBundge = winFlg == null
@@ -49,7 +52,7 @@ class GameFinishScreen extends HookWidget {
           const Duration(milliseconds: 500),
         );
 
-        if (!trainingFlg || changedTraining) {
+        if (!trainingFlg || changedTrainingFlg) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           if (!friendMatchFlg) {
@@ -65,7 +68,7 @@ class GameFinishScreen extends HookWidget {
           }
 
           if (winFlg == true) {
-            if (!trainingFlg && !changedTraining) {
+            if (!trainingFlg && !changedTrainingFlg && !rivalDisconnectedFlg) {
               // 対戦部屋
               DocumentReference<Map<String, dynamic>>? playingRoomDoc =
                   FirebaseFirestore.instance
@@ -95,7 +98,7 @@ class GameFinishScreen extends HookWidget {
                 prefs.setInt('maxContinuousWinCount', updatedCount);
               }
             }
-          } else if (!friendMatchFlg) {
+          } else if (!friendMatchFlg && !rivalDisconnectedFlg) {
             context.read(continuousWinCountProvider).state = 0;
             prefs.setInt('continuousWinCount', 0);
           }
@@ -170,6 +173,9 @@ class GameFinishScreen extends HookWidget {
           children: [
             Result(
               winFlg: winFlg,
+              trainingFlg: trainingFlg,
+              changedTrainingFlg: changedTrainingFlg,
+              rivalDisconnectedFlg: rivalDisconnectedFlg,
             ),
             const ActionedList(),
           ],

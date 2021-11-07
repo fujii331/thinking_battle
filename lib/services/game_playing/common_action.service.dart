@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/data/skills.dart';
 import 'dart:math';
 
@@ -107,8 +107,11 @@ Future turnAction(
       if (myTurnFlg) {
         // メッセージを初期化
         context.read(selectMessageIdProvider).state = 0;
-        // メッセージカウントを減少
+        // メッセージ時間を初期化
         context.read(afterMessageTimeProvider).state = 60;
+      } else if (context.read(trainingFlgProvider).state) {
+        // メッセージ時間を初期化
+        context.read(afterRivalMessageTimeProvider).state = 60;
       }
 
       await Future.delayed(
@@ -451,6 +454,21 @@ Future turnAction(
       if (sendContent.skillIds.contains(3)) {
         context.read(forceQuestionFlgProvider).state = true;
       }
+
+      final rivalSpChargeTurn = context.read(rivalSpChargeTurnProvider).state;
+
+      // SPチャージ
+      if (sendContent.skillIds.contains(6)) {
+        context.read(spChargeTurnProvider).state = 4;
+      }
+
+      // SP追加
+      if (rivalSpChargeTurn > 0) {
+        context.read(enemySkillPointProvider).state += 3;
+        context.read(rivalSpChargeTurnProvider).state -= 1;
+      } else {
+        context.read(enemySkillPointProvider).state += 1;
+      }
     }
 
     await Future.delayed(
@@ -476,6 +494,42 @@ Future turnAction(
     displayContentList.last.displayList.add(0);
     context.read(displayContentListProvider).state = displayContentList;
   } else {
+    // メッセージの表示
+    if (sendContent.messageId != 0) {
+      // メッセージ表示
+      soundEffect.play(
+        'sounds/rival_message.mp3',
+        isNotification: true,
+        volume: seVolume,
+      );
+
+      displayContentList.last.displayList.add(0);
+      context.read(displayContentListProvider).state = displayContentList;
+
+      if (myTurnFlg) {
+        // メッセージを初期化
+        context.read(selectMessageIdProvider).state = 0;
+        // メッセージ時間を初期化
+        context.read(afterMessageTimeProvider).state = 60;
+      } else if (context.read(trainingFlgProvider).state) {
+        // メッセージ時間を初期化
+        context.read(afterRivalMessageTimeProvider).state = 60;
+      }
+
+      await Future.delayed(
+        const Duration(milliseconds: 70),
+      );
+
+      scrollToBottom(
+        context,
+        scrollController,
+      );
+
+      await Future.delayed(
+        const Duration(milliseconds: 630),
+      );
+    }
+
     // 正解判定
     final correctAnswerFlg =
         context.read(correctAnswersProvider).state.contains(sendContent.answer);
@@ -568,13 +622,14 @@ Future turnAction(
         isNotification: true,
         volume: seVolume,
       );
-      if ((!context.read(trainingProvider).state &&
+      if ((!context.read(trainingFlgProvider).state &&
               context.read(friendMatchWordProvider).state == '') ||
-          context.read(changedTrainingProvider).state) {
+          context.read(changedTrainingFlgProvider).state) {
         // レート計算
         await updateRate(
           context,
           myTurnFlg,
+          context.read(rivalDisconnectedFlgProvider).state,
         );
       }
 
@@ -662,6 +717,11 @@ Future turnAction(
     await Future.delayed(
       const Duration(milliseconds: 1500),
     );
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // 接続が切れた場合のレートを更新
+    prefs.setDouble('failedRate', 0.0);
+
     // 質問無くなった宣言
     final DisplayContent displayContent = DisplayContent(
       content: 'もう質問ない...',
@@ -855,12 +915,13 @@ Future initializeAction(
     // 相手のターンの表示
     context.read(displayRivalturnSetFlgProvider).state = true;
 
-    if (context.read(trainingProvider).state) {
+    if (context.read(trainingFlgProvider).state) {
       cpuAction(
         context,
         scrollController,
         soundEffect,
         seVolume,
+        false,
       );
     }
   }

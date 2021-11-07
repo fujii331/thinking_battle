@@ -24,7 +24,7 @@ class TutorialGameSystemScreen extends HookWidget {
     );
 
     context.read(initialTutorialFlgProvider).state = true;
-    context.read(trainingProvider).state = true;
+    context.read(trainingFlgProvider).state = true;
     context.read(bgmProvider).state.stop();
 
     Navigator.of(context).pushReplacementNamed(

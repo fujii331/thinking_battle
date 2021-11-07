@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:thinking_battle/screens/tutorial/tutorial_page.screen.dart';
 import 'package:thinking_battle/screens/tutorial/tutorial_game_system.screen.dart';
 import 'package:thinking_battle/screens/tutorial/tutorial_tips.screen.dart';
-import 'package:thinking_battle/services/game_playing/initialize_game.service.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
+import 'package:thinking_battle/widgets/mode_select/menu_explain_modal.widget.dart';
 import 'package:thinking_battle/widgets/tutorial_top/match_content_list_modal.widget.dart';
 import 'package:thinking_battle/widgets/tutorial_top/skill_list_modal.widget.dart';
 
@@ -18,8 +17,10 @@ class TutorialTopScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool tutorialFlg = ModalRoute.of(context)?.settings.arguments as bool;
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
+    const double betweenHeight = 25;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +62,7 @@ class TutorialTopScreen extends HookWidget {
                       seVolume,
                       true,
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: betweenHeight),
                     _moveButton(
                       context,
                       '対戦画面',
@@ -70,7 +71,7 @@ class TutorialTopScreen extends HookWidget {
                       seVolume,
                       false,
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: betweenHeight),
                     _moveButton(
                       context,
                       '各スキル詳細',
@@ -79,7 +80,7 @@ class TutorialTopScreen extends HookWidget {
                       seVolume,
                       false,
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: betweenHeight),
                     _moveButton(
                       context,
                       'Tips',
@@ -88,6 +89,21 @@ class TutorialTopScreen extends HookWidget {
                       seVolume,
                       true,
                     ),
+                    !tutorialFlg
+                        ? Column(
+                            children: [
+                              const SizedBox(height: betweenHeight),
+                              _moveButton(
+                                context,
+                                'メニュー画面',
+                                5,
+                                soundEffect,
+                                seVolume,
+                                true,
+                              ),
+                            ],
+                          )
+                        : Container(),
                   ],
                 ),
               ],
@@ -132,16 +148,20 @@ class TutorialTopScreen extends HookWidget {
                   dismissOnBackKeyPress: true,
                   showCloseIcon: true,
                   animType: AnimType.SCALE,
-                  width: MediaQuery.of(context).size.width > 350 ? 330 : null,
+                  width: MediaQuery.of(context).size.width > 420 ? 380 : null,
                   body: buttonNumber == 3
                       ? SkillListModal(
                           soundEffect: soundEffect,
                           seVolume: seVolume,
                         )
-                      : MatchContentListModal(
-                          soundEffect: soundEffect,
-                          seVolume: seVolume,
-                        ))
+                      : buttonNumber == 2
+                          ? MatchContentListModal(
+                              soundEffect: soundEffect,
+                              seVolume: seVolume,
+                            )
+                          : const MenuExplainModal(
+                              tutorialFlg: false,
+                            ))
               .show();
         }
       },

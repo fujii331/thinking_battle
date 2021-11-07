@@ -85,9 +85,9 @@ class PlayGameButtons extends StatelessWidget {
             context.read(bgmProvider).state.stop();
 
             if (buttonNumber == 1) {
-              context.read(trainingProvider).state = true;
+              context.read(trainingFlgProvider).state = true;
             } else {
-              context.read(trainingProvider).state = false;
+              context.read(trainingFlgProvider).state = false;
             }
 
             Navigator.of(context).pushNamed(

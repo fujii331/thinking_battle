@@ -272,6 +272,7 @@ Future matchingPreparation(
           context.read(quizThemaProvider).state = quiz.thema;
           context.read(allQuestionsProvider).state = quiz.questions;
           context.read(correctAnswersProvider).state = quiz.correctAnswers;
+          context.read(wrongAnswersProvider).state = quiz.wrongAnswers;
 
           // マッチ済みに更新
           matchingRoomRef.doc(matchingId).set({
@@ -307,7 +308,14 @@ Future matchingPreparation(
       });
 
       if (randomMatchFlg) {
-        for (int i = 0; i < 13; i++) {
+        // 1/3で7-10秒
+        // 1/3で3-6秒
+        final int waitingTime = Random().nextInt(3) == 0
+            ? 7 + Random().nextInt(4)
+            : Random().nextInt(3) == 0
+                ? 3 + Random().nextInt(3)
+                : 13;
+        for (int i = 0; i < waitingTime; i++) {
           if (matchingQuitFlgState.value ||
               context.read(matchingWaitingIdProvider).state == '') {
             break;
@@ -326,8 +334,8 @@ Future matchingPreparation(
           context.read(matchingWaitingIdProvider).state = '';
 
           // とりあえずCPUとマッチングさせる
-          context.read(trainingProvider).state = true;
-          context.read(changedTrainingProvider).state = true;
+          context.read(trainingFlgProvider).state = true;
+          context.read(changedTrainingFlgProvider).state = true;
           trainingInitialAction(
             context,
           );
@@ -470,6 +478,7 @@ Future matchingUpdate(
         context.read(quizThemaProvider).state = quiz.thema;
         context.read(allQuestionsProvider).state = quiz.questions;
         context.read(correctAnswersProvider).state = quiz.correctAnswers;
+        context.read(wrongAnswersProvider).state = quiz.wrongAnswers;
 
         // 部屋のIDを取得
         context.read(matchingRoomIdProvider).state = matchingId;

@@ -112,7 +112,7 @@ class GameStartScreen extends HookWidget {
     final String playerName = useProvider(playerNameProvider).state;
     final double rate = useProvider(rateProvider).state;
     final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
-    final bool trainingFlg = context.read(trainingProvider).state;
+    final bool trainingFlg = context.read(trainingFlgProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
     final bool initialTutorialFlg =
         context.read(initialTutorialFlgProvider).state;

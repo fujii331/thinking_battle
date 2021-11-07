@@ -127,6 +127,7 @@ class BottomIconButtons extends HookWidget {
             } else if (buttonPuttern == 4) {
               Navigator.of(context).pushNamed(
                 TutorialTopScreen.routeName,
+                arguments: false,
               );
             }
           },

@@ -29,6 +29,7 @@ Future failedConnect(
   await updateRate(
     context,
     false,
+    false,
   );
 
   context.read(timerCancelFlgProvider).state = true;

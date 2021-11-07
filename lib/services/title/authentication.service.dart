@@ -101,6 +101,7 @@ Future login(
 
     Navigator.of(context).pushReplacementNamed(
       ModeSelectScreen.routeName,
+      arguments: false,
     );
   } catch (e) {
     // ログインに失敗した場合
