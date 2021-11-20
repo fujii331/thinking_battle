@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/screens/game_playing.screen.dart';
-import 'package:thinking_battle/services/game_playing/initialize_game.service.dart';
+import 'package:thinking_battle/services/game_start/initialize_game.service.dart';
 
 class InitialTutorialStartModal extends HookWidget {
   final BuildContext screenContext;
@@ -39,7 +39,7 @@ class InitialTutorialStartModal extends HookWidget {
           ),
           const SizedBox(height: 20),
           const Text(
-            '初対戦ではターンごとの制限時間はなく、対戦画面右上の「ヘルプ」ボタンからいつでもゲーム説明を確認することができます。\n\n気楽に色々試してみたください！',
+            '初対戦ではターンごとの制限時間はなく、対戦画面右上の「ヘルプ」ボタンからいつでもゲーム説明を確認することができます。\n\n気楽に色々試してみてください！',
             style: TextStyle(
               fontSize: 18.0,
             ),

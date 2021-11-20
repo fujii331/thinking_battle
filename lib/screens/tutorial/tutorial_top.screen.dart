@@ -46,68 +46,74 @@ class TutorialTopScreen extends HookWidget {
       body: Stack(
         children: <Widget>[
           background(),
-          Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 70),
-                Column(
-                  children: <Widget>[
-                    _moveButton(
-                      context,
-                      'ゲームシステム',
-                      1,
-                      soundEffect,
-                      seVolume,
-                      true,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 100),
+              Center(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height - 100 > 400
+                      ? 400
+                      : MediaQuery.of(context).size.height - 100,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        _moveButton(
+                          context,
+                          'ゲームシステム',
+                          1,
+                          soundEffect,
+                          seVolume,
+                          true,
+                        ),
+                        const SizedBox(height: betweenHeight),
+                        _moveButton(
+                          context,
+                          '対戦画面',
+                          2,
+                          soundEffect,
+                          seVolume,
+                          false,
+                        ),
+                        const SizedBox(height: betweenHeight),
+                        _moveButton(
+                          context,
+                          '各スキル詳細',
+                          3,
+                          soundEffect,
+                          seVolume,
+                          false,
+                        ),
+                        const SizedBox(height: betweenHeight),
+                        _moveButton(
+                          context,
+                          'Tips',
+                          4,
+                          soundEffect,
+                          seVolume,
+                          true,
+                        ),
+                        !tutorialFlg
+                            ? Column(
+                                children: [
+                                  const SizedBox(height: betweenHeight),
+                                  _moveButton(
+                                    context,
+                                    'メニュー画面',
+                                    5,
+                                    soundEffect,
+                                    seVolume,
+                                    true,
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                      ],
                     ),
-                    const SizedBox(height: betweenHeight),
-                    _moveButton(
-                      context,
-                      '対戦画面',
-                      2,
-                      soundEffect,
-                      seVolume,
-                      false,
-                    ),
-                    const SizedBox(height: betweenHeight),
-                    _moveButton(
-                      context,
-                      '各スキル詳細',
-                      3,
-                      soundEffect,
-                      seVolume,
-                      false,
-                    ),
-                    const SizedBox(height: betweenHeight),
-                    _moveButton(
-                      context,
-                      'Tips',
-                      4,
-                      soundEffect,
-                      seVolume,
-                      true,
-                    ),
-                    !tutorialFlg
-                        ? Column(
-                            children: [
-                              const SizedBox(height: betweenHeight),
-                              _moveButton(
-                                context,
-                                'メニュー画面',
-                                5,
-                                soundEffect,
-                                seVolume,
-                                true,
-                              ),
-                            ],
-                          )
-                        : Container(),
-                  ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -141,28 +147,26 @@ class TutorialTopScreen extends HookWidget {
           );
         } else {
           AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.NO_HEADER,
-                  headerAnimationLoop: false,
-                  dismissOnTouchOutside: true,
-                  dismissOnBackKeyPress: true,
-                  showCloseIcon: true,
-                  animType: AnimType.SCALE,
-                  width: MediaQuery.of(context).size.width > 420 ? 380 : null,
-                  body: buttonNumber == 3
-                      ? SkillListModal(
-                          soundEffect: soundEffect,
-                          seVolume: seVolume,
-                        )
-                      : buttonNumber == 2
-                          ? MatchContentListModal(
-                              soundEffect: soundEffect,
-                              seVolume: seVolume,
-                            )
-                          : const MenuExplainModal(
-                              tutorialFlg: false,
-                            ))
-              .show();
+            context: context,
+            dialogType: DialogType.NO_HEADER,
+            headerAnimationLoop: false,
+            dismissOnTouchOutside: true,
+            dismissOnBackKeyPress: true,
+            showCloseIcon: true,
+            animType: AnimType.SCALE,
+            width: MediaQuery.of(context).size.width > 420 ? 380 : null,
+            body: buttonNumber == 3
+                ? SkillListModal(
+                    soundEffect: soundEffect,
+                    seVolume: seVolume,
+                  )
+                : buttonNumber == 2
+                    ? MatchContentListModal(
+                        soundEffect: soundEffect,
+                        seVolume: seVolume,
+                      )
+                    : const MenuExplainModal(),
+          ).show();
         }
       },
       child: Container(

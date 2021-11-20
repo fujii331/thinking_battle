@@ -30,7 +30,7 @@ class AttentionModal extends HookWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             secondText,
             style: const TextStyle(

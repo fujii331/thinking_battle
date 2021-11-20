@@ -24,21 +24,21 @@ class PlayGameButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _playButton(
-          context,
-          'CPUマッチ',
-          Colors.lime.shade800,
-          1,
-        ),
-        SizedBox(height: betweenHeight),
-        _playButton(
+        // _playButton(
+        //   context,
+        //   'CPUマッチ',
+        //   Colors.lime.shade800,
+        //   1,
+        // ),
+        // SizedBox(height: betweenHeight),
+        _imagePlayButton(
           context,
           'ランダムマッチ',
-          Colors.lightBlue.shade600,
+          Colors.lightBlue.shade500,
           2,
         ),
         SizedBox(height: betweenHeight),
-        _playButton(
+        _imagePlayButton(
           context,
           'フレンドマッチ',
           Colors.deepOrange.shade500,
@@ -80,14 +80,13 @@ class PlayGameButtons extends StatelessWidget {
               body: const PasswordSetting(),
             ).show();
           } else {
-            // context.read(rivalInfoProvider).state = dummyPlayerInfo;
             context.read(friendMatchWordProvider).state = '';
             context.read(bgmProvider).state.stop();
 
             if (buttonNumber == 1) {
-              context.read(trainingFlgProvider).state = true;
+              context.read(trainingStatusProvider).state = 1;
             } else {
-              context.read(trainingFlgProvider).state = false;
+              context.read(trainingStatusProvider).state = 0;
             }
 
             Navigator.of(context).pushNamed(
@@ -116,6 +115,95 @@ class PlayGameButtons extends StatelessWidget {
           side: BorderSide(
             width: 2,
             color: Colors.grey.shade800,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _imagePlayButton(
+    BuildContext context,
+    String text,
+    Color color,
+    int buttonNumber,
+  ) {
+    final bool widthOk = MediaQuery.of(context).size.width > 350;
+
+    return Container(
+      width: widthOk ? 205 : 180,
+      height: widthOk ? 52 : 46,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: AssetImage('assets/images/game_buttons/game_button_' +
+              buttonNumber.toString() +
+              '.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () {
+            soundEffect.play(
+              'sounds/tap.mp3',
+              isNotification: true,
+              volume: seVolume,
+            );
+
+            if (buttonNumber == 3) {
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.NO_HEADER,
+                headerAnimationLoop: false,
+                dismissOnTouchOutside: true,
+                dismissOnBackKeyPress: true,
+                showCloseIcon: true,
+                animType: AnimType.SCALE,
+                width:
+                    MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
+                body: const PasswordSetting(),
+              ).show();
+            } else {
+              context.read(friendMatchWordProvider).state = '';
+              context.read(bgmProvider).state.stop();
+
+              if (buttonNumber == 1) {
+                context.read(trainingStatusProvider).state = 1;
+              } else {
+                context.read(trainingStatusProvider).state = 0;
+              }
+
+              Navigator.of(context).pushNamed(
+                GameStartScreen.routeName,
+              );
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blueGrey.shade800.withOpacity(0.4),
+              border: Border.all(
+                color: color,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: color.withOpacity(0.75),
+                  blurRadius: 2,
+                )
+              ],
+            ),
+            child: Center(
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'KaiseiOpti',
+                  fontSize: widthOk ? 24 : 20,
+                ),
+              ),
+            ),
           ),
         ),
       ),

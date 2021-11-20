@@ -15,6 +15,7 @@ import 'package:thinking_battle/widgets/common/loading_modal.widget.dart';
 Future signUp(
   BuildContext context,
   ValueNotifier<bool> buttonPressedState,
+  ValueNotifier<bool> judgeFlgState,
 ) async {
   showDialog<int>(
     context: context,
@@ -52,6 +53,7 @@ Future signUp(
     // ユーザー登録に失敗した場合
 
     buttonPressedState.value = false;
+    judgeFlgState.value = true;
     Navigator.pop(context);
     AwesomeDialog(
       context: context,
@@ -101,7 +103,6 @@ Future login(
 
     Navigator.of(context).pushReplacementNamed(
       ModeSelectScreen.routeName,
-      arguments: false,
     );
   } catch (e) {
     // ログインに失敗した場合

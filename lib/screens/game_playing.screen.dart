@@ -38,11 +38,12 @@ class GamePlayingScreen extends HookWidget {
     StreamSubscription<DocumentSnapshot>? rivalListenSubscription,
     AudioCache soundEffect,
     double seVolume,
+    bool initialTutorialFlg,
   ) {
     Timer.periodic(
       const Duration(seconds: 1),
       (Timer timer) async {
-        if (context.read(myTurnFlgProvider).state) {
+        if (context.read(myTurnFlgProvider).state && !initialTutorialFlg) {
           final int myTurnTime = context.read(myTurnTimeProvider).state -= 1;
 
           // 時間切れ判定
@@ -159,9 +160,7 @@ class GamePlayingScreen extends HookWidget {
                 dismissOnTap: true,
               );
 
-              context.read(trainingFlgProvider).state = true;
-              context.read(changedTrainingFlgProvider).state = true;
-              context.read(rivalDisconnectedFlgProvider).state = true;
+              context.read(trainingStatusProvider).state = 2;
 
               cpuAction(
                 context,
@@ -274,18 +273,16 @@ class GamePlayingScreen extends HookWidget {
           });
         }
 
-        if (!initialTutorialFlg) {
-          // チュートリアルではタイマーなし
-          timeStart(
-            context,
-            scrollController,
-            myActionDoc,
-            rivalActionDoc,
-            rivalListenSubscription,
-            soundEffect,
-            seVolume,
-          );
-        }
+        timeStart(
+          context,
+          scrollController,
+          myActionDoc,
+          rivalActionDoc,
+          rivalListenSubscription,
+          soundEffect,
+          seVolume,
+          initialTutorialFlg,
+        );
 
         await showDialog<int>(
           context: context,

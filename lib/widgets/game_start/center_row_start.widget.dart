@@ -9,7 +9,6 @@ import 'package:thinking_battle/screens/mode_select.screen.dart';
 
 class CenterRowStart extends HookWidget {
   final bool matchingFinishedFlg;
-  final bool trainingFlg;
   final AudioCache soundEffect;
   final double seVolume;
   final ValueNotifier<bool> matchingQuitFlg;
@@ -18,7 +17,6 @@ class CenterRowStart extends HookWidget {
   const CenterRowStart({
     Key? key,
     required this.matchingFinishedFlg,
-    required this.trainingFlg,
     required this.soundEffect,
     required this.seVolume,
     required this.matchingQuitFlg,
@@ -30,7 +28,7 @@ class CenterRowStart extends HookWidget {
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
 
     return SizedBox(
-      height: 85,
+      height: 95,
       child: Center(
         child: matchingFinishedFlg
             ? Container(

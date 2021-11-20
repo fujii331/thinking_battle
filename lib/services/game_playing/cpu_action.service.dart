@@ -28,18 +28,20 @@ Future cpuAction(
 
   allQuestions.shuffle();
   // 表示リスト
-  List<DisplayContent> displayContentList =
+  final List<DisplayContent> displayContentList =
       context.read(displayContentListProvider).state;
   // ターン数
-  int cpuTurn = (displayContentList.length ~/ 2) + 1;
+  final int cpuTurn = (displayContentList.length ~/ 2) + 1;
   // スキル
-  List<int> enemySkills = context.read(rivalInfoProvider).state.skillList;
+  final List<int> enemySkills = context.read(rivalInfoProvider).state.skillList;
   // 的情報
-  PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;
+  final PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;
   // スキルポイント
-  int enemySkillPoint = context.read(enemySkillPointProvider).state;
-  // 相手が接続切れだったかどうか
-  bool rivalDisconnectedFlg = context.read(rivalDisconnectedFlgProvider).state;
+  final int enemySkillPoint = context.read(enemySkillPointProvider).state;
+  // トレーニングステータス
+  final int trainingStatus = context.read(trainingStatusProvider).state;
+  // スキル使用レベル
+  final int skillUseLevel = context.read(skillUseLevelProvider).state;
 
   // 重要度
   int sumImportance = 0;
@@ -106,10 +108,10 @@ Future cpuAction(
       // 相手のレートによって応える早さが変わる
       final List<String> correctAnswerList =
           context.read(correctAnswersProvider).state;
-      returnAnswer = correctAnswerList[Random().nextInt(5) == 0
+      returnAnswer = correctAnswerList[Random().nextInt(10) == 0
           ? 0
           : Random().nextInt(correctAnswerList.length)];
-    } else if (!rivalDisconnectedFlg &&
+    } else if (trainingStatus >= 3 &&
         sumImportance >= finishImportance * 0.8 &&
         Random().nextInt(10) == 0 &&
         context.read(wrongAnswersProvider).state.length > 1 &&
@@ -125,8 +127,9 @@ Future cpuAction(
       // 解答した誤答を削除
       wrongAnswerList.removeAt(target);
       context.read(wrongAnswersProvider).state = wrongAnswerList;
-    } else if (Random().nextInt(3) > 0) {
-      // 2/3の確率でスキル使用判断
+    } else if (skillUseLevel == 1 ||
+        (skillUseLevel == 2 && Random().nextInt(3) > 0) ||
+        (skillUseLevel == 3 && Random().nextInt(3) == 0)) {
       final List<int> enemySkillsCandidate = enemySkills
           .where((skillId) =>
               skillId != 6 && (searchFlg || (skillId != 5 && skillId != 7)))
@@ -156,11 +159,17 @@ Future cpuAction(
         ];
 
         // ナイス質問を含み、質問サーチ・質問確認・SP溜め・トラップを含まず、スキルポイントが溜まっている場合
-        if (skillsCombination.contains(2) &&
-            !skillsCombination.contains(5) &&
-            !skillsCombination.contains(6) &&
-            !skillsCombination.contains(7) &&
-            !skillsCombination.contains(8) &&
+        if (((skillsCombination.contains(2) &&
+                    !skillsCombination.contains(5) &&
+                    !skillsCombination.contains(6) &&
+                    !skillsCombination.contains(7) &&
+                    !skillsCombination.contains(8)) ||
+                (!skillsCombination.contains(1) &&
+                    !skillsCombination.contains(2) &&
+                    !skillsCombination.contains(3) &&
+                    (skillUseLevel == 1 ||
+                        (skillUseLevel == 2 && Random().nextInt(2) == 0) ||
+                        (skillUseLevel == 3 && Random().nextInt(3) == 0)))) &&
             enemySkillPoint >=
                 skillSettings[skillsCombination[0] - 1].skillPoint +
                     skillSettings[skillsCombination[1] - 1].skillPoint) {
@@ -168,8 +177,11 @@ Future cpuAction(
         }
       }
 
-      // スキルを同時に使わなかった場合、1/2の確率でスキル単体使用
-      if (returnSkillIds.isEmpty && Random().nextInt(2) == 0) {
+      // スキルを同時に使わなかった場合
+      if (returnSkillIds.isEmpty &&
+          (skillUseLevel == 1 ||
+              (skillUseLevel == 2 && Random().nextInt(2) == 0) ||
+              (skillUseLevel == 3 && Random().nextInt(3) > 0))) {
         final int targetSkillId =
             enemySkillsCandidate[Random().nextInt(enemySkillsCandidate.length)];
 
@@ -188,18 +200,18 @@ Future cpuAction(
 
       // スキルを使っていても条件によってはスキルを取り除く
       // 質問隠しを使っていて、ナイス質問を使っていないかつ質問重要度が1の場合
-      // 強制質問を使っていて、質問重要度が80%より小さいの場合
-      // 5ターン以内でSP溜めを使っていなくて1/3の確率
+      // 強制質問を使っていて、質問重要度が80%より小さい場合
+      // 5ターン以内でSP溜めを使っていなくて2/3の確率
       if ((returnSkillIds.contains(1) &&
               !returnSkillIds.contains(2) &&
               questions[0].importance == 1) ||
           (returnSkillIds.contains(3) &&
-              sumImportance < finishImportance * 0.8 &&
-              !returnSkillIds.contains(2) &&
-              questions[0].importance == 1) ||
+              (sumImportance < finishImportance * 0.8 ||
+                  !returnSkillIds.contains(2))) ||
           (cpuTurn < 5 &&
               !returnSkillIds.contains(6) &&
-              Random().nextInt(3) == 0)) {
+              skillUseLevel != 1 &&
+              Random().nextInt(3) > 0)) {
         returnSkillIds = [];
       }
 
@@ -230,10 +242,10 @@ Future cpuAction(
   }
 
   // メッセージの設定
-  // 相手が接続切れではなく、メッセージを送ってから60秒経っている場合
-  if (!rivalDisconnectedFlg && afterRivalMessageTime == 0) {
+  // 相手がランダムマッチで接続切れではなく、メッセージを送ってから60秒経っている場合
+  if (trainingStatus >= 3 && afterRivalMessageTime == 0) {
     returnMessageId = getCpuMessageId(
-      context.read(cpuMessageIdsListProvider).state,
+      context,
       cpuTurn,
       gotMessageFlg,
     );
@@ -301,26 +313,28 @@ List<Question> getCpuQuestion(
 }
 
 int getCpuMessageId(
-  List<int> cpuMessageIdsList,
+  BuildContext context,
   int cpuTurn,
   bool gotMessageFlg,
 ) {
-  // 最初のターンで挨拶系のメッセージを持っていたら1/3で発動
-  // 相手からメッセージをもらっていたら3/4で発動
+  final List<int> cpuMessageIdsList =
+      context.read(cpuMessageIdsListProvider).state;
+  final int messageLevel = context.read(messageLevelProvider).state;
+
   if (cpuTurn == 1 || (cpuTurn == 2 && gotMessageFlg)) {
-    if ((Random().nextInt(3) == 0 ||
-            (gotMessageFlg && Random().nextInt(4) > 0)) &&
-        (cpuMessageIdsList.contains(1) ||
-            cpuMessageIdsList.contains(4) ||
-            cpuMessageIdsList.contains(9) ||
-            cpuMessageIdsList.contains(10))) {
+    if (messageLevel == 1 ||
+        (gotMessageFlg &&
+            (messageLevel == 2 ||
+                (messageLevel == 3 && Random().nextInt(3) == 0)))) {
       return cpuMessageIdsList.contains(1)
           ? 1
           : cpuMessageIdsList.contains(4)
               ? 4
               : cpuMessageIdsList.contains(9)
                   ? 9
-                  : 10;
+                  : cpuMessageIdsList.contains(10)
+                      ? 10
+                      : cpuMessageIdsList[Random().nextInt(4)];
     } else {
       return 0;
     }
@@ -331,10 +345,11 @@ int getCpuMessageId(
     }
 
     if (gotMessageFlg) {
-      if (Random().nextInt(2) == 0) {
+      if (messageLevel <= 2 || Random().nextInt(3) == 0) {
         return messageId;
       }
-    } else if (Random().nextInt(10) == 0) {
+    } else if ((messageLevel == 1 && Random().nextInt(2) == 0) ||
+        (messageLevel == 2 && Random().nextInt(10) == 0)) {
       return messageId;
     }
 

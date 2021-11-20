@@ -139,7 +139,7 @@ class MyApp extends HookWidget {
       builder: EasyLoading.init(),
       theme: ThemeData(
         canvasColor: Colors.grey.shade100,
-        fontFamily: 'KiwiMaru',
+        // fontFamily: 'KiwiMaru',
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
             TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),

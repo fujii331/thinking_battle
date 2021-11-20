@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,155 @@ import 'package:thinking_battle/providers/common.provider.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
+import 'package:thinking_battle/screens/game_playing.screen.dart';
 import 'package:thinking_battle/screens/mode_select.screen.dart';
-import 'package:thinking_battle/services/game_playing/initialize_game.service.dart';
+import 'package:thinking_battle/services/game_start/initialize_game.service.dart';
 import 'package:thinking_battle/services/game_playing/update_rate.service.dart';
 import 'package:thinking_battle/widgets/game_start/failed_matching.widget.dart';
+import 'package:thinking_battle/widgets/game_start/initial_tutorial_start_modal.widget.dart';
+import 'package:thinking_battle/widgets/game_start/no_matching_modal.widget.dart';
+
+Future matchingFlow(
+  BuildContext context,
+  int imageNumber,
+  int cardNumber,
+  String userName,
+  double userRate,
+  int matchedCount,
+  int continuousWinCount,
+  List<int> userSkillIdsList,
+  ValueNotifier<bool> matchingQuitFlgState,
+  String friendMatchWord,
+  ValueNotifier<bool> interruptionFlgState,
+  ValueNotifier<bool> matchingAnimatedFlgState,
+  AudioCache soundEffect,
+  double seVolume,
+) async {
+  await matchingAction(
+    context,
+    imageNumber,
+    cardNumber,
+    userName,
+    userRate,
+    matchedCount,
+    continuousWinCount,
+    userSkillIdsList,
+    matchingQuitFlgState,
+    friendMatchWord,
+    interruptionFlgState,
+    matchingAnimatedFlgState,
+  ).then((_) {
+    if (!matchingQuitFlgState.value) {
+      gameStart(
+        context,
+        soundEffect,
+        seVolume,
+        matchingAnimatedFlgState,
+      );
+    }
+  }).catchError((onError) async {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.ERROR,
+      headerAnimationLoop: false,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      animType: AnimType.SCALE,
+      width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
+      body: const FaildMatching(
+        topText: '通信失敗',
+        secondText: '電波状況をご確認ください。\nメニュー画面に戻ります。',
+      ),
+      // body: FaildMatching(
+      //   topText: '通信失敗',
+      //   secondText: onError.description,
+      // ),
+    ).show();
+
+    await Future.delayed(
+      const Duration(milliseconds: 3500),
+    );
+    context.read(bgmProvider).state.stop();
+    context.read(bgmProvider).state = await soundEffect.loop(
+      'sounds/title.mp3',
+      volume: context.read(bgmVolumeProvider).state,
+      isNotification: true,
+    );
+    Navigator.popUntil(
+        context, ModalRoute.withName(ModeSelectScreen.routeName));
+    return;
+  });
+}
+
+Future gameStart(
+  BuildContext context,
+  AudioCache soundEffect,
+  double seVolume,
+  ValueNotifier<bool> matchingAnimatedFlgState,
+) async {
+  soundEffect.play(
+    'sounds/matching.mp3',
+    isNotification: true,
+    volume: seVolume,
+  );
+
+  await Future.delayed(
+    const Duration(milliseconds: 100),
+  );
+
+  matchingAnimatedFlgState.value = true;
+
+  await Future.delayed(
+    const Duration(milliseconds: 5000),
+  );
+
+  context.read(bgmProvider).state.stop();
+
+  commonInitialAction(context);
+
+  Navigator.of(context).pushReplacementNamed(
+    GamePlayingScreen.routeName,
+  );
+}
+
+Future tutorialGameStart(
+  BuildContext context,
+  AudioCache soundEffect,
+  double seVolume,
+  ValueNotifier<bool> matchingAnimatedFlgState,
+) async {
+  soundEffect.play(
+    'sounds/matching.mp3',
+    isNotification: true,
+    volume: seVolume,
+  );
+
+  await Future.delayed(
+    const Duration(milliseconds: 100),
+  );
+
+  matchingAnimatedFlgState.value = true;
+
+  await Future.delayed(
+    const Duration(milliseconds: 2500),
+  );
+
+  AwesomeDialog(
+    context: context,
+    dialogType: DialogType.NO_HEADER,
+    headerAnimationLoop: false,
+    dismissOnTouchOutside: false,
+    dismissOnBackKeyPress: false,
+    showCloseIcon: false,
+    animType: AnimType.SCALE,
+    width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
+    body: InitialTutorialStartModal(
+      screenContext: context,
+      soundEffect: soundEffect,
+      seVolume: seVolume,
+    ),
+  ).show();
+}
 
 Future matchingAction(
   BuildContext context,
@@ -31,20 +177,22 @@ Future matchingAction(
   ValueNotifier<bool> matchingQuitFlgState,
   String friendMatchWord,
   ValueNotifier<bool> interruptionFlgState,
+  ValueNotifier<bool> matchingAnimatedFlgState,
 ) async {
   await mainMatchingAction(
-          context,
-          imageNumber,
-          cardNumber,
-          userName,
-          userRate,
-          matchedCount,
-          continuousWinCount,
-          userSkillIdsList,
-          matchingQuitFlgState,
-          friendMatchWord,
-          interruptionFlgState)
-      .then((_) async {
+    context,
+    imageNumber,
+    cardNumber,
+    userName,
+    userRate,
+    matchedCount,
+    continuousWinCount,
+    userSkillIdsList,
+    matchingQuitFlgState,
+    friendMatchWord,
+    interruptionFlgState,
+    matchingAnimatedFlgState,
+  ).then((_) async {
     if (interruptionFlgState.value) {
       interruptionFlgState.value = false;
       await matchingAction(
@@ -59,6 +207,7 @@ Future matchingAction(
         matchingQuitFlgState,
         friendMatchWord,
         interruptionFlgState,
+        matchingAnimatedFlgState,
       );
     }
   });
@@ -76,6 +225,7 @@ Future mainMatchingAction(
   ValueNotifier<bool> matchingQuitFlgState,
   String friendMatchWord,
   ValueNotifier<bool> interruptionFlgState,
+  ValueNotifier<bool> matchingAnimatedFlgState,
 ) async {
   final bool randomMatchFlg = friendMatchWord == '';
   final int buildNumber = context.read(buildNumberProvider).state;
@@ -88,8 +238,8 @@ Future mainMatchingAction(
     await matchingRoomRef
         .where('matchingStatus', isEqualTo: 1)
         // .where('buildNumber', isEqualTo: buildNumber) // TODO バージョン2から導入
-        .where('rate', isLessThan: userRate + 300.0)
-        .where('rate', isGreaterThan: userRate - 300.0)
+        .where('rate', isLessThan: userRate + 200.0)
+        .where('rate', isGreaterThan: userRate - 200.0)
         .limit(1)
         .get()
         .then((QuerySnapshot querySnapshot) async {
@@ -110,6 +260,7 @@ Future mainMatchingAction(
           context.read(loginIdProvider).state,
           friendMatchWord,
           interruptionFlgState,
+          matchingAnimatedFlgState,
         );
       }
     }).catchError((error) async {
@@ -145,6 +296,7 @@ Future mainMatchingAction(
           context.read(loginIdProvider).state,
           friendMatchWord,
           interruptionFlgState,
+          matchingAnimatedFlgState,
         );
       }
     }).catchError((error) async {
@@ -170,6 +322,7 @@ Future actionAfterSearch(
   String matchingId,
   String friendMatchWord,
   ValueNotifier<bool> interruptionFlgState,
+  ValueNotifier<bool> matchingAnimatedFlgState,
 ) async {
   if (querySnapshot.docs.isEmpty) {
     await matchingPreparation(
@@ -187,6 +340,7 @@ Future actionAfterSearch(
       matchingQuitFlgState,
       friendMatchWord,
       interruptionFlgState,
+      matchingAnimatedFlgState,
     );
   } else {
     // トランザクション制御を行ってステータスを更新
@@ -222,6 +376,7 @@ Future matchingPreparation(
   ValueNotifier<bool> matchingQuitFlgState,
   String friendMatchWord,
   ValueNotifier<bool> interruptionFlgState,
+  ValueNotifier<bool> matchingAnimatedFlgState,
 ) async {
   final bool precedingFlg = Random().nextInt(2) == 0 ? true : false;
   final randomMatchFlg = friendMatchWord == '';
@@ -308,13 +463,17 @@ Future matchingPreparation(
       });
 
       if (randomMatchFlg) {
+        // 1/12でCPUとも接続しない
+        final notCpuMatchingFlg = Random().nextInt(12) == 0;
         // 1/3で7-10秒
         // 1/3で3-6秒
-        final int waitingTime = Random().nextInt(3) == 0
-            ? 7 + Random().nextInt(4)
-            : Random().nextInt(3) == 0
-                ? 3 + Random().nextInt(3)
-                : 13;
+        final int waitingTime = notCpuMatchingFlg
+            ? 13
+            : Random().nextInt(2) == 0
+                ? 5 + Random().nextInt(4)
+                : Random().nextInt(3) == 0
+                    ? 3 + Random().nextInt(3)
+                    : 7;
         for (int i = 0; i < waitingTime; i++) {
           if (matchingQuitFlgState.value ||
               context.read(matchingWaitingIdProvider).state == '') {
@@ -333,12 +492,39 @@ Future matchingPreparation(
 
           context.read(matchingWaitingIdProvider).state = '';
 
-          // とりあえずCPUとマッチングさせる
-          context.read(trainingFlgProvider).state = true;
-          context.read(changedTrainingFlgProvider).state = true;
-          trainingInitialAction(
-            context,
-          );
+          if (notCpuMatchingFlg) {
+            // もう一回探すか確認
+            matchingQuitFlgState.value = true;
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.INFO,
+              headerAnimationLoop: false,
+              dismissOnTouchOutside: false,
+              dismissOnBackKeyPress: false,
+              animType: AnimType.SCALE,
+              width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
+              body: NoMatchingModal(
+                screenContext: context,
+                imageNumber: imageNumber,
+                cardNumber: cardNumber,
+                userName: userName,
+                userRate: userRate,
+                matchedCount: matchedCount,
+                continuousWinCount: continuousWinCount,
+                userSkillIdsList: userSkillIdsList,
+                matchingQuitFlgState: matchingQuitFlgState,
+                friendMatchWord: friendMatchWord,
+                interruptionFlgState: interruptionFlgState,
+                matchingAnimatedFlgState: matchingAnimatedFlgState,
+              ),
+            ).show();
+          } else {
+            // とりあえずCPUとマッチングさせる
+            context.read(trainingStatusProvider).state = 3;
+            trainingInitialAction(
+              context,
+            );
+          }
 
           return;
         }
@@ -382,7 +568,9 @@ Future matchingPreparation(
             const Duration(milliseconds: 3500),
           );
           Navigator.popUntil(
-              context, ModalRoute.withName(ModeSelectScreen.routeName));
+            context,
+            ModalRoute.withName(ModeSelectScreen.routeName),
+          );
 
           return;
         }

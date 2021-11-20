@@ -27,7 +27,7 @@ const stamps = [
   // 1 対戦回数
   <Stamp>[
     Stamp(
-      needCount: 3,
+      needCount: 1,
       reward: 'スキル「嘘つき」を解放',
     ),
     Stamp(

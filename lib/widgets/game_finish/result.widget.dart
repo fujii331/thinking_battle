@@ -9,20 +9,15 @@ import 'package:thinking_battle/providers/player.provider.dart';
 
 import 'package:thinking_battle/widgets/game_finish/center_row_finish.widget.dart';
 import 'package:thinking_battle/widgets/game_finish/user_profile_finish.widget.dart';
-// import 'package:thinking_battle/widgets/common/stamina.widget.dart';
 
 class Result extends HookWidget {
   final bool? winFlg;
-  final bool trainingFlg;
-  final bool changedTrainingFlg;
-  final bool rivalDisconnectedFlg;
+  final int trainingStatus;
 
   const Result({
     Key? key,
     required this.winFlg,
-    required this.trainingFlg,
-    required this.changedTrainingFlg,
-    required this.rivalDisconnectedFlg,
+    required this.trainingStatus,
   }) : super(key: key);
 
   @override
@@ -37,9 +32,9 @@ class Result extends HookWidget {
     final String playerName = useProvider(playerNameProvider).state;
     final double rate = useProvider(rateProvider).state;
     final String friendMatchWord = useProvider(friendMatchWordProvider).state;
-    final bool notRateChangeFlg =
-        (trainingFlg && !changedTrainingFlg) || friendMatchWord != '';
+    final bool notRateChangeFlg = trainingStatus == 1 || friendMatchWord != '';
     final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
+    final bool rivalDisconnectedFlg = trainingStatus == 2;
 
     return Scaffold(
       body: Stack(

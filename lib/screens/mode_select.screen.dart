@@ -16,7 +16,6 @@ import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
 
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/info_modal.widget.dart';
-import 'package:thinking_battle/widgets/mode_select/menu_explain_modal.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_info.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/play_game_buttons.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/my_room_button.widget.dart';
@@ -56,8 +55,8 @@ class ModeSelectScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool afterTutorialFlg =
-        ModalRoute.of(context)?.settings.arguments as bool;
+    // final bool afterTutorialFlg =
+    //     ModalRoute.of(context)?.settings.arguments as bool;
 
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
@@ -89,6 +88,10 @@ class ModeSelectScreen extends HookWidget {
         final String dataString = prefs.getString('dataString') ?? todayString;
         final int loginDays = prefs.getInt('loginDays') ?? 1;
 
+        if (prefs.getString('dataString') == null) {
+          prefs.setString('dataString', todayString);
+        }
+
         // 日時の更新が行われたらgpカウントとログイン日数を更新
         if (dataString != todayString) {
           context.read(gachaCountProvider).state = 5;
@@ -116,22 +119,6 @@ class ModeSelectScreen extends HookWidget {
           soundEffect,
           seVolume,
         );
-
-        if (afterTutorialFlg) {
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.NO_HEADER,
-            headerAnimationLoop: false,
-            dismissOnTouchOutside: true,
-            dismissOnBackKeyPress: true,
-            showCloseIcon: true,
-            animType: AnimType.SCALE,
-            width: MediaQuery.of(context).size.width > 420 ? 380 : null,
-            body: const MenuExplainModal(
-              tutorialFlg: true,
-            ),
-          ).show();
-        }
       });
       return null;
     }, const []);
@@ -298,33 +285,28 @@ class ModeSelectScreen extends HookWidget {
                 children: <Widget>[
                   // const Stamina(),
                   const SizedBox(height: 95),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height > 600
-                        ? 480
-                        : MediaQuery.of(context).size.height * 0.8,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          MyInfo(
-                            soundEffect: soundEffect,
-                            seVolume: seVolume,
-                            cardNumber: cardNumber,
-                            colorList: colorList,
-                            matchedCount: matchedCount,
-                          ),
-                          SizedBox(height: heightOk ? 50 : 30),
-                          PlayGameButtons(
-                            soundEffect: soundEffect,
-                            seVolume: seVolume,
-                            betweenHeight: heightOk ? 24 : 20,
-                          ),
-                          SizedBox(height: heightOk ? 50 : 30),
-                          BottomIconButtons(
-                            soundEffect: soundEffect,
-                            seVolume: seVolume,
-                          ),
-                        ],
-                      ),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        MyInfo(
+                          soundEffect: soundEffect,
+                          seVolume: seVolume,
+                          cardNumber: cardNumber,
+                          colorList: colorList,
+                          matchedCount: matchedCount,
+                        ),
+                        SizedBox(height: heightOk ? 75 : 55),
+                        PlayGameButtons(
+                          soundEffect: soundEffect,
+                          seVolume: seVolume,
+                          betweenHeight: heightOk ? 30 : 26,
+                        ),
+                        SizedBox(height: heightOk ? 75 : 55),
+                        BottomIconButtons(
+                          soundEffect: soundEffect,
+                          seVolume: seVolume,
+                        ),
+                      ],
                     ),
                   ),
                 ],

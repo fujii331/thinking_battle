@@ -24,7 +24,7 @@ class TutorialGameSystemScreen extends HookWidget {
     );
 
     context.read(initialTutorialFlgProvider).state = true;
-    context.read(trainingFlgProvider).state = true;
+    context.read(trainingStatusProvider).state = 1;
     context.read(bgmProvider).state.stop();
 
     Navigator.of(context).pushReplacementNamed(
@@ -101,9 +101,9 @@ class TutorialGameSystemScreen extends HookWidget {
                                     bottom: 30,
                                   ),
                                   child: Text(
-                                    'アプリのインストールありがとうございます！\n\nとりあえず下記のシステムを知っておけば十分なので、軽く読んでCPUと対戦してみましょう！',
+                                    'アプリのインストールありがとうございます！\n\nこのゲームは以下のシステムをもとに作成されています。\nまずはCPUと対戦してみましょう！',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 19,
                                       color: Colors.yellow.shade50,
                                     ),
                                   ),
@@ -111,7 +111,7 @@ class TutorialGameSystemScreen extends HookWidget {
                               : Container(),
                           _eachMessage(
                             1,
-                            '対戦画面の上に表示されたお題の正解を先に解答したら勝ちです。（職業、食べ物など誰でも知ってるものがお題になる）',
+                            '対戦画面の上に表示されたお題の正解を先に解答したら勝ちです。（職業、スポーツなど誰でも知ってるものがお題になる）',
                             width,
                           ),
                           const SizedBox(height: betweenHeight),
@@ -123,31 +123,13 @@ class TutorialGameSystemScreen extends HookWidget {
                           const SizedBox(height: betweenHeight),
                           _eachMessage(
                             3,
-                            '質問は3つの選択肢から選ぶことができ、ターンが進むにつれ正解に近づくための重要な質問が出やすくなります。',
-                            width,
-                          ),
-                          const SizedBox(height: betweenHeight),
-                          _eachMessage(
-                            4,
                             '質問の返答は「はい・いいえ・微妙」のいずれかで表示されます。\n※微妙：どちらとも言えない・はっきりわからない',
                             width,
                           ),
                           const SizedBox(height: betweenHeight),
                           _eachMessage(
-                            5,
+                            4,
                             '質問をするときにSP（スキルポイント）を使ってスキルを発動することでゲームを有利に進めることができます。',
-                            width,
-                          ),
-                          const SizedBox(height: betweenHeight),
-                          _eachMessage(
-                            6,
-                            '質問を行うとSPが溜まっていきますが、解答を行ったときはSPは溜まりません。',
-                            width,
-                          ),
-                          const SizedBox(height: betweenHeight),
-                          _eachMessage(
-                            7,
-                            '解答を行って間違えると次のターンは解答ができなくなります。',
                             width,
                           ),
                           initialTutorialFlg

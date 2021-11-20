@@ -8,7 +8,6 @@ List returnCardColorList(
     8,
     10,
     13,
-    16,
     17,
     19,
     20,

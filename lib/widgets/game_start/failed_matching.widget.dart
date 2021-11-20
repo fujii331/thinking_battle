@@ -35,7 +35,6 @@ class FaildMatching extends HookWidget {
             secondText,
             style: const TextStyle(
               fontSize: 18.0,
-              fontFamily: 'Stick',
             ),
           ),
         ],

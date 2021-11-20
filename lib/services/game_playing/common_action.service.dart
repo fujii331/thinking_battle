@@ -109,7 +109,7 @@ Future turnAction(
         context.read(selectMessageIdProvider).state = 0;
         // メッセージ時間を初期化
         context.read(afterMessageTimeProvider).state = 60;
-      } else if (context.read(trainingFlgProvider).state) {
+      } else if (context.read(trainingStatusProvider).state >= 3) {
         // メッセージ時間を初期化
         context.read(afterRivalMessageTimeProvider).state = 60;
       }
@@ -511,7 +511,7 @@ Future turnAction(
         context.read(selectMessageIdProvider).state = 0;
         // メッセージ時間を初期化
         context.read(afterMessageTimeProvider).state = 60;
-      } else if (context.read(trainingFlgProvider).state) {
+      } else if (context.read(trainingStatusProvider).state >= 3) {
         // メッセージ時間を初期化
         context.read(afterRivalMessageTimeProvider).state = 60;
       }
@@ -622,14 +622,13 @@ Future turnAction(
         isNotification: true,
         volume: seVolume,
       );
-      if ((!context.read(trainingFlgProvider).state &&
-              context.read(friendMatchWordProvider).state == '') ||
-          context.read(changedTrainingFlgProvider).state) {
+      if (context.read(friendMatchWordProvider).state == '' &&
+          context.read(trainingStatusProvider).state != 1) {
         // レート計算
         await updateRate(
           context,
           myTurnFlg,
-          context.read(rivalDisconnectedFlgProvider).state,
+          context.read(trainingStatusProvider).state == 2,
         );
       }
 
@@ -915,7 +914,7 @@ Future initializeAction(
     // 相手のターンの表示
     context.read(displayRivalturnSetFlgProvider).state = true;
 
-    if (context.read(trainingFlgProvider).state) {
+    if (context.read(trainingStatusProvider).state >= 1) {
       cpuAction(
         context,
         scrollController,
@@ -954,21 +953,21 @@ List<Question> getNextQuestions(
     question2 = target2RandomValue < 60
         ? importance1Questions[1] // 60%で重要度1
         : importance2Questions[0]; // 40%で重要度2
-    question3 = target3RandomValue < 92
-        ? importance2Questions[1] // 92%で重要度2
-        : target3RandomValue < 97
+    question3 = target3RandomValue < 87
+        ? importance2Questions[1] // 87%で重要度2
+        : target3RandomValue < 92
             ? importance1Questions[2] // 5%で重要度1
-            : importance3Questions[0]; // 3%で重要度3
+            : importance3Questions[0]; // 8%で重要度3
   } else if (turnCount < 7) {
     question1 = importance1Questions[0]; // 重要度1
     question2 = target2RandomValue < 90
         ? importance2Questions[0] // 90%で重要度2
         : importance1Questions[1]; // 10%で重要度1
-    question3 = target3RandomValue < 90
-        ? importance2Questions[1] // 90%で重要度2
-        : target3RandomValue < 95
-            ? importance1Questions[2] // 5%で重要度1
-            : importance3Questions[0]; // 5%で重要度3
+    question3 = target3RandomValue < 88
+        ? importance2Questions[1] // 88%で重要度2
+        : target3RandomValue < 90
+            ? importance1Questions[2] // 2%で重要度1
+            : importance3Questions[0]; // 10%で重要度3
   } else if (turnCount < 9) {
     question1 = importance1Questions[0]; // 重要度1
     question2 = target2RandomValue < 90

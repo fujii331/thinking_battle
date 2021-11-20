@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MenuExplainModal extends StatelessWidget {
-  final bool tutorialFlg;
-
   const MenuExplainModal({
     Key? key,
-    required this.tutorialFlg,
   }) : super(key: key);
 
   @override
@@ -31,17 +28,6 @@ class MenuExplainModal extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          tutorialFlg
-              ? const Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Text(
-                    '初対戦お疲れ様でした！\n\nメニュー画面にはいくつかボタンがあるため簡単に説明します。',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  ),
-                )
-              : Container(),
           const SizedBox(height: 30),
           Container(
             padding: const EdgeInsets.only(left: 15),
@@ -132,7 +118,7 @@ class MenuExplainModal extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'あいことばを使って知ってる人と対戦できます。',
+                  'あいことばを使って知っている人と対戦できます。',
                   style: TextStyle(
                     fontSize: widthOk ? 16 : 15,
                   ),

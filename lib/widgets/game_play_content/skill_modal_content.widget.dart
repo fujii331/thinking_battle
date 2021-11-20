@@ -225,11 +225,25 @@ class SkillModalContent extends HookWidget {
           ),
           const SizedBox(width: 15),
           Padding(
-            padding: const EdgeInsets.only(top: 9),
+            padding: const EdgeInsets.only(top: 10),
             child: SkillTooltip(
               skill: skill,
               profileFlg: false,
               wordMinusSize: 0,
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 13,
+              ),
+              child: Text(
+                'SP ' + skill.skillPoint.toString(),
+                style: const TextStyle(
+                  color: Colors.blueGrey,
+                  fontSize: 17,
+                ),
+              ),
             ),
           ),
         ],

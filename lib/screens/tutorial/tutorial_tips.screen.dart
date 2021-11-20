@@ -46,30 +46,41 @@ class TutorialTipsScreen extends StatelessWidget {
                       children: <Widget>[
                         _eachMessage(
                           1,
-                          'SPが溜まっていればスキルは同時に複数発動することができます。\n（「質問隠し」＋「ナイス質問」などが有効！）',
+                          '質問は3つの選択肢から選ぶことができ、ターンが進むにつれ正解に近づくための重要な質問が出やすくなります。',
                           width,
                         ),
                         const SizedBox(height: betweenHeight),
                         _eachMessage(
                           2,
-                          '対戦中のスキル使用画面やあいての情報画面でスキル名を長押しするとスキルの説明が表示されます。',
+                          '質問を行うとSPが溜まっていきますが、解答を行ったときはSPは溜まりません。',
                           width,
                         ),
                         const SizedBox(height: betweenHeight),
                         _eachMessage(
                           3,
-                          'スキルは3つ、メッセージは4つ装備することができます。',
+                          '解答を行って間違えると次のターンは解答ができなくなります。',
                           width,
                         ),
-                        const SizedBox(height: betweenHeight),
                         _eachMessage(
                           4,
-                          'メニュー右上のボタンを押してHomeを開くと、アイコンやテーマ、スキルなどを変更することできます。',
+                          'SPが溜まっていればスキルは同時に複数発動することができます。\n（「質問隠し」＋「ナイス質問」などが有効！）',
                           width,
                         ),
                         const SizedBox(height: betweenHeight),
                         _eachMessage(
                           5,
+                          '対戦中のスキル使用画面やあいての情報画面でスキル名を長押しするとスキルの説明が表示されます。',
+                          width,
+                        ),
+                        const SizedBox(height: betweenHeight),
+                        _eachMessage(
+                          6,
+                          'スキルは3つ、メッセージは4つ装備することができます。',
+                          width,
+                        ),
+                        const SizedBox(height: betweenHeight),
+                        _eachMessage(
+                          7,
                           'お題・先行後行は完全にランダムで決定します。',
                           width,
                         ),

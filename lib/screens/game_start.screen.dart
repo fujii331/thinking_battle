@@ -1,98 +1,23 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:thinking_battle/screens/game_playing.screen.dart';
-import 'package:thinking_battle/screens/mode_select.screen.dart';
-import 'package:thinking_battle/services/game_playing/matching_action.service.dart';
+import 'package:thinking_battle/services/game_start/matching_flow.service.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
-import 'package:thinking_battle/services/game_playing/initialize_game.service.dart';
+import 'package:thinking_battle/services/game_start/initialize_game.service.dart';
 
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 
 import 'package:thinking_battle/widgets/game_start/center_row_start.widget.dart';
-import 'package:thinking_battle/widgets/game_start/failed_matching.widget.dart';
-import 'package:thinking_battle/widgets/game_start/initial_tutorial_start_modal.widget.dart';
 import 'package:thinking_battle/widgets/game_start/top_row_start.widget.dart';
 import 'package:thinking_battle/widgets/common/user_profile_common.widget.dart';
 
 class GameStartScreen extends HookWidget {
   const GameStartScreen({Key? key}) : super(key: key);
   static const routeName = '/game-start';
-
-  Future gameStart(
-    BuildContext context,
-    ValueNotifier<bool> matchingFlg,
-    AudioCache soundEffect,
-    double seVolume,
-  ) async {
-    soundEffect.play(
-      'sounds/matching.mp3',
-      isNotification: true,
-      volume: seVolume,
-    );
-
-    await Future.delayed(
-      const Duration(milliseconds: 100),
-    );
-
-    matchingFlg.value = true;
-
-    await Future.delayed(
-      const Duration(milliseconds: 5000),
-    );
-
-    context.read(bgmProvider).state.stop();
-
-    commonInitialAction(context);
-
-    Navigator.of(context).pushReplacementNamed(
-      GamePlayingScreen.routeName,
-    );
-  }
-
-  Future tutorialGameStart(
-    BuildContext context,
-    ValueNotifier<bool> matchingFlg,
-    AudioCache soundEffect,
-    double seVolume,
-  ) async {
-    soundEffect.play(
-      'sounds/matching.mp3',
-      isNotification: true,
-      volume: seVolume,
-    );
-
-    await Future.delayed(
-      const Duration(milliseconds: 100),
-    );
-
-    matchingFlg.value = true;
-
-    await Future.delayed(
-      const Duration(milliseconds: 2500),
-    );
-
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.NO_HEADER,
-      headerAnimationLoop: false,
-      dismissOnTouchOutside: false,
-      dismissOnBackKeyPress: false,
-      showCloseIcon: false,
-      animType: AnimType.SCALE,
-      width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
-      body: InitialTutorialStartModal(
-        screenContext: context,
-        soundEffect: soundEffect,
-        seVolume: seVolume,
-      ),
-    ).show();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,14 +37,15 @@ class GameStartScreen extends HookWidget {
     final String playerName = useProvider(playerNameProvider).state;
     final double rate = useProvider(rateProvider).state;
     final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
-    final bool trainingFlg = context.read(trainingFlgProvider).state;
+    final int trainingStatus = context.read(trainingStatusProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
     final bool initialTutorialFlg =
         context.read(initialTutorialFlgProvider).state;
 
-    final matchingQuitFlg = useState(false);
-    final matchingFlg = useState(false);
-    final interruptionFlgState = useState(false);
+    final ValueNotifier<bool> matchingQuitFlg = useState(false);
+
+    final ValueNotifier<bool> interruptionFlgState = useState(false);
+    final ValueNotifier<bool> matchingAnimatedFlgState = useState(false);
 
     final bool widthOk = MediaQuery.of(context).size.width > 350;
     final double wordMinusSize = widthOk ? 0 : 1.5;
@@ -140,7 +66,7 @@ class GameStartScreen extends HookWidget {
         );
 
         if (!matchingQuitFlg.value) {
-          if (trainingFlg) {
+          if (trainingStatus >= 1) {
             await Future.delayed(
               const Duration(milliseconds: 1500),
             );
@@ -151,9 +77,9 @@ class GameStartScreen extends HookWidget {
 
               tutorialGameStart(
                 context,
-                matchingFlg,
                 soundEffect,
                 seVolume,
+                matchingAnimatedFlgState,
               );
             } else if (!matchingQuitFlg.value) {
               trainingInitialAction(
@@ -162,13 +88,13 @@ class GameStartScreen extends HookWidget {
 
               gameStart(
                 context,
-                matchingFlg,
                 soundEffect,
                 seVolume,
+                matchingAnimatedFlgState,
               );
             }
           } else {
-            await matchingAction(
+            await matchingFlow(
               context,
               imageNumber,
               cardNumber,
@@ -180,44 +106,10 @@ class GameStartScreen extends HookWidget {
               matchingQuitFlg,
               fiendMatchWord,
               interruptionFlgState,
-            ).then((_) {
-              if (!matchingQuitFlg.value) {
-                gameStart(
-                  context,
-                  matchingFlg,
-                  soundEffect,
-                  seVolume,
-                );
-              }
-            }).catchError((onError) async {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.ERROR,
-                headerAnimationLoop: false,
-                dismissOnTouchOutside: false,
-                dismissOnBackKeyPress: false,
-                animType: AnimType.SCALE,
-                width:
-                    MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
-                body: const FaildMatching(
-                  topText: '通信失敗',
-                  secondText: '電波状況をご確認ください。\nメニュー画面に戻ります。',
-                ),
-              ).show();
-
-              await Future.delayed(
-                const Duration(milliseconds: 3500),
-              );
-              context.read(bgmProvider).state.stop();
-              context.read(bgmProvider).state = await soundEffect.loop(
-                'sounds/title.mp3',
-                volume: bgmVolume,
-                isNotification: true,
-              );
-              Navigator.popUntil(
-                  context, ModalRoute.withName(ModeSelectScreen.routeName));
-              return;
-            });
+              matchingAnimatedFlgState,
+              soundEffect,
+              seVolume,
+            );
           }
         }
       });
@@ -246,7 +138,7 @@ class GameStartScreen extends HookWidget {
                           // rivalInfo.skillList.isEmpty
                           ? AnimatedOpacity(
                               duration: const Duration(milliseconds: 500),
-                              opacity: matchingFlg.value ? 1 : 0,
+                              opacity: matchingAnimatedFlgState.value ? 1 : 0,
                               child: UserProfileCommon(
                                 imageNumber: rivalInfo.imageNumber,
                                 cardNumber: rivalInfo.cardNumber,
@@ -295,7 +187,6 @@ class GameStartScreen extends HookWidget {
                             ),
                       CenterRowStart(
                         matchingFinishedFlg: rivalInfo.skillList.isNotEmpty,
-                        trainingFlg: trainingFlg,
                         soundEffect: soundEffect,
                         seVolume: seVolume,
                         matchingQuitFlg: matchingQuitFlg,

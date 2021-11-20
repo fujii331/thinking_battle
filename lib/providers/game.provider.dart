@@ -62,10 +62,8 @@ final interstitialAdProvider = StateProvider<InterstitialAd?>((ref) => null);
 
 final initialTutorialFlgProvider = StateProvider((ref) => false);
 
+final trainingStatusProvider = StateProvider((ref) => 0);
 final cpuMessageIdsListProvider = StateProvider((ref) => <int>[1, 2, 3, 4]);
 final afterRivalMessageTimeProvider = StateProvider((ref) => 0);
-
-final trainingFlgProvider = StateProvider((ref) => false);
-final changedTrainingFlgProvider = StateProvider((ref) => false);
-final rivalDisconnectedFlgProvider = StateProvider((ref) => false);
-// final trainingStatusProvider = StateProvider((ref) => 0);
+final messageLevelProvider = StateProvider((ref) => 0);
+final skillUseLevelProvider = StateProvider((ref) => 0);

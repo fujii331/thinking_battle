@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -7,6 +8,7 @@ import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/screens/game_start.screen.dart';
 import 'package:thinking_battle/screens/mode_select.screen.dart';
+import 'package:thinking_battle/widgets/mode_select/menu_explain_modal.widget.dart';
 
 class CenterRowFinish extends HookWidget {
   final bool? winFlg;
@@ -80,10 +82,22 @@ class CenterRowFinish extends HookWidget {
 
                       context.read(initialTutorialFlgProvider).state = false;
 
-                      Navigator.of(context).pushReplacementNamed(
+                      Navigator.of(context).pushNamed(
                         ModeSelectScreen.routeName,
-                        arguments: true,
                       );
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.NO_HEADER,
+                        headerAnimationLoop: false,
+                        dismissOnTouchOutside: true,
+                        dismissOnBackKeyPress: true,
+                        showCloseIcon: true,
+                        animType: AnimType.SCALE,
+                        width: MediaQuery.of(context).size.width > 420
+                            ? 380
+                            : null,
+                        body: const MenuExplainModal(),
+                      ).show();
                     },
                   ),
                 )
@@ -113,12 +127,8 @@ class CenterRowFinish extends HookWidget {
                             volume: seVolume,
                           );
 
-                          if (context.read(changedTrainingFlgProvider).state) {
-                            context.read(changedTrainingFlgProvider).state =
-                                false;
-                            context.read(rivalDisconnectedFlgProvider).state =
-                                false;
-                            context.read(trainingFlgProvider).state = false;
+                          if (context.read(trainingStatusProvider).state >= 2) {
+                            context.read(trainingStatusProvider).state = 0;
                           }
 
                           Navigator.popUntil(
@@ -153,12 +163,8 @@ class CenterRowFinish extends HookWidget {
                             volume: seVolume,
                           );
 
-                          if (context.read(changedTrainingFlgProvider).state) {
-                            context.read(changedTrainingFlgProvider).state =
-                                false;
-                            context.read(rivalDisconnectedFlgProvider).state =
-                                false;
-                            context.read(trainingFlgProvider).state = false;
+                          if (context.read(trainingStatusProvider).state >= 2) {
+                            context.read(trainingStatusProvider).state = 0;
                           }
 
                           Navigator.popUntil(

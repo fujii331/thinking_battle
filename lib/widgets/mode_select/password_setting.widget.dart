@@ -89,9 +89,8 @@ class PasswordSetting extends HookWidget {
                         isNotification: true,
                         volume: seVolume,
                       );
-                      // context.read(rivalInfoProvider).state = dummyPlayerInfo;
                       context.read(bgmProvider).state.stop();
-                      context.read(trainingFlgProvider).state = false;
+                      context.read(trainingStatusProvider).state = 0;
 
                       context.read(friendMatchWordProvider).state =
                           passwordState.value;

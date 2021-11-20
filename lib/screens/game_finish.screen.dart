@@ -24,13 +24,9 @@ class GameFinishScreen extends HookWidget {
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
-    final bool trainingFlg = useProvider(trainingFlgProvider).state;
-    final bool changedTrainingFlg =
-        useProvider(changedTrainingFlgProvider).state;
+    final int trainingStatus = useProvider(trainingStatusProvider).state;
     final String friendMatchWord = useProvider(friendMatchWordProvider).state;
     final bool friendMatchFlg = friendMatchWord != '';
-    final bool rivalDisconnectedFlg =
-        useProvider(rivalDisconnectedFlgProvider).state;
 
     // final screenNo = useState<int>(0);
     final pageController = usePageController(initialPage: 0, keepPage: true);
@@ -52,7 +48,7 @@ class GameFinishScreen extends HookWidget {
           const Duration(milliseconds: 500),
         );
 
-        if (!trainingFlg || changedTrainingFlg) {
+        if (trainingStatus != 1) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           if (!friendMatchFlg) {
@@ -68,7 +64,7 @@ class GameFinishScreen extends HookWidget {
           }
 
           if (winFlg == true) {
-            if (!trainingFlg && !changedTrainingFlg && !rivalDisconnectedFlg) {
+            if (trainingStatus == 0) {
               // 対戦部屋
               DocumentReference<Map<String, dynamic>>? playingRoomDoc =
                   FirebaseFirestore.instance
@@ -98,7 +94,7 @@ class GameFinishScreen extends HookWidget {
                 prefs.setInt('maxContinuousWinCount', updatedCount);
               }
             }
-          } else if (!friendMatchFlg && !rivalDisconnectedFlg) {
+          } else if (!friendMatchFlg && [0, 3].contains(trainingStatus)) {
             context.read(continuousWinCountProvider).state = 0;
             prefs.setInt('continuousWinCount', 0);
           }
@@ -173,9 +169,7 @@ class GameFinishScreen extends HookWidget {
           children: [
             Result(
               winFlg: winFlg,
-              trainingFlg: trainingFlg,
-              changedTrainingFlg: changedTrainingFlg,
-              rivalDisconnectedFlg: rivalDisconnectedFlg,
+              trainingStatus: trainingStatus,
             ),
             const ActionedList(),
           ],

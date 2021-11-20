@@ -170,6 +170,7 @@ class ProfileUpdateArea extends HookWidget {
                               signUp(
                                 context,
                                 buttonPressedState,
+                                judgeFlgState,
                               );
                             }
                           : () {},
