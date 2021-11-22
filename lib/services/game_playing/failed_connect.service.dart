@@ -38,6 +38,15 @@ Future failedConnect(
     const Duration(milliseconds: 3500),
   );
 
+  // BGM切り替え
+  context.read(bgmProvider).state.stop();
+  context.read(bgmProvider).state =
+      await context.read(soundEffectProvider).state.loop(
+            'sounds/title.mp3',
+            volume: 0,
+            isNotification: true,
+          );
+
   Navigator.popUntil(context, ModalRoute.withName(GamePlayingScreen.routeName));
 
   Navigator.of(context).pushReplacementNamed(

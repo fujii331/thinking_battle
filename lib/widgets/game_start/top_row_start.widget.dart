@@ -20,7 +20,7 @@ class TopRowStart extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10),
                 child: StackWord(
                   word: '準備完了！',
-                  wordColor: Colors.orange.shade100,
+                  wordColor: Colors.orange.shade200,
                   wordMinusSize: -13,
                 ),
               )

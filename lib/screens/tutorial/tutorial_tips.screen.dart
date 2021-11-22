@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/widgets/common/stack_label.widget.dart';
@@ -38,7 +40,7 @@ class TutorialTipsScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 100),
+              SizedBox(height: Platform.isAndroid ? 100 : 120),
               Expanded(
                 child: SingleChildScrollView(
                   child: Center(
@@ -61,6 +63,7 @@ class TutorialTipsScreen extends StatelessWidget {
                           '解答を行って間違えると次のターンは解答ができなくなります。',
                           width,
                         ),
+                        const SizedBox(height: betweenHeight),
                         _eachMessage(
                           4,
                           'SPが溜まっていればスキルは同時に複数発動することができます。\n（「質問隠し」＋「ナイス質問」などが有効！）',

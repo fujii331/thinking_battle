@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,6 +17,7 @@ import 'package:thinking_battle/services/common/return_card_color_list.service.d
 import 'package:thinking_battle/services/game_playing/common_action.service.dart';
 import 'package:thinking_battle/services/game_playing/cpu_action.service.dart';
 import 'package:thinking_battle/services/game_playing/failed_connect.service.dart';
+import 'package:thinking_battle/widgets/game_playing/answer_candidate_modal.widget.dart';
 import 'package:thinking_battle/widgets/game_playing/info_toast/ready.widget.dart';
 import 'package:thinking_battle/widgets/game_playing/info_toast/time_limit.widget.dart';
 
@@ -57,13 +60,15 @@ class GamePlayingScreen extends HookWidget {
 
               Navigator.popUntil(context, ModalRoute.withName(routeName));
 
-              await showDialog<int>(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return const TimeLimit();
-                },
-              );
+              if (!context.read(backgroundProvider).state) {
+                await showDialog<int>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return const TimeLimit();
+                  },
+                );
+              }
 
               final messageId = context.read(selectMessageIdProvider).state;
 
@@ -118,47 +123,28 @@ class GamePlayingScreen extends HookWidget {
               rivalListenSubscription.cancel();
             }
 
-            await rivalActionDoc!.get().then((DocumentSnapshot<Map> _) async {
-              // 接続成功
-              // AwesomeDialog(
-              //   context: context,
-              //   dialogType: DialogType.ERROR,
-              //   headerAnimationLoop: false,
-              //   dismissOnTouchOutside: false,
-              //   dismissOnBackKeyPress: false,
-              //   animType: AnimType.SCALE,
-              //   width:
-              //       MediaQuery.of(context).size.width * .86 > 600 ? 600 : null,
-              //   body: const AttentionModal(
-              //     topText: '対戦相手の接続が切れました',
-              //     secondText: '結果画面に移ります。',
-              //   ),
-              // ).show();
+            final ConnectivityResult connectivityResult =
+                await (Connectivity().checkConnectivity());
 
-              // // レート計算
-              // await updateRate(
-              //   context,
-              //   true,
-              // );
-
-              // context.read(timerCancelFlgProvider).state = true;
-
-              // await Future.delayed(
-              //   const Duration(milliseconds: 3500),
-              // );
-
-              // Navigator.popUntil(context, ModalRoute.withName(routeName));
-
-              // Navigator.of(context).pushReplacementNamed(
-              //   GameFinishScreen.routeName,
-              //   arguments: true,
-              // );
+            if (connectivityResult != ConnectivityResult.none) {
               EasyLoading.showToast(
                 '相手の接続が切れたのでCPUに切り替えます',
                 duration: const Duration(milliseconds: 2000),
                 toastPosition: EasyLoadingToastPosition.center,
                 dismissOnTap: true,
               );
+
+              if (context.read(trainingStatusProvider).state == 0) {
+                // 対戦部屋
+                DocumentReference<Map<String, dynamic>>? playingRoomDoc =
+                    FirebaseFirestore.instance
+                        .collection('playing-room')
+                        .doc(context.read(matchingRoomIdProvider).state);
+
+                playingRoomDoc.delete().catchError((error) {
+                  // データ削除に失敗した場合、何もしない
+                });
+              }
 
               context.read(trainingStatusProvider).state = 2;
 
@@ -169,20 +155,10 @@ class GamePlayingScreen extends HookWidget {
                 seVolume,
                 true,
               );
-
-              // 対戦部屋
-              DocumentReference<Map<String, dynamic>>? playingRoomDoc =
-                  FirebaseFirestore.instance
-                      .collection('playing-room')
-                      .doc(context.read(matchingRoomIdProvider).state);
-
-              playingRoomDoc.delete().catchError((error) {
-                // データ削除に失敗した場合、何もしない
-              });
-            }).onError((error, stackTrace) {
+            } else {
               // 接続失敗
               failedConnect(context);
-            });
+            }
           }
         }
 
@@ -248,7 +224,7 @@ class GamePlayingScreen extends HookWidget {
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         if (context.read(matchingRoomIdProvider).state != '') {
-          rivalActionDoc!.delete().catchError((error) {
+          await rivalActionDoc!.delete().catchError((error) {
             // データ削除に失敗した場合、何もしない
           });
 
@@ -333,12 +309,49 @@ class GamePlayingScreen extends HookWidget {
           centerTitle: true,
           backgroundColor: Colors.blueGrey.shade900.withOpacity(0.9),
           actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: IconButton(
+                iconSize: 23,
+                icon: Icon(
+                  Icons.feed,
+                  color: Colors.grey.shade200,
+                ),
+                onPressed: () {
+                  soundEffect.play(
+                    'sounds/tap.mp3',
+                    isNotification: true,
+                    volume: seVolume,
+                  );
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.NO_HEADER,
+                    headerAnimationLoop: false,
+                    dismissOnTouchOutside: true,
+                    dismissOnBackKeyPress: true,
+                    showCloseIcon: true,
+                    animType: AnimType.SCALE,
+                    width: MediaQuery.of(context).size.width * .86 > 450
+                        ? 450
+                        : null,
+                    body: const AnswerCandidateModal(),
+                  ).show();
+                },
+              ),
+            ),
             initialTutorialFlg
                 ? TextButton(
-                    onPressed: () => Navigator.of(context).pushNamed(
-                      TutorialTopScreen.routeName,
-                      arguments: true,
-                    ),
+                    onPressed: () {
+                      soundEffect.play(
+                        'sounds/tap.mp3',
+                        isNotification: true,
+                        volume: seVolume,
+                      );
+                      Navigator.of(context).pushNamed(
+                        TutorialTopScreen.routeName,
+                        arguments: true,
+                      );
+                    },
                     child: const Text(
                       "ヘルプ",
                       style: TextStyle(color: Colors.white, fontSize: 14),

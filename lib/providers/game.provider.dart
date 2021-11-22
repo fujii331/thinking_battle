@@ -7,6 +7,7 @@ import 'package:thinking_battle/models/quiz.model.dart';
 final quizThemaProvider = StateProvider((ref) => '');
 final correctAnswersProvider = StateProvider((ref) => <String>[]);
 final wrongAnswersProvider = StateProvider((ref) => <String>[]);
+final answerCandidateProvider = StateProvider((ref) => <String>[]);
 
 final allQuestionsProvider = StateProvider((ref) => <Question>[]);
 final displayContentListProvider = StateProvider((ref) => <DisplayContent>[]);
@@ -33,8 +34,8 @@ final myTurnTimeProvider = StateProvider((ref) => 30);
 final rivalTurnTimeProvider = StateProvider((ref) => 45);
 
 final myTurnFlgProvider = StateProvider((ref) => false);
-final currentSkillPointProvider = StateProvider((ref) => 7);
-final enemySkillPointProvider = StateProvider((ref) => 7);
+final currentSkillPointProvider = StateProvider((ref) => 5);
+final enemySkillPointProvider = StateProvider((ref) => 5);
 
 final inputAnswerProvider = StateProvider((ref) => '');
 final selectableQuestionsProvider = StateProvider((ref) => <Question>[]);

@@ -114,8 +114,10 @@ class _WidgetObserverState extends HookState<void, _WidgetObserver>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       context.read(bgmProvider).state.pause();
+      context.read(backgroundProvider).state = true;
     } else if (state == AppLifecycleState.resumed) {
       context.read(bgmProvider).state.resume();
+      context.read(backgroundProvider).state = false;
     }
     super.didChangeAppLifecycleState(state);
   }

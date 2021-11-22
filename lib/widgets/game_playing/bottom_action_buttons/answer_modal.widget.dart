@@ -32,6 +32,8 @@ class AnswerModal extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final String inputAnswer = useProvider(inputAnswerProvider).state;
+    final List<String> answerCandidate =
+        useProvider(answerCandidateProvider).state;
 
     return AnswerModalContent(
       screenContext: screenContext,
@@ -42,6 +44,7 @@ class AnswerModal extends HookWidget {
       seVolume: seVolume,
       myTurnFlg: myTurnFlg,
       inputAnswer: inputAnswer,
+      answerCandidate: answerCandidate,
     );
   }
 }

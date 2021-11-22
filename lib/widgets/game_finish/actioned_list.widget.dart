@@ -40,17 +40,10 @@ class ActionedList extends HookWidget {
       children: <Widget>[
         background(),
         Padding(
-          padding: const EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 45),
           child: Center(
             child: Column(
               children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: AdWidget(ad: bannerAd),
-                  width: bannerAd.size.width.toDouble(),
-                  height: bannerAd.size.height.toDouble(),
-                ),
-                const SizedBox(height: 13),
                 Text(
                   '答え：' + correctAnswers[0],
                   style: TextStyle(
@@ -59,119 +52,129 @@ class ActionedList extends HookWidget {
                   ),
                 ),
                 const SizedBox(height: 15),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height - 230,
-                  width: widthSetting,
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: const DecorationImage(
-                            image: AssetImage(
-                                'assets/images/background/content_background.png'),
-                            fit: BoxFit.cover,
+                Container(
+                  alignment: Alignment.center,
+                  child: AdWidget(ad: bannerAd),
+                  width: bannerAd.size.width.toDouble(),
+                  height: bannerAd.size.height.toDouble(),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: SizedBox(
+                    width: widthSetting,
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: const DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/background/content_background.png'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.indigo.shade700.withOpacity(0.80),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.black,
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.indigo.shade700.withOpacity(0.80),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.black,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade800.withOpacity(0.5),
+                                blurRadius: 3.0,
+                                offset: const Offset(5, 5),
+                              )
+                            ],
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade800.withOpacity(0.5),
-                              blurRadius: 3.0,
-                              offset: const Offset(5, 5),
-                            )
-                          ],
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                            right: 8,
-                            left: 8,
-                            bottom: 10,
-                          ),
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              final DisplayContent targetContent =
-                                  displayContentList[index];
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                              right: 8,
+                              left: 8,
+                              bottom: 10,
+                              top: 4,
+                            ),
+                            child: ListView.builder(
+                              padding: const EdgeInsets.only(
+                                top: 0,
+                              ),
+                              itemBuilder: (context, index) {
+                                final DisplayContent targetContent =
+                                    displayContentList[index];
 
-                              final List<Widget> skillList = [];
+                                final List<Widget> skillList = [];
 
-                              Widget messageWidget = Container();
+                                Widget messageWidget = Container();
 
-                              if (targetContent.messageId != 0) {
-                                messageWidget = _message(targetContent);
-                              }
-
-                              for (int skillId in targetContent.skillIds) {
-                                if (![0, 108, -108].contains(skillId)) {
-                                  skillList.add(
-                                    _skillMessage(
-                                      targetContent.specialMessage != '' &&
-                                              (skillId == 5 || skillId == 7)
-                                          ? targetContent.specialMessage
-                                          : skillId < 0
-                                              ? skillSettings[
-                                                      (-1 * skillId) - 1]
-                                                  .skillName
-                                              : skillSettings[skillId - 1]
-                                                  .skillName,
-                                      targetContent.myTurnFlg,
-                                      targetContent.displayList,
-                                      skillId < 0 ? true : false,
-                                      fontSize,
-                                    ),
-                                  );
+                                if (targetContent.messageId != 0) {
+                                  messageWidget = _message(targetContent);
                                 }
-                              }
 
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: 10,
-                                  top: index == 0
-                                      ? 0
-                                      : skillList.isNotEmpty
-                                          ? 2
-                                          : 10,
-                                  left: 2,
-                                  right: 2,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: targetContent.myTurnFlg
-                                      ? CrossAxisAlignment.start
-                                      : CrossAxisAlignment.end,
-                                  children: [
-                                    messageWidget,
-                                    skillList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 4),
-                                            child: Column(children: skillList),
-                                          )
-                                        : Container(),
-                                    _contentRow(
-                                      context,
-                                      targetContent,
-                                      rivalInfo.imageNumber,
-                                      colorList,
-                                      fontSize,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            itemCount: displayContentList.length,
+                                for (int skillId in targetContent.skillIds) {
+                                  if (![0, 108, -108].contains(skillId)) {
+                                    skillList.add(
+                                      _skillMessage(
+                                        targetContent.specialMessage != '' &&
+                                                (skillId == 5 || skillId == 7)
+                                            ? targetContent.specialMessage
+                                            : skillId < 0
+                                                ? skillSettings[
+                                                        (-1 * skillId) - 1]
+                                                    .skillName
+                                                : skillSettings[skillId - 1]
+                                                    .skillName,
+                                        targetContent.myTurnFlg,
+                                        targetContent.displayList,
+                                        skillId < 0 ? true : false,
+                                        fontSize,
+                                      ),
+                                    );
+                                  }
+                                }
+
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: 10,
+                                    top: skillList.isNotEmpty ? 2 : 10,
+                                    left: 2,
+                                    right: 2,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: targetContent.myTurnFlg
+                                        ? CrossAxisAlignment.start
+                                        : CrossAxisAlignment.end,
+                                    children: [
+                                      messageWidget,
+                                      skillList.isNotEmpty
+                                          ? Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 4),
+                                              child:
+                                                  Column(children: skillList),
+                                            )
+                                          : Container(),
+                                      _contentRow(
+                                        context,
+                                        targetContent,
+                                        rivalInfo.imageNumber,
+                                        colorList,
+                                        fontSize,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              itemCount: displayContentList.length,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
+                const SizedBox(height: 35),
               ],
             ),
           ),

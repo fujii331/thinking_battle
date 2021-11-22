@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -230,6 +231,14 @@ Future mainMatchingAction(
   final bool randomMatchFlg = friendMatchWord == '';
   final int buildNumber = context.read(buildNumberProvider).state;
 
+  final ConnectivityResult connectivityResult =
+      await (Connectivity().checkConnectivity());
+
+  // ネット接続していなかったらエラー
+  if (connectivityResult == ConnectivityResult.none) {
+    throw Exception('通信失敗');
+  }
+
   if (randomMatchFlg) {
     // ランダムマッチ
     final matchingRoomRef =
@@ -428,6 +437,7 @@ Future matchingPreparation(
           context.read(allQuestionsProvider).state = quiz.questions;
           context.read(correctAnswersProvider).state = quiz.correctAnswers;
           context.read(wrongAnswersProvider).state = quiz.wrongAnswers;
+          context.read(answerCandidateProvider).state = quiz.answerCandidate;
 
           // マッチ済みに更新
           matchingRoomRef.doc(matchingId).set({
@@ -454,6 +464,18 @@ Future matchingPreparation(
             matchingRoomRef.doc(matchingId).delete().catchError((error) {
               // データ削除に失敗した場合、何もしない
             });
+
+            // 前回削除できていなかった時のために対戦部屋の削除
+            // 対戦開始時にやってるからいらないかも
+            // DocumentReference<Map<String, dynamic>>? playingRoomDoc =
+            //     FirebaseFirestore.instance
+            //         .collection('playing-room')
+            //         .doc(matchingId);
+
+            // playingRoomDoc.delete().catchError((error) {
+            //   // データ削除に失敗した場合、何もしない
+            // });
+
             return;
           }).catchError((error) async {
             // データ更新に失敗した場合
@@ -464,13 +486,13 @@ Future matchingPreparation(
 
       if (randomMatchFlg) {
         // 1/12でCPUとも接続しない
-        final notCpuMatchingFlg = Random().nextInt(12) == 0;
+        final notCpuMatchingFlg = Random().nextInt(15) == 0;
         // 1/3で7-10秒
         // 1/3で3-6秒
         final int waitingTime = notCpuMatchingFlg
-            ? 13
+            ? 11
             : Random().nextInt(2) == 0
-                ? 5 + Random().nextInt(4)
+                ? 4 + Random().nextInt(4)
                 : Random().nextInt(3) == 0
                     ? 3 + Random().nextInt(3)
                     : 7;
@@ -521,7 +543,7 @@ Future matchingPreparation(
           } else {
             // とりあえずCPUとマッチングさせる
             context.read(trainingStatusProvider).state = 3;
-            trainingInitialAction(
+            await trainingInitialAction(
               context,
             );
           }
@@ -667,6 +689,7 @@ Future matchingUpdate(
         context.read(allQuestionsProvider).state = quiz.questions;
         context.read(correctAnswersProvider).state = quiz.correctAnswers;
         context.read(wrongAnswersProvider).state = quiz.wrongAnswers;
+        context.read(answerCandidateProvider).state = quiz.answerCandidate;
 
         // 部屋のIDを取得
         context.read(matchingRoomIdProvider).state = matchingId;

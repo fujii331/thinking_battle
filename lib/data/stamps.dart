@@ -31,7 +31,7 @@ const stamps = [
       reward: 'スキル「嘘つき」を解放',
     ),
     Stamp(
-      needCount: 20,
+      needCount: 5,
       reward: 'スキル「質問確認」を解放',
     ),
     Stamp(
@@ -39,11 +39,11 @@ const stamps = [
       reward: 'メッセージ「百戦錬磨です」獲得',
     ),
     Stamp(
-      needCount: 1000,
+      needCount: 500,
       reward: 'アイコン「ホラーパンプキン」獲得',
     ),
     Stamp(
-      needCount: 2000,
+      needCount: 1000,
       reward: 'テーマ「すてきな夜空」獲得',
     ),
   ],
@@ -54,7 +54,7 @@ const stamps = [
       reward: 'ガチャチケット1枚獲得',
     ),
     Stamp(
-      needCount: 5,
+      needCount: 10,
       reward: 'スキル「質問サーチ」を解放',
     ),
     Stamp(

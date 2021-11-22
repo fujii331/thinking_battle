@@ -55,9 +55,6 @@ class ModeSelectScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final bool afterTutorialFlg =
-    //     ModalRoute.of(context)?.settings.arguments as bool;
-
     final AudioCache soundEffect = useProvider(soundEffectProvider).state;
     final double seVolume = useProvider(seVolumeProvider).state;
     final int cardNumber = useProvider(cardNumberProvider).state;

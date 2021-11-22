@@ -27,10 +27,9 @@ class TutorialSkillModal extends StatelessWidget {
             const Spacer(),
             Container(
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                // border: Border.all(color: Colors.blue),
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
                   bottomRight: Radius.zero,

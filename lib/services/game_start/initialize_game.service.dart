@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thinking_battle/data/cpu_names.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 
@@ -10,13 +11,14 @@ import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/data/quiz_data.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
+import 'package:thinking_battle/services/game_playing/update_rate.service.dart';
 
 void commonInitialAction(
   BuildContext context,
 ) {
   // 初期化
   context.read(bgmProvider).state.stop();
-  context.read(currentSkillPointProvider).state = 5;
+  context.read(currentSkillPointProvider).state = 7;
   context.read(afterMessageTimeProvider).state = 0;
   context.read(afterRivalMessageTimeProvider).state = 0;
   context.read(alreadyseenQuestionsProvider).state = [];
@@ -33,9 +35,9 @@ void commonInitialAction(
   context.read(interstitialAdProvider).state = null;
 }
 
-void trainingInitialAction(
+Future trainingInitialAction(
   BuildContext context,
-) {
+) async {
   context.read(enemySkillPointProvider).state = 7;
 
   // 先行・後攻
@@ -88,9 +90,9 @@ void trainingInitialAction(
   int imageNumber = Random().nextInt(6) + 1;
   int cardNumber = Random().nextInt(4) + 1;
 
-  if (matchedCount < 3) {
+  if (matchedCount < 2) {
     // 何もしない
-  } else if (matchedCount < 20) {
+  } else if (matchedCount < 10) {
     skillList = skillRandomValue < 10
         ? [1, 2, 4]
         : skillRandomValue < 40
@@ -112,19 +114,17 @@ void trainingInitialAction(
     imageNumber = Random().nextInt(9) + 1;
     cardNumber = Random().nextInt(6) + 1;
   } else if (matchedCount < 100) {
-    skillList = skillRandomValue < 10
+    skillList = skillRandomValue < 20
         ? [1, 2, 4]
-        : skillRandomValue < 30
+        : skillRandomValue < 40
             ? [1, 2, 5]
-            : skillRandomValue < 45
-                ? [2, 3, 5]
-                : skillRandomValue < 60
-                    ? [2, 4, 5]
-                    : skillRandomValue < 75
-                        ? [2, 5, 7]
-                        : skillRandomValue < 90
-                            ? [1, 2, 7]
-                            : [2, 4, 7];
+            : skillRandomValue < 60
+                ? [2, 4, 5]
+                : skillRandomValue < 75
+                    ? [1, 3, 4]
+                    : skillRandomValue < 90
+                        ? [1, 2, 7]
+                        : [2, 4, 7];
 
     messageIdsList = messageRandomValue < 20
         ? [1, 2, 6, 7]
@@ -157,7 +157,7 @@ void trainingInitialAction(
                                     ? [2, 4, 6]
                                     : skillRandomValue < 90
                                         ? [1, 2, 7]
-                                        : [2, 3, 7];
+                                        : [1, 3, 7];
 
     messageIdsList = [
       Random().nextInt(20) + 1,
@@ -172,7 +172,7 @@ void trainingInitialAction(
 
   if (plusMatchedCount > 1600 && Random().nextInt(10) == 0) {
     skillList = skillRandomValue < 20
-        ? [2, 3, 8]
+        ? [3, 7, 8]
         : skillRandomValue < 40
             ? [2, 5, 8]
             : skillRandomValue < 60
@@ -196,7 +196,7 @@ void trainingInitialAction(
 
   final int messageLevelRandomValue = Random().nextInt(100);
 
-  context.read(messageLevelProvider).state = messageLevelRandomValue < 30
+  context.read(messageLevelProvider).state = messageLevelRandomValue < 20
       ? 1
       : messageLevelRandomValue < 80
           ? 2
@@ -204,7 +204,7 @@ void trainingInitialAction(
 
   final int skillUseLevelRandomValue = Random().nextInt(100);
 
-  context.read(skillUseLevelProvider).state = skillUseLevelRandomValue < 30
+  context.read(skillUseLevelProvider).state = skillUseLevelRandomValue < 20
       ? 1
       : messageLevelRandomValue < 75
           ? 2
@@ -216,12 +216,23 @@ void trainingInitialAction(
   context.read(allQuestionsProvider).state = quiz.questions;
   context.read(correctAnswersProvider).state = quiz.correctAnswers;
   context.read(wrongAnswersProvider).state = quiz.wrongAnswers;
+  context.read(answerCandidateProvider).state = quiz.answerCandidate;
+
+  // 負けた場合のレートを登録
+  final double failedRate = getNewRate(
+    context.read(rateProvider).state,
+    cpuRate,
+    false,
+  );
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setDouble('failedRate', failedRate);
 }
 
 void tutorialTrainingInitialAction(
   BuildContext context,
 ) {
-  context.read(enemySkillPointProvider).state = 5;
+  context.read(enemySkillPointProvider).state = 7;
   context.read(cpuMessageIdsListProvider).state = [0, 0, 0, 0];
 
   context.read(precedingFlgProvider).state = true;
@@ -237,10 +248,11 @@ void tutorialTrainingInitialAction(
   );
   context.read(skillUseLevelProvider).state = 2;
 
-  final Quiz quiz = quizData[12];
+  final Quiz quiz = quizData[15];
   // 問題を設定
   context.read(quizThemaProvider).state = quiz.thema;
   context.read(allQuestionsProvider).state = quiz.questions;
   context.read(correctAnswersProvider).state = quiz.correctAnswers;
   context.read(wrongAnswersProvider).state = quiz.wrongAnswers;
+  context.read(answerCandidateProvider).state = quiz.answerCandidate;
 }

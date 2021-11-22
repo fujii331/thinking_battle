@@ -115,7 +115,7 @@ Future turnAction(
       }
 
       await Future.delayed(
-        const Duration(milliseconds: 70),
+        const Duration(milliseconds: 100),
       );
 
       scrollToBottom(
@@ -124,7 +124,7 @@ Future turnAction(
       );
 
       await Future.delayed(
-        const Duration(milliseconds: 630),
+        const Duration(milliseconds: 600),
       );
     }
 
@@ -183,7 +183,7 @@ Future turnAction(
       context.read(displayContentListProvider).state = displayContentList;
 
       await Future.delayed(
-        const Duration(milliseconds: 70),
+        const Duration(milliseconds: 100),
       );
 
       scrollToBottom(
@@ -194,7 +194,7 @@ Future turnAction(
       if (displaySkillIds[i] == 5) {
         int changedCount = 0;
         await Future.delayed(
-          const Duration(milliseconds: 430),
+          const Duration(milliseconds: 400),
         );
 
         context.read(displayQuestionResearchProvider).state = 1;
@@ -272,7 +272,7 @@ Future turnAction(
         );
 
         await Future.delayed(
-          const Duration(milliseconds: 70),
+          const Duration(milliseconds: 100),
         );
 
         if (changedCount > 0) {
@@ -283,7 +283,7 @@ Future turnAction(
         }
 
         await Future.delayed(
-          const Duration(milliseconds: 130),
+          const Duration(milliseconds: 100),
         );
 
         context.read(animationQuestionResearchProvider).state = false;
@@ -387,7 +387,7 @@ Future turnAction(
         );
 
         await Future.delayed(
-          const Duration(milliseconds: 70),
+          const Duration(milliseconds: 100),
         );
 
         if (changedFlg) {
@@ -398,7 +398,7 @@ Future turnAction(
         }
 
         await Future.delayed(
-          const Duration(milliseconds: 130),
+          const Duration(milliseconds: 100),
         );
 
         context.read(animationQuestionResearchProvider).state = false;
@@ -472,7 +472,7 @@ Future turnAction(
     }
 
     await Future.delayed(
-      const Duration(milliseconds: 70),
+      const Duration(milliseconds: 100),
     );
 
     scrollToBottom(
@@ -481,7 +481,7 @@ Future turnAction(
     );
 
     await Future.delayed(
-      const Duration(milliseconds: 1230),
+      const Duration(milliseconds: 1200),
     );
 
     // 返答表示
@@ -517,7 +517,7 @@ Future turnAction(
       }
 
       await Future.delayed(
-        const Duration(milliseconds: 70),
+        const Duration(milliseconds: 100),
       );
 
       scrollToBottom(
@@ -526,7 +526,7 @@ Future turnAction(
       );
 
       await Future.delayed(
-        const Duration(milliseconds: 630),
+        const Duration(milliseconds: 600),
       );
     }
 
@@ -571,7 +571,7 @@ Future turnAction(
     context.read(displayContentListProvider).state = displayContentList;
 
     await Future.delayed(
-      const Duration(milliseconds: 70),
+      const Duration(milliseconds: 100),
     );
 
     scrollToBottom(
@@ -580,7 +580,7 @@ Future turnAction(
     );
 
     await Future.delayed(
-      const Duration(milliseconds: 1430),
+      const Duration(milliseconds: 1400),
     );
 
     for (int i = 0; i < 3; i++) {
@@ -739,7 +739,7 @@ Future turnAction(
     context.read(displayContentListProvider).state = displayContentList;
 
     await Future.delayed(
-      const Duration(milliseconds: 70),
+      const Duration(milliseconds: 100),
     );
 
     // 質問表示
@@ -760,7 +760,7 @@ Future turnAction(
     context.read(timerCancelFlgProvider).state = true;
 
     await Future.delayed(
-      const Duration(milliseconds: 1930),
+      const Duration(milliseconds: 1900),
     );
 
     // 音楽停止し、新しい音楽の準備

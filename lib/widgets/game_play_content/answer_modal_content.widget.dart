@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/services.dart';
 
 import 'package:thinking_battle/models/send_content.model.dart';
 
@@ -22,6 +21,7 @@ class AnswerModalContent extends HookWidget {
   final double seVolume;
   final bool myTurnFlg;
   final String inputAnswer;
+  final List<String> answerCandidate;
 
   const AnswerModalContent({
     Key? key,
@@ -33,6 +33,7 @@ class AnswerModalContent extends HookWidget {
     required this.seVolume,
     required this.myTurnFlg,
     required this.inputAnswer,
+    required this.answerCandidate,
   }) : super(key: key);
 
   @override
@@ -75,7 +76,7 @@ class AnswerModalContent extends HookWidget {
                 bottom: 25,
               ),
               child: Text(
-                'ひらがなで答えを入力',
+                '候補から答えを選択',
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -93,57 +94,66 @@ class AnswerModalContent extends HookWidget {
                     fontSize: 18,
                   ),
                 ),
-                Container(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  width: 170,
-                  child: TextFormField(
-                    controller: answerController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.grey.shade200,
-                      filled: true,
-                      hintText: 'タップして入力',
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.blue,
-                          width: 3.0,
-                        ),
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                      bottom: 3,
+                    ),
+                    width: 160,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: Colors.black54,
                       ),
                     ),
-                    onChanged: (String input) {
-                      context.read(inputAnswerProvider).state = input;
-                      if (inputAnswer.isNotEmpty &&
-                          RegExp(r'^([ぁ-ん|ー])+$').hasMatch(input)) {
-                        hiraganaState.value = true;
-                      }
-                    },
-                    inputFormatters: <TextInputFormatter>[
-                      LengthLimitingTextInputFormatter(
-                        12,
+                    alignment: Alignment.center,
+                    child: DropdownButton(
+                      isExpanded: true,
+                      hint: const Text(
+                        'タップして選択',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black45,
+                        ),
                       ),
-                    ],
+                      underline: Container(
+                        color: Colors.black,
+                      ),
+                      value: answerController.text != ''
+                          ? answerController.text
+                          : null,
+                      items: answerCandidate.map((String word) {
+                        return DropdownMenuItem(
+                          value: word,
+                          child: Text(word,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              )),
+                        );
+                      }).toList(),
+                      onChanged: (targetSubject) {
+                        answerController.text = context
+                            .read(inputAnswerProvider)
+                            .state = targetSubject as String;
+                      },
+                    ),
                   ),
                 ),
                 const Text(
                   'だ！',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 18,
-              child: Text(
-                hiraganaState.value ? '' : 'ひらがなで入力してください',
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontFamily: 'SawarabiGothic',
-                  color: Colors.red,
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             SizedBox(
               width: 100,
               height: 40,
@@ -164,57 +174,52 @@ class AnswerModalContent extends HookWidget {
                 ),
                 onPressed: myTurnFlg && answerController.text.isNotEmpty
                     ? () async {
-                        if (RegExp(r'^([ぁ-ん|ー])+$')
-                            .hasMatch(answerController.text)) {
-                          soundEffect.play(
-                            'sounds/tap.mp3',
-                            isNotification: true,
-                            volume: seVolume,
-                          );
-                          hiraganaState.value = true;
-                          context.read(myTurnFlgProvider).state = false;
+                        soundEffect.play(
+                          'sounds/tap.mp3',
+                          isNotification: true,
+                          volume: seVolume,
+                        );
+                        hiraganaState.value = true;
+                        context.read(myTurnFlgProvider).state = false;
 
-                          final messageId =
-                              context.read(selectMessageIdProvider).state;
+                        final messageId =
+                            context.read(selectMessageIdProvider).state;
 
-                          // 通信対戦時は相手にデータを送る
-                          if (myActionDoc != null) {
-                            await myActionDoc!
-                                .set({
-                                  'questionId': 0,
-                                  'answer': answerController.text,
-                                  'skillIds': [],
-                                  'messageId': messageId,
-                                })
-                                .timeout(const Duration(seconds: 5))
-                                .onError((error, stackTrace) {
-                                  rivalListenSubscription!.cancel();
-                                  failedConnect(context);
-                                });
-                          }
-
-                          final sendContent = SendContent(
-                            questionId: 0,
-                            answer: answerController.text,
-                            skillIds: [],
-                            messageId: messageId,
-                          );
-
-                          // ターン行動実行
-                          turnAction(
-                            screenContext,
-                            sendContent,
-                            true,
-                            scrollController,
-                            soundEffect,
-                            seVolume,
-                            rivalListenSubscription,
-                          );
-
-                          Navigator.pop(context);
-                        } else {
-                          hiraganaState.value = false;
+                        // 通信対戦時は相手にデータを送る
+                        if (myActionDoc != null) {
+                          await myActionDoc!
+                              .set({
+                                'questionId': 0,
+                                'answer': answerController.text,
+                                'skillIds': [],
+                                'messageId': messageId,
+                              })
+                              .timeout(const Duration(seconds: 5))
+                              .onError((error, stackTrace) {
+                                rivalListenSubscription!.cancel();
+                                failedConnect(context);
+                              });
                         }
+
+                        final sendContent = SendContent(
+                          questionId: 0,
+                          answer: answerController.text,
+                          skillIds: [],
+                          messageId: messageId,
+                        );
+
+                        // ターン行動実行
+                        turnAction(
+                          screenContext,
+                          sendContent,
+                          true,
+                          scrollController,
+                          soundEffect,
+                          seVolume,
+                          rivalListenSubscription,
+                        );
+
+                        Navigator.pop(context);
                       }
                     : () {},
               ),

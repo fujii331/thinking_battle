@@ -56,7 +56,7 @@ class TutorialAnswerModalRedFrame extends StatelessWidget {
                       bottom: 25,
                     ),
                     child: Text(
-                      'ひらがなで答えを入力',
+                      '候補から答えを選択',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -75,18 +75,26 @@ class TutorialAnswerModalRedFrame extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 3,
-                            color: [1, 2].contains(tutorialNumber)
-                                ? Colors.red
-                                : Colors.white.withOpacity(0),
-                          ),
-                          borderRadius: BorderRadius.circular(20),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 13,
+                          right: 10,
                         ),
-                        height: 49,
-                        width: 155,
+                        child: Container(
+                          width: 163,
+                          height: 53,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: [1, 2].contains(tutorialNumber)
+                                  ? Colors.red
+                                  : Colors.white.withOpacity(0),
+                              width: 3,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Container(),
+                        ),
                       ),
                       Text(
                         'だ！',
@@ -97,18 +105,7 @@ class TutorialAnswerModalRedFrame extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 18,
-                    child: Text(
-                      'ひらがなで入力してください',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'SawarabiGothic',
-                        color: Colors.white.withOpacity(0),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 20),
                   Container(
                     width: 100,
                     height: 40,

@@ -8,3 +8,5 @@ final seVolumeProvider = StateProvider((ref) => 0.5);
 final timerCancelFlgProvider = StateProvider((ref) => false);
 final buildNumberProvider = StateProvider((ref) => 0);
 final watchedInfoListProvider = StateProvider((ref) => <String>[]);
+
+final backgroundProvider = StateProvider((ref) => false);

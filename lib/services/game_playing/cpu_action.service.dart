@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'dart:math';
@@ -34,7 +35,7 @@ Future cpuAction(
   final int cpuTurn = (displayContentList.length ~/ 2) + 1;
   // スキル
   final List<int> enemySkills = context.read(rivalInfoProvider).state.skillList;
-  // 的情報
+  // 敵情報
   final PlayerInfo rivalInfo = context.read(rivalInfoProvider).state;
   // スキルポイント
   final int enemySkillPoint = context.read(enemySkillPointProvider).state;
@@ -53,7 +54,7 @@ Future cpuAction(
   List<int> returnSkillIds = [];
   int returnMessageId = 0;
 
-  final double finishImportance = (60 - (rivalInfo.rate / 90));
+  final double finishImportance = (70 - (rivalInfo.rate / 70));
 
   final bool gotMessageFlg = displayContentList.isEmpty
       ? false
@@ -61,17 +62,36 @@ Future cpuAction(
 
   if (!disconnectedActionFlg) {
     // 経過時間にランダム性を出す
+    final durationTime = cpuTurn < 6
+        ? 4 + Random().nextInt(4)
+        : Random().nextInt(15) == 0
+            ? 15 + Random().nextInt(5)
+            : cpuTurn < 12
+                ? 6 + Random().nextInt(6)
+                : 8 + Random().nextInt(5);
+
     await Future.delayed(
       Duration(
-        seconds: cpuTurn < 6
-            ? 4 + Random().nextInt(4)
-            : Random().nextInt(15) == 0
-                ? 15 + Random().nextInt(5)
-                : cpuTurn < 12
-                    ? 6 + Random().nextInt(6)
-                    : 8 + Random().nextInt(5),
+        seconds: durationTime,
       ),
     );
+
+    if (trainingStatus >= 3) {
+      for (int i = 0; i < 40 - durationTime; i++) {
+        final ConnectivityResult connectivityResult =
+            await (Connectivity().checkConnectivity());
+
+        // ネット接続していたらbreak
+        if (connectivityResult != ConnectivityResult.none) {
+          break;
+        }
+        // 時間制限が切れていたらreturn
+        if (context.read(rivalTurnTimeProvider).state == 0) {
+          return;
+        }
+        await Future.delayed(const Duration(seconds: 1));
+      }
+    }
   }
 
   // CPUのメッセージ時間
@@ -87,10 +107,7 @@ Future cpuAction(
         !displayContent.myTurnFlg) {
       searchFlg = true;
     } else {
-      sumImportance +=
-          displayContent.importance * displayContent.importance == 4
-              ? 3
-              : displayContent.importance;
+      sumImportance += displayContent.importance * displayContent.importance;
     }
   }
 
@@ -127,9 +144,7 @@ Future cpuAction(
       // 解答した誤答を削除
       wrongAnswerList.removeAt(target);
       context.read(wrongAnswersProvider).state = wrongAnswerList;
-    } else if (skillUseLevel == 1 ||
-        (skillUseLevel == 2 && Random().nextInt(3) > 0) ||
-        (skillUseLevel == 3 && Random().nextInt(3) == 0)) {
+    } else if (skillUseLevel == 1 || Random().nextInt(3) > 0) {
       final List<int> enemySkillsCandidate = enemySkills
           .where((skillId) =>
               skillId != 6 && (searchFlg || (skillId != 5 && skillId != 7)))
@@ -138,6 +153,7 @@ Future cpuAction(
       // 質問候補が2つの場合でナイス質問を含み、質問サーチ・質問確認・トラップを含まず、スキルポイントが溜まっている場合
       if (enemySkillsCandidate.length == 2 &&
           enemySkillsCandidate.contains(2) &&
+          (!enemySkillsCandidate.contains(4) || Random().nextInt(3) == 0) &&
           !enemySkillsCandidate.contains(5) &&
           !enemySkillsCandidate.contains(6) &&
           !enemySkillsCandidate.contains(7) &&
@@ -160,6 +176,8 @@ Future cpuAction(
 
         // ナイス質問を含み、質問サーチ・質問確認・SP溜め・トラップを含まず、スキルポイントが溜まっている場合
         if (((skillsCombination.contains(2) &&
+                    (!skillsCombination.contains(4) ||
+                        Random().nextInt(3) == 0) &&
                     !skillsCombination.contains(5) &&
                     !skillsCombination.contains(6) &&
                     !skillsCombination.contains(7) &&
@@ -178,15 +196,16 @@ Future cpuAction(
       }
 
       // スキルを同時に使わなかった場合
-      if (returnSkillIds.isEmpty &&
-          (skillUseLevel == 1 ||
-              (skillUseLevel == 2 && Random().nextInt(2) == 0) ||
-              (skillUseLevel == 3 && Random().nextInt(3) > 0))) {
+      // スキルを同時に使う場合でもスキルパターンが3の場合1/2で上書き
+      if ((returnSkillIds.isEmpty ||
+              skillUseLevel == 1 && Random().nextInt(2) == 0) &&
+          (skillUseLevel == 1 || Random().nextInt(3) > 0)) {
         final int targetSkillId =
             enemySkillsCandidate[Random().nextInt(enemySkillsCandidate.length)];
 
         if (enemySkillPoint >= skillSettings[targetSkillId - 1].skillPoint &&
-            targetSkillId != 2 &&
+            (targetSkillId != 2 ||
+                (enemySkills.contains(4) && Random().nextInt(3) == 0)) &&
             (targetSkillId != 6 || enemySkillPoint < 8)) {
           returnSkillIds = [targetSkillId];
         }
@@ -208,7 +227,7 @@ Future cpuAction(
           (returnSkillIds.contains(3) &&
               (sumImportance < finishImportance * 0.8 ||
                   !returnSkillIds.contains(2))) ||
-          (cpuTurn < 5 &&
+          (cpuTurn < 3 &&
               !returnSkillIds.contains(6) &&
               skillUseLevel != 1 &&
               Random().nextInt(3) > 0)) {

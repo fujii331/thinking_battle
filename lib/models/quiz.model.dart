@@ -18,6 +18,7 @@ class Quiz {
   final List<Question> questions;
   final List<String> correctAnswers;
   final List<String> wrongAnswers;
+  final List<String> answerCandidate;
 
   const Quiz({
     required this.id,
@@ -25,5 +26,6 @@ class Quiz {
     required this.questions,
     required this.correctAnswers,
     required this.wrongAnswers,
+    required this.answerCandidate,
   });
 }

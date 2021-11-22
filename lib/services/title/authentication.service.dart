@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:thinking_battle/providers/game.provider.dart';
+import 'package:thinking_battle/providers/player.provider.dart';
 
 import 'package:thinking_battle/screens/mode_select.screen.dart';
 import 'package:thinking_battle/screens/tutorial/tutorial_game_system.screen.dart';
@@ -42,6 +42,8 @@ Future signUp(
 
     prefs.setString('email', email);
     prefs.setString('password', password);
+
+    context.read(loginIdProvider).state = email;
 
     Navigator.pop(context);
 

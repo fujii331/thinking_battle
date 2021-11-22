@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -87,7 +89,7 @@ class TutorialGameSystemScreen extends HookWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 100),
+                SizedBox(height: Platform.isAndroid ? 100 : 120),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Center(

@@ -50,7 +50,7 @@ class GpChange extends HookWidget {
                 primary: Colors.brown.shade500,
                 textStyle: Theme.of(context).textTheme.button,
                 padding: const EdgeInsets.only(
-                  bottom: 2,
+                  top: 2,
                 ),
                 shape: const StadiumBorder(),
                 side: BorderSide(
