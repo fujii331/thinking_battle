@@ -246,7 +246,7 @@ Future mainMatchingAction(
 
     await matchingRoomRef
         .where('matchingStatus', isEqualTo: 1)
-        // .where('buildNumber', isEqualTo: buildNumber) // TODO バージョン2から導入
+        .where('buildNumber', isEqualTo: buildNumber)
         .where('rate', isLessThan: userRate + 200.0)
         .where('rate', isGreaterThan: userRate - 200.0)
         .limit(1)
@@ -283,7 +283,7 @@ Future mainMatchingAction(
     // フレンドマッチ
     await friendMatchingRoomRef
         .where('matchingStatus', isEqualTo: 1)
-        // .where('buildNumber', isEqualTo: buildNumber) // TODO バージョン2から導入
+        .where('buildNumber', isEqualTo: buildNumber)
         .where('customData', isEqualTo: friendMatchWord)
         .limit(1)
         .get()

@@ -239,6 +239,7 @@ Future cpuAction(
         returnQuestionId = getNiceQuestion(
           context,
           allQuestions,
+          cpuTurn,
         );
       } else {
         returnQuestionId = questions[0].id;

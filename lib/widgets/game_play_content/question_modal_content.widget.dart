@@ -221,6 +221,7 @@ class QuestionModalContent extends HookWidget {
                                 sendQuestionId = getNiceQuestion(
                                   context,
                                   allQuestions,
+                                  context.read(turnCountProvider).state,
                                 );
                               }
 

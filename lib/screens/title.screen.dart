@@ -18,11 +18,8 @@ class TitleScreen extends HookWidget {
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
-        // await shouldUpdate(context); // バージョン2から導入
+        // await shouldUpdate(context); // TODO バージョン2から導入
 
-        // timeStart(
-        //   context,
-        // );
         await Future.delayed(
           const Duration(milliseconds: 1000),
         );
