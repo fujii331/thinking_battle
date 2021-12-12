@@ -18,10 +18,20 @@ class TopRowStart extends StatelessWidget {
         child: matchingFlg
             ? Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: StackWord(
-                  word: '準備完了！',
-                  wordColor: Colors.orange.shade200,
-                  wordMinusSize: -13,
+                child: Text(
+                  '準備完了！!',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'MochiyPopOne',
+                    color: Colors.orange.shade200,
+                    shadows: const [
+                      Shadow(
+                        color: Colors.black,
+                        offset: Offset(1, 1),
+                        blurRadius: 1,
+                      ),
+                    ],
+                  ),
                 ),
               )
             : Row(
@@ -32,10 +42,20 @@ class TopRowStart extends StatelessWidget {
                     size: 30,
                   ),
                   const SizedBox(width: 15),
-                  StackWord(
-                    word: '待機中...',
-                    wordColor: Colors.yellow.shade100,
-                    wordMinusSize: -13,
+                  Text(
+                    '待機中...',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontFamily: 'MochiyPopOne',
+                      color: Colors.yellow.shade100,
+                      shadows: const [
+                        Shadow(
+                          color: Colors.black,
+                          offset: Offset(1, 1),
+                          blurRadius: 1,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

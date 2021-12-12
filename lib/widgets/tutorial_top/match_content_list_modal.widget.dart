@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -137,11 +139,17 @@ class MatchContentListModal extends HookWidget {
           ),
         ),
         child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 17,
-              color: Colors.black,
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: Platform.isAndroid ? 1 : 0,
+              top: Platform.isAndroid ? 0 : 1,
+            ),
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 17,
+                color: Colors.black,
+              ),
             ),
           ),
         ),

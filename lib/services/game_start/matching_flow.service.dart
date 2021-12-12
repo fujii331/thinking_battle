@@ -492,10 +492,10 @@ Future matchingPreparation(
         final int waitingTime = notCpuMatchingFlg
             ? 11
             : Random().nextInt(2) == 0
-                ? 4 + Random().nextInt(4)
+                ? 3 + Random().nextInt(4)
                 : Random().nextInt(3) == 0
-                    ? 3 + Random().nextInt(3)
-                    : 7;
+                    ? 2 + Random().nextInt(3)
+                    : 6;
         for (int i = 0; i < waitingTime; i++) {
           if (matchingQuitFlgState.value ||
               context.read(matchingWaitingIdProvider).state == '') {

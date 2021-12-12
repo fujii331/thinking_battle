@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -117,8 +119,8 @@ class SkillModalContent extends HookWidget {
                       ? Colors.green.shade600
                       : Colors.green.shade200,
                   textStyle: Theme.of(context).textTheme.button,
-                  padding: const EdgeInsets.only(
-                    bottom: 3,
+                  padding: EdgeInsets.only(
+                    bottom: Platform.isAndroid ? 3 : 1,
                   ),
                   shape: const StadiumBorder(),
                   side: BorderSide(
@@ -146,6 +148,7 @@ class SkillModalContent extends HookWidget {
                     : () {},
               ),
             ),
+            Platform.isAndroid ? Container() : const SizedBox(height: 8),
           ],
         ),
       ),
@@ -194,9 +197,10 @@ class SkillModalContent extends HookWidget {
               enableCheck
                   ? Container()
                   : Padding(
-                      padding: const EdgeInsets.only(
-                        left: 13.5,
-                        top: 1,
+                      padding: EdgeInsets.only(
+                        left: Platform.isAndroid ? 13.5 : 12.8,
+                        top: Platform.isAndroid ? 1 : 0,
+                        bottom: Platform.isAndroid ? 0 : 0.5,
                       ),
                       child: Column(
                         children: [

@@ -51,7 +51,9 @@ class TitleScreen extends HookWidget {
                 TitleButton(
                   displayFlg: displayFlg,
                 ),
-                const SizedBox(height: 160),
+                SizedBox(
+                    height:
+                        MediaQuery.of(context).size.height > 600 ? 170 : 100),
               ],
             ),
           ),

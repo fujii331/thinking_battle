@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -113,11 +114,15 @@ class AnswerModalContent extends HookWidget {
                     alignment: Alignment.center,
                     child: DropdownButton(
                       isExpanded: true,
-                      hint: const Text(
-                        'タップして選択',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black45,
+                      hint: Padding(
+                        padding:
+                            EdgeInsets.only(top: Platform.isAndroid ? 0 : 4),
+                        child: const Text(
+                          'タップして選択',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black45,
+                          ),
                         ),
                       ),
                       underline: Container(
@@ -163,8 +168,8 @@ class AnswerModalContent extends HookWidget {
                   primary: answerController.text.isNotEmpty
                       ? Colors.orange.shade600
                       : Colors.orange.shade200,
-                  padding: const EdgeInsets.only(
-                    bottom: 3,
+                  padding: EdgeInsets.only(
+                    bottom: Platform.isAndroid ? 3 : 1,
                   ),
                   shape: const StadiumBorder(),
                   side: BorderSide(
@@ -224,9 +229,7 @@ class AnswerModalContent extends HookWidget {
                     : () {},
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).viewInsets.bottom,
-            ),
+            Platform.isAndroid ? Container() : const SizedBox(height: 8),
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class TutorialRedFrame extends StatelessWidget {
@@ -11,7 +13,7 @@ class TutorialRedFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double widthSetting = MediaQuery.of(context).size.width > 650.0
-        ? 650.0
+        ? 643.0
         : MediaQuery.of(context).size.width;
 
     return Stack(
@@ -131,10 +133,10 @@ class TutorialRedFrame extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          width: 50,
+                          width: 52,
                           height: 40,
                         ),
-                        const SizedBox(width: 9),
+                        SizedBox(width: Platform.isAndroid ? 7 : 5),
                       ],
                     ),
                   ),
@@ -153,7 +155,9 @@ class TutorialRedFrame extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       height: MediaQuery.of(context).size.height - 290,
-                      width: MediaQuery.of(context).size.width * .9,
+                      width: Platform.isAndroid
+                          ? MediaQuery.of(context).size.width * .9
+                          : MediaQuery.of(context).size.width * .93,
                       child: Container(
                         padding: const EdgeInsets.only(
                           right: 8,
@@ -334,60 +338,6 @@ class TutorialRedFrame extends StatelessWidget {
                           height: 40,
                         ),
                         const SizedBox(width: 9),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  // ContentList
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 3,
-                        color: Colors.white.withOpacity(0),
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    height: MediaQuery.of(context).size.height - 290,
-                    width: MediaQuery.of(context).size.width * .9,
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                        right: 8,
-                        left: 8,
-                        top: 4,
-                        bottom: 10,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // BottomRow
-                  SizedBox(
-                    height: 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 3,
-                              color: Colors.white.withOpacity(0),
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        const SizedBox(width: 30),
-                        Container(
-                          width: 80,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 3,
-                              color: Colors.white.withOpacity(0),
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
                       ],
                     ),
                   ),

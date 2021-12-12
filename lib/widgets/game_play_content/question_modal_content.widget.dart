@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -141,8 +142,8 @@ class QuestionModalContent extends HookWidget {
                             ? Colors.green.shade600
                             : Colors.green.shade200,
                         textStyle: Theme.of(context).textTheme.button,
-                        padding: const EdgeInsets.only(
-                          bottom: 3,
+                        padding: EdgeInsets.only(
+                          bottom: Platform.isAndroid ? 3 : 1,
                         ),
                         shape: const StadiumBorder(),
                         side: BorderSide(
@@ -189,8 +190,8 @@ class QuestionModalContent extends HookWidget {
                             selectQuestionId != 0 || selectSkillIds.contains(2)
                                 ? Colors.blue.shade600
                                 : Colors.blue.shade200,
-                        padding: const EdgeInsets.only(
-                          bottom: 3,
+                        padding: EdgeInsets.only(
+                          bottom: Platform.isAndroid ? 3 : 1,
                         ),
                         shape: const StadiumBorder(),
                         side: BorderSide(
@@ -269,6 +270,7 @@ class QuestionModalContent extends HookWidget {
                 ],
               ),
             ),
+            Platform.isAndroid ? Container() : const SizedBox(height: 8),
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -49,8 +51,8 @@ class GpChange extends HookWidget {
               style: ElevatedButton.styleFrom(
                 primary: Colors.brown.shade500,
                 textStyle: Theme.of(context).textTheme.button,
-                padding: const EdgeInsets.only(
-                  top: 2,
+                padding: EdgeInsets.only(
+                  top: Platform.isAndroid ? 2 : 1,
                 ),
                 shape: const StadiumBorder(),
                 side: BorderSide(

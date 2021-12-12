@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class TutorialAnswerModalRedFrame extends StatelessWidget {
@@ -119,9 +121,7 @@ class TutorialAnswerModalRedFrame extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).viewInsets.bottom,
-                  ),
+                  Platform.isAndroid ? Container() : const SizedBox(height: 8),
                 ],
               ),
             ),

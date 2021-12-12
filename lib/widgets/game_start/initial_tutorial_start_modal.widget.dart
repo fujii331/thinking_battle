@@ -49,7 +49,7 @@ class InitialTutorialStartModal extends HookWidget {
             width: 115,
             height: 40,
             child: ElevatedButton(
-              child: const Text('対戦開始！'),
+              child: const Text('対戦開始!'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.orange.shade600,
                 padding: const EdgeInsets.only(

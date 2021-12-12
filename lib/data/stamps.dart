@@ -96,23 +96,23 @@ const stamps = [
   // 4 スキル使用回数
   <Stamp>[
     Stamp(
-      needCount: 50,
+      needCount: 10,
       reward: 'ガチャチケット1枚獲得',
     ),
     Stamp(
-      needCount: 100,
+      needCount: 20,
       reward: 'スキル「SP溜め」を解放',
     ),
     Stamp(
-      needCount: 200,
+      needCount: 100,
       reward: 'アイコン「きゅうりマン」獲得',
     ),
     Stamp(
-      needCount: 500,
+      needCount: 200,
       reward: 'テーマ「オレンジキューブ」獲得',
     ),
     Stamp(
-      needCount: 1000,
+      needCount: 300,
       reward: 'メッセージ「スキル使うけど許してね」獲得',
     ),
   ],

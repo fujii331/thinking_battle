@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -36,6 +38,7 @@ class SettingMyMessages extends HookWidget {
           context,
           selectingMessageList,
           messageSettings[int.parse(messageIdString) - 1],
+          selectingMessageList.length == 4,
           judgeFlgState,
         ),
       );
@@ -114,8 +117,8 @@ class SettingMyMessages extends HookWidget {
                   primary: selectingMessageList.length == 4
                       ? Colors.orange
                       : Colors.orange.shade200,
-                  padding: const EdgeInsets.only(
-                    bottom: 3,
+                  padding: EdgeInsets.only(
+                    bottom: Platform.isAndroid ? 3 : 1,
                   ),
                   shape: const StadiumBorder(),
                   side: BorderSide(
@@ -135,24 +138,61 @@ class SettingMyMessages extends HookWidget {
     BuildContext context,
     List<int> selectingMessageList,
     Message message,
+    bool isSetEnough,
     ValueNotifier<bool> judgeFlgState,
   ) {
-    int messageId = message.id;
+    final int messageId = message.id;
+    final bool isSet = selectingMessageList.contains(messageId);
+    final bool cannotUse = isSetEnough && !isSet;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Checkbox(
-          value: selectingMessageList.contains(messageId),
-          onChanged: (bool? checked) {
-            if (checked!) {
-              selectingMessageList.add(messageId);
-            } else {
-              selectingMessageList
-                  .removeWhere((int number) => number == messageId);
-            }
-            judgeFlgState.value = !judgeFlgState.value;
-          },
+        Stack(
+          children: [
+            Checkbox(
+              value: isSet,
+              hoverColor: Colors.grey,
+              onChanged: cannotUse
+                  ? null
+                  : (bool? checked) {
+                      if (checked!) {
+                        selectingMessageList.add(messageId);
+                      } else {
+                        selectingMessageList
+                            .removeWhere((int number) => number == messageId);
+                      }
+                      judgeFlgState.value = !judgeFlgState.value;
+                    },
+            ),
+            cannotUse
+                ? Row(
+                    children: [
+                      const SizedBox(
+                        width: 16.3,
+                      ),
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 16.3,
+                          ),
+                          Container(
+                            width: 15.5,
+                            height: 15.5,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade400,
+                              border: Border.all(
+                                color: Colors.grey.shade700,
+                                width: 0.8,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                : Container()
+          ],
         ),
         SizedBox(
           width: MediaQuery.of(context).size.width * .86 > 450

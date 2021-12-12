@@ -131,6 +131,12 @@ class TutorialGameSystemScreen extends HookWidget {
                           const SizedBox(height: betweenHeight),
                           _eachMessage(
                             4,
+                            '質問は3つの選択肢から選ぶことができ、ターンが進むにつれ正解に近づくための重要な質問が出やすくなります。',
+                            width,
+                          ),
+                          const SizedBox(height: betweenHeight),
+                          _eachMessage(
+                            5,
                             '質問をするときにSP（スキルポイント）を使ってスキルを発動することでゲームを有利に進めることができます。',
                             width,
                           ),

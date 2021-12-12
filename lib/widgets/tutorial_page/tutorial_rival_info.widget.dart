@@ -49,20 +49,21 @@ class TutorialRivalInfo extends StatelessWidget {
                 ),
                 Center(
                   child: SizedBox(
-                      height: 35,
-                      width: width,
-                      child: Row(
-                        children: const [
-                          Spacer(),
-                          Icon(Icons.close, size: 24, color: Colors.white),
-                          SizedBox(width: 10)
-                        ],
-                      )),
+                    height: 35,
+                    width: width,
+                    child: Row(
+                      children: const [
+                        Spacer(),
+                        Icon(Icons.close, size: 24, color: Colors.white),
+                        SizedBox(width: 10)
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
             const Spacer(),
-            const SizedBox(height: 0),
+            const SizedBox(),
           ],
         ),
       ],

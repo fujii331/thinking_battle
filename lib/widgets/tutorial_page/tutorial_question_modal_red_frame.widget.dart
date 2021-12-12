@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class TutorialQuestionModalRedFrame extends StatelessWidget {
@@ -205,6 +207,9 @@ class TutorialQuestionModalRedFrame extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Platform.isAndroid
+                        ? Container()
+                        : const SizedBox(height: 8),
                   ],
                 ),
               ),

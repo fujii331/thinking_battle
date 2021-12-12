@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -132,8 +134,8 @@ class MyData extends HookWidget {
                         primary: judgeFlgState.value
                             ? Colors.blue
                             : Colors.blue.shade200,
-                        padding: const EdgeInsets.only(
-                          bottom: 3,
+                        padding: EdgeInsets.only(
+                          bottom: Platform.isAndroid ? 3 : 1,
                         ),
                         shape: const StadiumBorder(),
                         side: BorderSide(

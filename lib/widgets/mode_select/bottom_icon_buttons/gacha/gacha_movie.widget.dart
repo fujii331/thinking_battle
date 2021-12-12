@@ -81,7 +81,8 @@ class _GachaMovie extends State<GachaMovie> with TickerProviderStateMixin {
                     padding: const EdgeInsets.only(right: 5),
                     child: Row(
                       children: [
-                        const SizedBox(width: 100),
+                        const SizedBox(),
+                        const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(right: 5),
                           child: Text(

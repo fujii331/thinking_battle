@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_sliding_tutorial/flutter_sliding_tutorial.dart';
@@ -49,7 +51,15 @@ class TutorialPageScreen extends HookWidget {
                   Container(
                     width: double.infinity,
                     height: 40,
-                    color: Colors.white.withOpacity(0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.2),
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.grey.shade800,
+                          width: 0.8,
+                        ),
+                      ),
+                    ),
                     child: SlidingIndicator(
                       indicatorCount: childrenWidget.length,
                       notifier: notifier,
@@ -57,9 +67,9 @@ class TutorialPageScreen extends HookWidget {
                         Icons.circle,
                         color: Colors.blue,
                       ),
-                      inActiveIndicator: const Icon(
+                      inActiveIndicator: Icon(
                         Icons.circle,
-                        color: Colors.grey,
+                        color: Colors.grey.shade400,
                       ),
                       margin: 8,
                       inactiveIndicatorSize: 12,
@@ -86,6 +96,7 @@ class TutorialPageScreen extends HookWidget {
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   )
                                 : null,
@@ -106,6 +117,7 @@ class TutorialPageScreen extends HookWidget {
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   )
                                 : null,
@@ -116,6 +128,7 @@ class TutorialPageScreen extends HookWidget {
                   ),
                 ],
               ),
+              SizedBox(height: Platform.isAndroid ? 0 : 30),
             ],
           ),
         ],

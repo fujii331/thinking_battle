@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,8 +47,8 @@ class BottomActionButtonsContent extends StatelessWidget {
                 primary: myTurnFlg && !forceQuestionFlg && !answerFailedFlg
                     ? Colors.orange.shade600
                     : Colors.orange.shade200,
-                padding: const EdgeInsets.only(
-                  bottom: 3,
+                padding: EdgeInsets.only(
+                  bottom: Platform.isAndroid ? 3 : 1,
                 ),
                 shape: const StadiumBorder(),
                 side: BorderSide(
@@ -95,8 +96,8 @@ class BottomActionButtonsContent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 primary:
                     myTurnFlg ? Colors.blue.shade500 : Colors.blue.shade200,
-                padding: const EdgeInsets.only(
-                  bottom: 3,
+                padding: EdgeInsets.only(
+                  bottom: Platform.isAndroid ? 3 : 1,
                 ),
                 shape: const StadiumBorder(),
                 side: BorderSide(

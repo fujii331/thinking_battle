@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class TutorialSkillModalRedFrame extends StatelessWidget {
@@ -199,6 +201,7 @@ class TutorialSkillModalRedFrame extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
+                  Platform.isAndroid ? Container() : const SizedBox(height: 8),
                 ],
               ),
             ),

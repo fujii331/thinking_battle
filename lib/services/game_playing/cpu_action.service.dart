@@ -54,7 +54,7 @@ Future cpuAction(
   List<int> returnSkillIds = [];
   int returnMessageId = 0;
 
-  final double finishImportance = (70 - (rivalInfo.rate / 70));
+  final double finishImportance = (130 - (rivalInfo.rate / 20));
 
   final bool gotMessageFlg = displayContentList.isEmpty
       ? false
@@ -98,13 +98,13 @@ Future cpuAction(
   int afterRivalMessageTime = context.read(afterRivalMessageTimeProvider).state;
 
   for (DisplayContent displayContent in displayContentList) {
-    if ((displayContent.skillIds.contains(4) && !displayContent.myTurnFlg) ||
-        (displayContent.skillIds.contains(108) && displayContent.myTurnFlg)) {
+    if ((displayContent.skillIds.contains(4) && displayContent.myTurnFlg) ||
+        (displayContent.skillIds.contains(108) && !displayContent.myTurnFlg)) {
       // 相手のターンに嘘つきを使ったか、自分の前の相手のターンにトラップを使われたか
       sumImportance -= displayContent.importance;
       searchFlg = true;
     } else if (displayContent.skillIds.contains(1) &&
-        !displayContent.myTurnFlg) {
+        displayContent.myTurnFlg) {
       searchFlg = true;
     } else {
       sumImportance += displayContent.importance * displayContent.importance;
@@ -122,12 +122,10 @@ Future cpuAction(
       !displayContentList.last.skillIds.contains(3)) {
     if (sumImportance >= finishImportance && !previousAnsweredFlg) {
       // 重要度が溜まっていたら解答
-      // 相手のレートによって応える早さが変わる
+      // 相手のレートによって答える早さが変わる
       final List<String> correctAnswerList =
           context.read(correctAnswersProvider).state;
-      returnAnswer = correctAnswerList[Random().nextInt(10) == 0
-          ? 0
-          : Random().nextInt(correctAnswerList.length)];
+      returnAnswer = correctAnswerList[0];
     } else if (trainingStatus >= 3 &&
         sumImportance >= finishImportance * 0.8 &&
         Random().nextInt(10) == 0 &&
@@ -144,7 +142,7 @@ Future cpuAction(
       // 解答した誤答を削除
       wrongAnswerList.removeAt(target);
       context.read(wrongAnswersProvider).state = wrongAnswerList;
-    } else if (skillUseLevel == 1 || Random().nextInt(3) > 0) {
+    } else if (skillUseLevel == 1 || Random().nextInt(5) > 0) {
       final List<int> enemySkillsCandidate = enemySkills
           .where((skillId) =>
               skillId != 6 && (searchFlg || (skillId != 5 && skillId != 7)))
@@ -198,14 +196,13 @@ Future cpuAction(
       // スキルを同時に使わなかった場合
       // スキルを同時に使う場合でもスキルパターンが3の場合1/2で上書き
       if ((returnSkillIds.isEmpty ||
-              skillUseLevel == 1 && Random().nextInt(2) == 0) &&
-          (skillUseLevel == 1 || Random().nextInt(3) > 0)) {
+          skillUseLevel == 3 && Random().nextInt(2) == 0)) {
         final int targetSkillId =
             enemySkillsCandidate[Random().nextInt(enemySkillsCandidate.length)];
 
         if (enemySkillPoint >= skillSettings[targetSkillId - 1].skillPoint &&
             (targetSkillId != 2 ||
-                (enemySkills.contains(4) && Random().nextInt(3) == 0)) &&
+                (enemySkills.contains(4) && Random().nextInt(10) == 0)) &&
             (targetSkillId != 6 || enemySkillPoint < 8)) {
           returnSkillIds = [targetSkillId];
         }

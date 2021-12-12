@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -155,8 +157,8 @@ class SettingMySkills extends HookWidget {
                   primary: selectingSkillList.length == 3
                       ? Colors.orange
                       : Colors.orange.shade200,
-                  padding: const EdgeInsets.only(
-                    bottom: 3,
+                  padding: EdgeInsets.only(
+                    bottom: Platform.isAndroid ? 3 : 1,
                   ),
                   shape: const StadiumBorder(),
                   side: BorderSide(
@@ -180,6 +182,9 @@ class SettingMySkills extends HookWidget {
     bool enableCheck,
   ) {
     int skillNumber = skill.id;
+    final bool isSetEnough = selectingSkillList.length == 3;
+    final bool isSet = selectingSkillList.contains(skillNumber);
+    final bool cannotUse = isSetEnough && !isSet;
 
     return SizedBox(
       height: 39,
@@ -189,17 +194,50 @@ class SettingMySkills extends HookWidget {
           Stack(
             children: [
               enableCheck
-                  ? Checkbox(
-                      value: selectingSkillList.contains(skillNumber),
-                      onChanged: (bool? checked) {
-                        if (checked!) {
-                          selectingSkillList.add(skillNumber);
-                        } else {
-                          selectingSkillList.removeWhere(
-                              (int number) => number == skillNumber);
-                        }
-                        judgeFlgState.value = !judgeFlgState.value;
-                      },
+                  ? Stack(
+                      children: [
+                        Checkbox(
+                          value: selectingSkillList.contains(skillNumber),
+                          onChanged: cannotUse
+                              ? null
+                              : (bool? checked) {
+                                  if (checked!) {
+                                    selectingSkillList.add(skillNumber);
+                                  } else {
+                                    selectingSkillList.removeWhere(
+                                        (int number) => number == skillNumber);
+                                  }
+                                  judgeFlgState.value = !judgeFlgState.value;
+                                },
+                        ),
+                        cannotUse
+                            ? Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 16.3,
+                                  ),
+                                  Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 11.8,
+                                      ),
+                                      Container(
+                                        width: 15.5,
+                                        height: 15.5,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade400,
+                                          border: Border.all(
+                                            color: Colors.grey.shade700,
+                                            width: 0.8,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Container()
+                      ],
                     )
                   : Container(
                       width: 48,
