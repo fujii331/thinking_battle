@@ -25,6 +25,7 @@ class MenuExplainModal extends StatelessWidget {
             'メニュー画面説明',
             style: TextStyle(
               fontSize: 20.0,
+              fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -100,12 +101,14 @@ class MenuExplainModal extends StatelessWidget {
                   'ランダムマッチ',
                   style: TextStyle(
                     fontSize: widthOk ? 15 : 14,
+                    fontFamily: 'NotoSansJP',
                     color: Colors.blueGrey.shade500,
                   ),
                 ),
                 Text(
                   '近いレートのランダムな誰かと対戦できます。',
                   style: TextStyle(
+                    fontFamily: 'NotoSansJP',
                     fontSize: widthOk ? 16 : 15,
                   ),
                 ),
@@ -114,6 +117,7 @@ class MenuExplainModal extends StatelessWidget {
                   'フレンドマッチ',
                   style: TextStyle(
                     fontSize: widthOk ? 15 : 14,
+                    fontFamily: 'NotoSansJP',
                     color: Colors.blueGrey.shade500,
                   ),
                 ),
@@ -121,6 +125,7 @@ class MenuExplainModal extends StatelessWidget {
                   'あいことばを使って知っている人と対戦できます。',
                   style: TextStyle(
                     fontSize: widthOk ? 16 : 15,
+                    fontFamily: 'NotoSansJP',
                   ),
                 ),
               ],

@@ -25,6 +25,7 @@ class RivalInfo extends StatelessWidget {
             style: TextStyle(
               color: Colors.white,
               fontSize: 20.0,
+              fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.bold,
             ),
           ),

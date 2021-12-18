@@ -11,6 +11,7 @@ import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 import 'package:thinking_battle/services/mode_select/check_stamp.service.dart';
+import 'package:thinking_battle/services/mode_select/event_timer.service.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
 
@@ -30,6 +31,7 @@ class ModeSelectScreen extends HookWidget {
     double seVolume,
     BuildContext context,
     List<String> watchedInfoList,
+    ValueNotifier<bool> existNotWatchedInfoState,
   ) {
     soundEffect.play(
       'sounds/tap.mp3',
@@ -49,6 +51,7 @@ class ModeSelectScreen extends HookWidget {
         soundEffect: soundEffect,
         seVolume: seVolume,
         watchedInfoList: watchedInfoList,
+        existNotWatchedInfoState: existNotWatchedInfoState,
       ),
     ).show();
   }
@@ -62,11 +65,11 @@ class ModeSelectScreen extends HookWidget {
     final List<String> watchedInfoList =
         useProvider(watchedInfoListProvider).state;
 
-    bool existNotWatchedInfoFlg = false;
+    final ValueNotifier<bool> existNotWatchedInfoState = useState(false);
 
     for (Info infoContent in infoContents) {
       if (!watchedInfoList.contains(infoContent.id.toString())) {
-        existNotWatchedInfoFlg = true;
+        existNotWatchedInfoState.value = true;
       }
     }
 
@@ -88,6 +91,14 @@ class ModeSelectScreen extends HookWidget {
         if (prefs.getString('dataString') == null) {
           prefs.setString('dataString', todayString);
         }
+
+        // イベント開始時間判定
+        // final DateTime now = DateTime.now();
+        // // 2021/12/28 ~ 2022/1/10の範囲内の場合
+        // if (now.isBefore(DateTime(2022, 1, 10, 0, 0)) &&
+        //     now.isAfter(DateTime(2021, 12, 28, 0, 0))) {
+        //   eventTimer(context);
+        // }
 
         // 日時の更新が行われたらgpカウントとログイン日数を更新
         if (dataString != todayString) {
@@ -158,6 +169,7 @@ class ModeSelectScreen extends HookWidget {
                     seVolume,
                     context,
                     watchedInfoList,
+                    existNotWatchedInfoState,
                   ),
                 ),
                 Padding(
@@ -168,10 +180,11 @@ class ModeSelectScreen extends HookWidget {
                       seVolume,
                       context,
                       watchedInfoList,
+                      existNotWatchedInfoState,
                     ),
                     child: Icon(
                       Icons.circle,
-                      color: existNotWatchedInfoFlg
+                      color: existNotWatchedInfoState.value
                           ? Colors.red
                           : Colors.red.withOpacity(0),
                       size: 13,
@@ -278,32 +291,37 @@ class ModeSelectScreen extends HookWidget {
             background(),
             Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   // const Stamina(),
-                  const SizedBox(height: 95),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        MyInfo(
-                          soundEffect: soundEffect,
-                          seVolume: seVolume,
-                          cardNumber: cardNumber,
-                          colorList: colorList,
-                          matchedCount: matchedCount,
+                  const SizedBox(height: 100),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height - 100,
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            MyInfo(
+                              soundEffect: soundEffect,
+                              seVolume: seVolume,
+                              cardNumber: cardNumber,
+                              colorList: colorList,
+                              matchedCount: matchedCount,
+                            ),
+                            SizedBox(height: heightOk ? 65 : 45),
+                            PlayGameButtons(
+                              soundEffect: soundEffect,
+                              seVolume: seVolume,
+                              betweenHeight: heightOk ? 30 : 26,
+                            ),
+                            SizedBox(height: heightOk ? 65 : 45),
+                            BottomIconButtons(
+                              soundEffect: soundEffect,
+                              seVolume: seVolume,
+                            ),
+                          ],
                         ),
-                        SizedBox(height: heightOk ? 75 : 55),
-                        PlayGameButtons(
-                          soundEffect: soundEffect,
-                          seVolume: seVolume,
-                          betweenHeight: heightOk ? 30 : 26,
-                        ),
-                        SizedBox(height: heightOk ? 75 : 55),
-                        BottomIconButtons(
-                          soundEffect: soundEffect,
-                          seVolume: seVolume,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],

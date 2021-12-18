@@ -46,7 +46,9 @@ Future shouldUpdate(
       width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
       dismissOnTouchOutside: false,
       dismissOnBackKeyPress: false,
-      body: const UpdateVersionModal(),
+      body: UpdateVersionModal(
+        context: context,
+      ),
     ).show();
   }
   ;

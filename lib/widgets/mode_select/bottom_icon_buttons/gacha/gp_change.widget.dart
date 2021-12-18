@@ -52,7 +52,7 @@ class GpChange extends HookWidget {
                 primary: Colors.brown.shade500,
                 textStyle: Theme.of(context).textTheme.button,
                 padding: EdgeInsets.only(
-                  top: Platform.isAndroid ? 2 : 1,
+                  bottom: 1,
                 ),
                 shape: const StadiumBorder(),
                 side: BorderSide(
@@ -95,6 +95,7 @@ class GpChange extends HookWidget {
             '入手済み',
             style: TextStyle(
               fontSize: 10,
+              fontFamily: 'NotoSansJP',
               color: Colors.orange.shade700,
             ),
           );

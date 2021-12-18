@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:thinking_battle/models/display_content.model.dart';
 
 import 'package:thinking_battle/models/send_content.model.dart';
 
@@ -23,6 +24,7 @@ class AnswerModalContent extends HookWidget {
   final bool myTurnFlg;
   final String inputAnswer;
   final List<String> answerCandidate;
+  final ValueNotifier<bool> displayUpdateFlgState;
 
   const AnswerModalContent({
     Key? key,
@@ -35,6 +37,7 @@ class AnswerModalContent extends HookWidget {
     required this.myTurnFlg,
     required this.inputAnswer,
     required this.answerCandidate,
+    required this.displayUpdateFlgState,
   }) : super(key: key);
 
   @override
@@ -80,6 +83,7 @@ class AnswerModalContent extends HookWidget {
                 '候補から答えを選択',
                 style: TextStyle(
                   fontSize: 20.0,
+                  fontFamily: 'NotoSansJP',
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -92,6 +96,7 @@ class AnswerModalContent extends HookWidget {
                   '答えは',
                   style: TextStyle(
                     color: Colors.black,
+                    fontFamily: 'NotoSansJP',
                     fontSize: 18,
                   ),
                 ),
@@ -121,6 +126,7 @@ class AnswerModalContent extends HookWidget {
                           'タップして選択',
                           style: TextStyle(
                             fontSize: 16,
+                            fontFamily: 'NotoSansJP',
                             color: Colors.black45,
                           ),
                         ),
@@ -137,6 +143,7 @@ class AnswerModalContent extends HookWidget {
                           child: Text(word,
                               style: const TextStyle(
                                 color: Colors.black,
+                                fontFamily: 'NotoSansJP',
                                 fontSize: 16,
                               )),
                         );
@@ -222,6 +229,7 @@ class AnswerModalContent extends HookWidget {
                           soundEffect,
                           seVolume,
                           rivalListenSubscription,
+                          displayUpdateFlgState,
                         );
 
                         Navigator.pop(context);

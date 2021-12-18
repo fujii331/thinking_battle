@@ -10,3 +10,6 @@ final buildNumberProvider = StateProvider((ref) => 0);
 final watchedInfoListProvider = StateProvider((ref) => <String>[]);
 
 final backgroundProvider = StateProvider((ref) => false);
+
+// イベント関連
+final enableEventProvider = StateProvider((ref) => false);

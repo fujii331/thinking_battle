@@ -1,11 +1,7 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'dart:io';
 import 'package:thinking_battle/data/advertising.dart';
-import 'package:thinking_battle/providers/common.provider.dart';
-import 'package:thinking_battle/providers/game.provider.dart';
 
 BannerAd getBanner(int pageNumber) {
   // final BannerAdListener listener = BannerAdListener(
@@ -26,10 +22,14 @@ BannerAd getBanner(int pageNumber) {
   // );
 
   final BannerAd myBanner = BannerAd(
-    // adUnitId: Platform.isAndroid
-    //   ? pageNumber == 1 ? androidResultBannerAdvid : androidContentListBannerAdvid
-    //           : pageNumber == 1 ? iosResultBannerAdvid : iosContentListBannerAdvid,
-    adUnitId: BannerAd.testAdUnitId,
+    adUnitId: Platform.isAndroid
+        ? pageNumber == 1
+            ? androidResultBannerAdvid
+            : androidContentListBannerAdvid
+        : pageNumber == 1
+            ? iosResultBannerAdvid
+            : iosContentListBannerAdvid,
+    // adUnitId: BannerAd.testAdUnitId,
     size: AdSize.banner,
     request: const AdRequest(),
     listener: const BannerAdListener(),

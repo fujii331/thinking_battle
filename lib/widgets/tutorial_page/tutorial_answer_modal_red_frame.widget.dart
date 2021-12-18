@@ -61,6 +61,7 @@ class TutorialAnswerModalRedFrame extends StatelessWidget {
                       '候補から答えを選択',
                       style: TextStyle(
                         fontSize: 20.0,
+                        fontFamily: 'NotoSansJP',
                         fontWeight: FontWeight.bold,
                         color: Colors.white.withOpacity(0),
                       ),
@@ -74,6 +75,7 @@ class TutorialAnswerModalRedFrame extends StatelessWidget {
                         '答えは',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0),
+                          fontFamily: 'NotoSansJP',
                           fontSize: 18,
                         ),
                       ),
@@ -102,6 +104,7 @@ class TutorialAnswerModalRedFrame extends StatelessWidget {
                         'だ！',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0),
+                          fontFamily: 'NotoSansJP',
                           fontSize: 20,
                         ),
                       ),

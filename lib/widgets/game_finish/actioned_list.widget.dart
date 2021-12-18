@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,7 +30,7 @@ class ActionedList extends HookWidget {
     final PlayerInfo rivalInfo = useProvider(rivalInfoProvider).state;
     final List colorList = returnCardColorList(rivalInfo.cardNumber);
 
-    final BannerAd bannerAd = getBanner(2);
+    final BannerAd? bannerAd = getBanner(2);
 
     final bool widthOk = MediaQuery.of(context).size.width > 350;
     final double fontSize = widthOk ? 16 : 14;
@@ -40,7 +42,7 @@ class ActionedList extends HookWidget {
       children: <Widget>[
         background(),
         Padding(
-          padding: const EdgeInsets.only(top: 45),
+          padding: EdgeInsets.only(top: Platform.isAndroid ? 45 : 50),
           child: Center(
             child: Column(
               children: [
@@ -51,13 +53,17 @@ class ActionedList extends HookWidget {
                     fontSize: 22,
                   ),
                 ),
-                const SizedBox(height: 15),
-                Container(
-                  alignment: Alignment.center,
-                  child: AdWidget(ad: bannerAd),
-                  width: bannerAd.size.width.toDouble(),
-                  height: bannerAd.size.height.toDouble(),
-                ),
+                bannerAd != null
+                    ? const SizedBox(height: 15)
+                    : const SizedBox(height: 0),
+                bannerAd != null
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: AdWidget(ad: bannerAd),
+                        width: bannerAd.size.width.toDouble(),
+                        height: bannerAd.size.height.toDouble(),
+                      )
+                    : Container(),
                 const SizedBox(height: 20),
                 Expanded(
                   child: SizedBox(
@@ -207,7 +213,8 @@ class ActionedList extends HookWidget {
           child: Text(
             messageSettings[targetContent.messageId - 1].message,
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 14,
+              fontFamily: 'NotoSansJP',
               color: Colors.white,
             ),
           ),
@@ -343,10 +350,13 @@ class ActionedList extends HookWidget {
                     ? Colors.yellow.shade200
                     : Colors.white,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 2.5),
+          padding: EdgeInsets.only(bottom: Platform.isAndroid ? 2.5 : 1.5),
           child: Text(
             message,
-            style: TextStyle(fontSize: fontSize),
+            style: TextStyle(
+              fontSize: fontSize,
+              fontFamily: 'NotoSansJP',
+            ),
           ),
         ),
       ),
@@ -383,7 +393,10 @@ class ActionedList extends HookWidget {
         ),
         child: Text(
           targetContent.reply,
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontFamily: 'NotoSansJP',
+          ),
         ),
       ),
     );

@@ -693,7 +693,7 @@ Future matchingUpdate(
 
         // 部屋のIDを取得
         context.read(matchingRoomIdProvider).state = matchingId;
-        // 先行フラグの反対値を設定
+        // 先攻フラグの反対値を設定
         context.read(precedingFlgProvider).state =
             !firstMatchedInfoSnapshot.precedingFlg;
 

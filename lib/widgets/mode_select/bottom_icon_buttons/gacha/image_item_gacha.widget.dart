@@ -139,6 +139,7 @@ class ImageItemGacha extends HookWidget {
               iconGachaFlg ? 'アイコンガチャ' : 'テーマガチャ',
               style: const TextStyle(
                 fontSize: 20.0,
+                fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.bold,
               ),
             ),

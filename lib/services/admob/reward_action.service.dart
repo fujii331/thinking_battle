@@ -67,18 +67,18 @@ void createRewardedAd(
   int buttonNumber,
 ) {
   RewardedAd.load(
-    // adUnitId: Platform.isAndroid
-    //     ? buttonNumber == 1
-    //         ? androidIconRewardAdvid
-    //         : buttonNumber == 2
-    //             ? androidThemeRewardAdvid
-    //             : androidMessageRewardAdvid
-    //     : buttonNumber == 1
-    //         ? iosIconRewardAdvid
-    //         : buttonNumber == 2
-    //             ? iosThemeRewardAdvid
-    //             : iosMessageRewardAdvid,
-    adUnitId: RewardedAd.testAdUnitId,
+    adUnitId: Platform.isAndroid
+        ? buttonNumber == 1
+            ? androidIconRewardAdvid
+            : buttonNumber == 2
+                ? androidThemeRewardAdvid
+                : androidMessageRewardAdvid
+        : buttonNumber == 1
+            ? iosIconRewardAdvid
+            : buttonNumber == 2
+                ? iosThemeRewardAdvid
+                : iosMessageRewardAdvid,
+    // adUnitId: RewardedAd.testAdUnitId,
     request: const AdRequest(),
     rewardedAdLoadCallback: RewardedAdLoadCallback(
       onAdLoaded: (RewardedAd ad) {

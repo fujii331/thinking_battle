@@ -68,3 +68,5 @@ final cpuMessageIdsListProvider = StateProvider((ref) => <int>[1, 2, 3, 4]);
 final afterRivalMessageTimeProvider = StateProvider((ref) => 0);
 final messageLevelProvider = StateProvider((ref) => 0);
 final skillUseLevelProvider = StateProvider((ref) => 0);
+
+final isEventMatchProvider = StateProvider((ref) => false);

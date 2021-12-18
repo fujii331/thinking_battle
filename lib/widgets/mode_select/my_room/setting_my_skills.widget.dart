@@ -62,6 +62,7 @@ class SettingMySkills extends HookWidget {
             style: TextStyle(
               height: 1.3,
               fontSize: 17.0,
+              fontFamily: 'NotoSansJP',
               color: Colors.blueGrey.shade800,
             ),
           ),
@@ -250,6 +251,7 @@ class SettingMySkills extends HookWidget {
                         '未入手',
                         style: TextStyle(
                           fontSize: 10.0,
+                          fontFamily: 'NotoSansJP',
                           color: Colors.red.shade300,
                         ),
                       ),

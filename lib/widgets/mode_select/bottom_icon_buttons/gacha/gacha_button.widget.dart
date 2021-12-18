@@ -1,18 +1,14 @@
-import 'dart:math';
+import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/admob/reward_action.service.dart';
-import 'package:thinking_battle/services/mode_select/get_item.service.dart';
 import 'package:thinking_battle/widgets/common/comment_modal.widget.dart';
 import 'package:thinking_battle/widgets/common/loading_modal.widget.dart';
-import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha/gacha_movie.widget.dart';
 
 class GachaButton extends HookWidget {
   final int buttonNumber;
@@ -53,27 +49,32 @@ class GachaButton extends HookWidget {
       }
     }
 
+    final bool enableMovieGacha = gachaCount > 0;
+
     final bool enableGacha =
-        (gachaTicket > 0 || gachaCount > 0) && remainingFlg;
+        (gachaTicket > 0 || enableMovieGacha) && remainingFlg;
     final ValueNotifier<RewardedAd?> rewardedAd = useState(null);
 
     return SizedBox(
       width: gachaTicket > 0 ? 150 : 140,
       height: 40,
       child: ElevatedButton(
-        child: Text(
-          gachaTicket > 0
-              ? 'ガチャチケを使う'
-              : ('動画を見る ' + gachaCount.toString() + '/5'),
-          style: TextStyle(
-            fontSize: gachaTicket > 0 ? 16 : 17,
+        child: Padding(
+          padding: EdgeInsets.only(top: !Platform.isAndroid ? 2 : 0),
+          child: Text(
+            gachaTicket > 0
+                ? 'ガチャチケを使う'
+                : ('動画を見る ' + gachaCount.toString() + '/5'),
+            style: TextStyle(
+              fontSize: gachaTicket > 0 ? 16 : 17,
+            ),
           ),
         ),
         style: ElevatedButton.styleFrom(
           primary:
               enableGacha ? Colors.orange.shade600 : Colors.orange.shade200,
-          padding: const EdgeInsets.only(
-            bottom: 3,
+          padding: EdgeInsets.only(
+            bottom: Platform.isAndroid ? 3 : 2,
           ),
           shape: const StadiumBorder(),
           side: BorderSide(

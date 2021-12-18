@@ -29,6 +29,7 @@ Future turnAction(
   AudioCache soundEffect,
   double seVolume,
   StreamSubscription<DocumentSnapshot>? rivalListenSubscription,
+  ValueNotifier<bool> displayUpdateFlgState,
 ) async {
   await Future.delayed(
     const Duration(milliseconds: 500),
@@ -42,13 +43,6 @@ Future turnAction(
   final List<Question> allQuestions = [
     ...context.read(allQuestionsProvider).state
   ];
-
-  // スクロール量決定用
-  final bool widthOk = MediaQuery.of(context).size.width > 350;
-  final double fontSize = widthOk ? 16 : 14;
-  final double restrictWidth = myTurnFlg
-      ? MediaQuery.of(context).size.width * .56
-      : MediaQuery.of(context).size.width * .47;
 
   // 画面上の表示を消す
   if (myTurnFlg) {
@@ -92,6 +86,7 @@ Future turnAction(
     // 表示リストに追加する
     displayContentList.add(displayContent);
     context.read(displayContentListProvider).state = displayContentList;
+    displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
     if (sendContent.messageId != 0) {
       // メッセージ表示
@@ -103,6 +98,7 @@ Future turnAction(
 
       displayContentList.last.displayList.add(0);
       context.read(displayContentListProvider).state = displayContentList;
+      displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
       if (myTurnFlg) {
         // メッセージを初期化
@@ -181,6 +177,7 @@ Future turnAction(
 
       displayContentList.last.displayList.add(0);
       context.read(displayContentListProvider).state = displayContentList;
+      displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
       await Future.delayed(
         const Duration(milliseconds: 100),
@@ -270,6 +267,7 @@ Future turnAction(
               : '質問サーチ (' + changedCount.toString() + 'つ修正)',
           messageId: displayContentList.last.messageId,
         );
+        displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
         await Future.delayed(
           const Duration(milliseconds: 100),
@@ -292,6 +290,7 @@ Future turnAction(
         );
         context.read(displayQuestionResearchProvider).state = 0;
         displayContentList = context.read(displayContentListProvider).state;
+        displayUpdateFlgState.value = !displayUpdateFlgState.value;
       } else if (displaySkillIds[i] == 7) {
         bool changedFlg = false;
         await Future.delayed(
@@ -343,6 +342,7 @@ Future turnAction(
             specialMessage: changeContent.specialMessage,
             messageId: changeContent.messageId,
           );
+          displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
           // トラップを更新した場合は次の自分の質問分も修正
           if (changedSkillIds.contains(-8)) {
@@ -372,6 +372,7 @@ Future turnAction(
           }
 
           context.read(displayContentListProvider).state = displayContentList;
+          displayUpdateFlgState.value = !displayUpdateFlgState.value;
         }
 
         context.read(displayContentListProvider).state.last = DisplayContent(
@@ -385,6 +386,7 @@ Future turnAction(
           specialMessage: !changedFlg ? '質問確認 (修正なし)' : '質問確認 (1つ修正)',
           messageId: displayContentList.last.messageId,
         );
+        displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
         await Future.delayed(
           const Duration(milliseconds: 100),
@@ -407,6 +409,7 @@ Future turnAction(
         );
         context.read(displayQuestionResearchProvider).state = 0;
         displayContentList = context.read(displayContentListProvider).state;
+        displayUpdateFlgState.value = !displayUpdateFlgState.value;
       }
 
       await Future.delayed(
@@ -423,6 +426,7 @@ Future turnAction(
 
     displayContentList.last.displayList.add(0);
     context.read(displayContentListProvider).state = displayContentList;
+    displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
     if (myTurnFlg) {
       // 解答禁止状態の場合、解除する
@@ -493,43 +497,9 @@ Future turnAction(
 
     displayContentList.last.displayList.add(0);
     context.read(displayContentListProvider).state = displayContentList;
+    displayUpdateFlgState.value = !displayUpdateFlgState.value;
   } else {
-    // メッセージの表示
-    if (sendContent.messageId != 0) {
-      // メッセージ表示
-      soundEffect.play(
-        'sounds/rival_message.mp3',
-        isNotification: true,
-        volume: seVolume,
-      );
-
-      displayContentList.last.displayList.add(0);
-      context.read(displayContentListProvider).state = displayContentList;
-
-      if (myTurnFlg) {
-        // メッセージを初期化
-        context.read(selectMessageIdProvider).state = 0;
-        // メッセージ時間を初期化
-        context.read(afterMessageTimeProvider).state = 60;
-      } else if (context.read(trainingStatusProvider).state >= 3) {
-        // メッセージ時間を初期化
-        context.read(afterRivalMessageTimeProvider).state = 60;
-      }
-
-      await Future.delayed(
-        const Duration(milliseconds: 100),
-      );
-
-      scrollToBottom(
-        context,
-        scrollController,
-      );
-
-      await Future.delayed(
-        const Duration(milliseconds: 600),
-      );
-    }
-
+    // 解答実行
     // 正解判定
     final correctAnswerFlg =
         context.read(correctAnswersProvider).state.contains(sendContent.answer);
@@ -559,6 +529,44 @@ Future turnAction(
     // 表示リストに追加する
     displayContentList.add(displayContent);
     context.read(displayContentListProvider).state = displayContentList;
+    displayUpdateFlgState.value = !displayUpdateFlgState.value;
+
+    // メッセージの表示
+    if (sendContent.messageId != 0) {
+      // メッセージ表示
+      soundEffect.play(
+        'sounds/rival_message.mp3',
+        isNotification: true,
+        volume: seVolume,
+      );
+
+      displayContentList.last.displayList.add(0);
+      context.read(displayContentListProvider).state = displayContentList;
+      displayUpdateFlgState.value = !displayUpdateFlgState.value;
+
+      if (myTurnFlg) {
+        // メッセージを初期化
+        context.read(selectMessageIdProvider).state = 0;
+        // メッセージ時間を初期化
+        context.read(afterMessageTimeProvider).state = 60;
+      } else if (context.read(trainingStatusProvider).state >= 3) {
+        // メッセージ時間を初期化
+        context.read(afterRivalMessageTimeProvider).state = 60;
+      }
+
+      await Future.delayed(
+        const Duration(milliseconds: 100),
+      );
+
+      scrollToBottom(
+        context,
+        scrollController,
+      );
+
+      await Future.delayed(
+        const Duration(milliseconds: 600),
+      );
+    }
 
     // 解答表示
     soundEffect.play(
@@ -569,6 +577,7 @@ Future turnAction(
 
     displayContentList.last.displayList.add(0);
     context.read(displayContentListProvider).state = displayContentList;
+    displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
     await Future.delayed(
       const Duration(milliseconds: 100),
@@ -580,7 +589,7 @@ Future turnAction(
     );
 
     await Future.delayed(
-      const Duration(milliseconds: 1400),
+      const Duration(milliseconds: 1300),
     );
 
     for (int i = 0; i < 3; i++) {
@@ -606,6 +615,7 @@ Future turnAction(
         displayContentList.last.displayList.add(0);
       }
       context.read(displayContentListProvider).state = displayContentList;
+      displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
       await Future.delayed(
         const Duration(milliseconds: 700),
@@ -646,7 +656,7 @@ Future turnAction(
                 isNotification: true,
               );
 
-      if (!myTurnFlg) {
+      if (!myTurnFlg && context.read(interstitialAdProvider).state != null) {
         // 広告を表示する
         showInterstitialAd(context);
         await Future.delayed(
@@ -666,6 +676,7 @@ Future turnAction(
         messageId: displayContentList.last.messageId,
       );
       context.read(displayContentListProvider).state = displayContentList;
+      displayUpdateFlgState.value = !displayUpdateFlgState.value;
       context.read(timerCancelFlgProvider).state = true;
 
       await Future.delayed(
@@ -696,6 +707,7 @@ Future turnAction(
         messageId: displayContentList.last.messageId,
       );
       context.read(displayContentListProvider).state = displayContentList;
+      displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
       if (myTurnFlg) {
         // 次のターンの解答を禁止する
@@ -737,6 +749,7 @@ Future turnAction(
     // 表示リストに追加する
     displayContentList.add(displayContent);
     context.read(displayContentListProvider).state = displayContentList;
+    displayUpdateFlgState.value = !displayUpdateFlgState.value;
 
     await Future.delayed(
       const Duration(milliseconds: 100),
@@ -790,6 +803,7 @@ Future turnAction(
     soundEffect,
     seVolume,
     scrollController,
+    displayUpdateFlgState,
   );
 }
 
@@ -812,6 +826,7 @@ Future initializeAction(
   AudioCache soundEffect,
   double seVolume,
   ScrollController scrollController,
+  ValueNotifier<bool> displayUpdateFlgState,
 ) async {
   if (nextMyTurnFlg) {
     allQuestions.shuffle();
@@ -921,6 +936,7 @@ Future initializeAction(
         soundEffect,
         seVolume,
         false,
+        displayUpdateFlgState,
       );
     }
   }
@@ -937,45 +953,40 @@ List<Question> getNextQuestions(
   Question question2;
   Question question3;
 
-  final target2RandomValue = Random().nextInt(100);
   final target3RandomValue = Random().nextInt(100);
 
   if (turnCount < 3) {
     question1 = importance1Questions[0]; // 重要度1
-    question2 = importance1Questions[1]; // 重要度1
-    question3 = target3RandomValue < 90
-        ? importance2Questions[0] // 90%で重要度2
-        : target3RandomValue < 98
-            ? importance1Questions[2] // 8%で重要度1
-            : importance3Questions[0]; // 2%で重要度3
-  } else if (turnCount < 5) {
-    question1 = importance1Questions[0]; // 重要度1
-    question2 = target2RandomValue < 60
-        ? importance1Questions[1] // 60%で重要度1
-        : importance2Questions[0]; // 40%で重要度2
-    question3 = target3RandomValue < 87
-        ? importance2Questions[1] // 87%で重要度2
-        : target3RandomValue < 92
-            ? importance1Questions[2] // 5%で重要度1
-            : importance3Questions[0]; // 8%で重要度3
-  } else if (turnCount < 7) {
-    question1 = importance1Questions[0]; // 重要度1
-    question2 = target2RandomValue < 90
-        ? importance2Questions[0] // 90%で重要度2
-        : importance1Questions[1]; // 10%で重要度1
-    question3 = target3RandomValue < 88
-        ? importance2Questions[1] // 88%で重要度2
+    question2 = importance2Questions[0]; // 重要度2
+    question3 = target3RandomValue < 50
+        ? importance2Questions[1] // 50%で重要度1
         : target3RandomValue < 90
-            ? importance1Questions[2] // 2%で重要度1
+            ? importance1Questions[2] // 40%で重要度2
             : importance3Questions[0]; // 10%で重要度3
+  } else if (turnCount < 6) {
+    question1 = importance1Questions[0]; // 重要度1
+    question2 = importance2Questions[0]; // 重要度2
+    question3 = target3RandomValue < 30
+        ? importance1Questions[1] // 30%で重要度1
+        : target3RandomValue < 80
+            ? importance2Questions[1] // 50%で重要度2
+            : importance3Questions[0]; // 20%で重要度3
   } else if (turnCount < 9) {
     question1 = importance1Questions[0]; // 重要度1
-    question2 = target2RandomValue < 90
-        ? importance2Questions[0] // 90%で重要度2
-        : importance1Questions[1]; // 10%で重要度1
-    question3 = target3RandomValue < 90
-        ? importance2Questions[1] // 80%で重要度2
-        : importance3Questions[0]; // 20%で重要度3
+    question2 = importance2Questions[0]; // 重要度2
+    question3 = target3RandomValue < 20
+        ? importance1Questions[1] // 20%で重要度1
+        : target3RandomValue < 70
+            ? importance2Questions[1] // 50%で重要度2
+            : importance3Questions[0]; // 30%で重要度3
+  } else if (turnCount < 12) {
+    question1 = importance1Questions[0]; // 重要度1
+    question2 = importance2Questions[0]; // 重要度2
+    question3 = target3RandomValue < 20
+        ? importance1Questions[1] // 20%で重要度1
+        : target3RandomValue < 60
+            ? importance2Questions[1] // 40%で重要度2
+            : importance3Questions[0]; // 40%で重要度3
   } else {
     question1 = importance1Questions[0]; // 重要度1
     question2 = importance2Questions[0]; // 重要度2

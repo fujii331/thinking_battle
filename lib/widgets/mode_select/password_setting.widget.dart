@@ -36,6 +36,7 @@ class PasswordSetting extends HookWidget {
               '3文字以上のあいことばを入力',
               style: TextStyle(
                 fontSize: 18.0,
+                fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.bold,
               ),
             ),

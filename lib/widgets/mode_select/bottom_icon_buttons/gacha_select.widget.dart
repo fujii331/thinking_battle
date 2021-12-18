@@ -67,6 +67,7 @@ class GachaSelect extends HookWidget {
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.white,
+                  fontFamily: 'NotoSansJP',
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
                 ),
@@ -76,14 +77,15 @@ class GachaSelect extends HookWidget {
                 '所持ガチャチケ：' + gachaTicket.toString(),
                 style: const TextStyle(
                   color: Colors.white,
+                  fontFamily: 'NotoSansJP',
                   fontSize: 15.0,
                 ),
               ),
               Text(
-                '本日の残り動画ガチャ：' +
-                    (Platform.isAndroid ? gachaCount.toString() + '回' : '準備中'),
+                '本日の残り動画ガチャ：' + gachaCount.toString() + '回',
                 style: const TextStyle(
                   color: Colors.white,
+                  fontFamily: 'NotoSansJP',
                   fontSize: 15.0,
                 ),
               ),
@@ -91,6 +93,7 @@ class GachaSelect extends HookWidget {
                 '所持GP：' + gachaPoint.toString(),
                 style: const TextStyle(
                   color: Colors.white,
+                  fontFamily: 'NotoSansJP',
                   fontSize: 15.0,
                 ),
               ),
@@ -218,6 +221,7 @@ class GachaSelect extends HookWidget {
                   style: const TextStyle(
                     fontSize: 17,
                     color: Colors.black,
+                    fontFamily: 'NotoSansJP',
                     fontStyle: FontStyle.italic,
                   ),
                 ),

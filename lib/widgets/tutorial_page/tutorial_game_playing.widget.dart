@@ -102,6 +102,7 @@ class TutorialGamePlaying extends HookWidget {
                 myTurnFlg: myTurnFlg,
                 forceQuestionFlg: forceQuestionFlg,
                 answerFailedFlg: answerFailedFlg,
+                displayUpdateFlgState: useState(false),
               ),
             ],
           ),

@@ -16,6 +16,7 @@ class BottomActionButtons extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
   final bool myTurnFlg;
+  final ValueNotifier<bool> displayUpdateFlgState;
 
   const BottomActionButtons({
     Key? key,
@@ -26,6 +27,7 @@ class BottomActionButtons extends HookWidget {
     required this.soundEffect,
     required this.seVolume,
     required this.myTurnFlg,
+    required this.displayUpdateFlgState,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class BottomActionButtons extends HookWidget {
       myTurnFlg: myTurnFlg,
       forceQuestionFlg: forceQuestionFlg,
       answerFailedFlg: answerFailedFlg,
+      displayUpdateFlgState: displayUpdateFlgState,
     );
   }
 }

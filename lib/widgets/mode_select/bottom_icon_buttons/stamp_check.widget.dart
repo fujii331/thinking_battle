@@ -67,7 +67,7 @@ class StampCheck extends HookWidget {
                   '成果スタンプ',
                   style: TextStyle(
                     fontSize: 20.0,
-                    // color: Colors.white,
+                    fontFamily: 'NotoSansJP',
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.bold,
                   ),
@@ -179,6 +179,7 @@ class StampCheck extends HookWidget {
                         style: TextStyle(
                           height: 1.3,
                           fontSize: 13.0,
+                          fontFamily: 'NotoSansJP',
                           color: Colors.blueGrey.shade700,
                         ),
                       ),
@@ -187,6 +188,7 @@ class StampCheck extends HookWidget {
                         style: const TextStyle(
                           height: 1.3,
                           fontSize: 16.0,
+                          fontFamily: 'NotoSansJP',
                           color: Colors.black,
                         ),
                       ),
@@ -196,6 +198,7 @@ class StampCheck extends HookWidget {
                         style: TextStyle(
                           height: 1.3,
                           fontSize: 13.0,
+                          fontFamily: 'NotoSansJP',
                           color: Colors.blueGrey.shade700,
                         ),
                       ),
@@ -210,6 +213,7 @@ class StampCheck extends HookWidget {
                           style: const TextStyle(
                             height: 1.3,
                             fontSize: 16.0,
+                            fontFamily: 'NotoSansJP',
                             color: Colors.black,
                           ),
                         ),
@@ -243,6 +247,7 @@ class StampCheck extends HookWidget {
           forwardText + ' (現在：' + currentCount + unitText.toString() + ')',
           style: TextStyle(
             fontSize: 12.0,
+            fontFamily: 'NotoSansJP',
             color: Colors.blueGrey.shade800,
           ),
         ),

@@ -130,6 +130,7 @@ class TopRowContent extends StatelessWidget {
                               '残り',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontFamily: 'NotoSansJP',
                                 fontSize: 22,
                               ),
                             ),
@@ -156,6 +157,7 @@ class TopRowContent extends StatelessWidget {
                               ' 秒',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontFamily: 'NotoSansJP',
                                 fontSize: 20,
                               ),
                             ),
@@ -165,6 +167,7 @@ class TopRowContent extends StatelessWidget {
                           'こっちの番',
                           style: TextStyle(
                             color: Colors.blue.shade200,
+                            fontFamily: 'NotoSansJP',
                             fontSize: 22,
                           ),
                         ),
@@ -176,6 +179,7 @@ class TopRowContent extends StatelessWidget {
                     'あいての番',
                     style: TextStyle(
                       color: Colors.green.shade200,
+                      fontFamily: 'NotoSansJP',
                       fontSize: 22,
                     ),
                   ),
@@ -202,6 +206,7 @@ class TopRowContent extends StatelessWidget {
                     ' SP',
                     style: TextStyle(
                       color: Colors.white,
+                      fontFamily: 'NotoSansJP',
                       fontSize: 13,
                     ),
                   ),

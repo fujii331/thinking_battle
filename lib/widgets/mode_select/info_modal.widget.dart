@@ -1,10 +1,12 @@
-// import 'package:app_review/app_review.dart';
+import 'dart:io';
+
+import 'package:app_review/app_review.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:share/share.dart';
 import 'package:thinking_battle/data/info_contents.dart';
 import 'package:thinking_battle/models/info.model.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
@@ -15,12 +17,14 @@ class InfoModal extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
   final List<String> watchedInfoList;
+  final ValueNotifier<bool> existNotWatchedInfoState;
 
   const InfoModal({
     Key? key,
     required this.soundEffect,
     required this.seVolume,
     required this.watchedInfoList,
+    required this.existNotWatchedInfoState,
   }) : super(key: key);
 
   void openInfoModal(
@@ -41,6 +45,15 @@ class InfoModal extends HookWidget {
       watchedInfoList.add(infoContent.id.toString());
       context.read(watchedInfoListProvider).state = watchedInfoList;
       prefs.setStringList('watchedInfoList', watchedInfoList);
+
+      bool updatedFlg = false;
+
+      for (Info infoContent in infoContents) {
+        if (!watchedInfoList.contains(infoContent.id.toString())) {
+          updatedFlg = true;
+        }
+      }
+      existNotWatchedInfoState.value = updatedFlg;
       changeFlgState.value = !changeFlgState.value;
     }
 
@@ -76,6 +89,7 @@ class InfoModal extends HookWidget {
             'インフォメーション',
             style: TextStyle(
               fontSize: 18,
+              fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -188,37 +202,39 @@ class InfoModal extends HookWidget {
               itemCount: infoContents.length,
             ),
           ),
-          // リリース後
-          // const SizedBox(height: 10),
-          // Row(
-          //   children: [
-          //     const SizedBox(),
-          //     const Spacer(),
-          //     IconButton(
-          //       iconSize: 25,
-          //       icon: Icon(
-          //         Icons.share,
-          //         color: Colors.blue.shade700,
-          //       ),
-          //       onPressed: () {
-          //         Share.share(
-          //             '水平思考モンスターズをやってみませんか？\n相手の裏をかいて閃く爽快感が味わえる！\n\nhttps://example.com');
-          //       },
-          //     ),
-          //     IconButton(
-          //       iconSize: 25,
-          //       icon: Icon(
-          //         Icons.rate_review,
-          //         color: Colors.green.shade700,
-          //       ),
-          //       onPressed: () {
-          //         // AppReview.requestReview.then(
-          //         //   (_) {},
-          //         // );
-          //       },
-          //     ),
-          //   ],
-          // ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              const SizedBox(),
+              const Spacer(),
+              IconButton(
+                iconSize: 25,
+                icon: Icon(
+                  Icons.share,
+                  color: Colors.blue.shade700,
+                ),
+                onPressed: () {
+                  final String storeUrl = Platform.isAndroid
+                      ? 'https://play.google.com/store/apps/details?id=io.github.naoto613.thinking_battle'
+                      : 'https://apps.apple.com/app/id1596581901';
+                  Share.share('水平思考モンスターズをやってみませんか？\n相手の裏をかいて閃く爽快感が味わえる！\n\n' +
+                      storeUrl);
+                },
+              ),
+              IconButton(
+                iconSize: 25,
+                icon: Icon(
+                  Icons.rate_review,
+                  color: Colors.green.shade700,
+                ),
+                onPressed: () {
+                  AppReview.requestReview.then(
+                    (_) {},
+                  );
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );

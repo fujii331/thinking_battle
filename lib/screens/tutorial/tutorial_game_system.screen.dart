@@ -215,6 +215,7 @@ class TutorialGameSystemScreen extends HookWidget {
               text,
               style: TextStyle(
                 fontSize: 18,
+                fontFamily: 'NotoSansJP',
                 color: Colors.grey.shade100,
               ),
             ),

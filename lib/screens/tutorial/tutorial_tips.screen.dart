@@ -78,7 +78,7 @@ class TutorialTipsScreen extends StatelessWidget {
                         const SizedBox(height: betweenHeight),
                         _eachMessage(
                           6,
-                          'お題・先行後行はランダムで決定します。',
+                          'お題・先攻後行はランダムで決定します。',
                           width,
                         ),
                       ],
@@ -125,6 +125,7 @@ class TutorialTipsScreen extends StatelessWidget {
               text,
               style: TextStyle(
                 fontSize: 18,
+                fontFamily: 'NotoSansJP',
                 color: Colors.grey.shade100,
               ),
             ),

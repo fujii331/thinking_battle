@@ -8,6 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
 import 'dart:async';
 
@@ -42,6 +43,7 @@ class GamePlayingScreen extends HookWidget {
     AudioCache soundEffect,
     double seVolume,
     bool initialTutorialFlg,
+    ValueNotifier<bool> displayUpdateFlgState,
   ) {
     Timer.periodic(
       const Duration(seconds: 1),
@@ -106,6 +108,7 @@ class GamePlayingScreen extends HookWidget {
                 soundEffect,
                 seVolume,
                 rivalListenSubscription,
+                displayUpdateFlgState,
               );
             }
           }
@@ -154,6 +157,7 @@ class GamePlayingScreen extends HookWidget {
                 soundEffect,
                 seVolume,
                 true,
+                displayUpdateFlgState,
               );
             } else {
               // 接続失敗
@@ -205,7 +209,7 @@ class GamePlayingScreen extends HookWidget {
                 .collection('playing-room')
                 .doc(context.read(matchingRoomIdProvider).state)
                 .collection('each-action')
-                .doc(precedingFlg ? '後攻' : '先行')
+                .doc(precedingFlg ? '後攻' : '先攻')
             : null;
 
     final DocumentReference<Map<String, dynamic>>? myActionDoc =
@@ -214,12 +218,14 @@ class GamePlayingScreen extends HookWidget {
                 .collection('playing-room')
                 .doc(context.read(matchingRoomIdProvider).state)
                 .collection('each-action')
-                .doc(precedingFlg ? '先行' : '後攻')
+                .doc(precedingFlg ? '先攻' : '後攻')
             : null;
 
     final List rivalColorList = returnCardColorList(rivalInfo.cardNumber);
 
     StreamSubscription<DocumentSnapshot>? rivalListenSubscription;
+
+    final ValueNotifier<bool> displayUpdateFlgState = useState(false);
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
@@ -242,6 +248,7 @@ class GamePlayingScreen extends HookWidget {
               soundEffect,
               seVolume,
               rivalListenSubscription,
+              displayUpdateFlgState,
             );
           }, onError: (Object o) {
             // 接続失敗
@@ -258,6 +265,7 @@ class GamePlayingScreen extends HookWidget {
           soundEffect,
           seVolume,
           initialTutorialFlg,
+          displayUpdateFlgState,
         );
 
         await showDialog<int>(
@@ -289,6 +297,7 @@ class GamePlayingScreen extends HookWidget {
           soundEffect,
           seVolume,
           scrollController,
+          displayUpdateFlgState,
         );
       });
       return null;
@@ -304,6 +313,7 @@ class GamePlayingScreen extends HookWidget {
             'テーマ：' + quizThema,
             style: const TextStyle(
               fontSize: 21,
+              fontFamily: 'NotoSansJP',
             ),
           ),
           centerTitle: true,
@@ -401,6 +411,7 @@ class GamePlayingScreen extends HookWidget {
                           soundEffect: soundEffect,
                           seVolume: seVolume,
                           myTurnFlg: myTurnFlg,
+                          displayUpdateFlgState: displayUpdateFlgState,
                         ),
                         Platform.isAndroid
                             ? Container()

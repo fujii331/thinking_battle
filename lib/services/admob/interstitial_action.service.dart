@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'dart:io';
 import 'package:thinking_battle/data/advertising.dart';
-import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 
 void showInterstitialAd(
@@ -31,10 +30,10 @@ void createInterstitialAd(
   int _numInterstitialLoadAttempts,
 ) {
   InterstitialAd.load(
-    // adUnitId: Platform.isAndroid
-    //   ? androidGameInterstitalAdvid
-    //           : iosGameInterstitalAdvid,
-    adUnitId: InterstitialAd.testAdUnitId,
+    adUnitId: Platform.isAndroid
+        ? androidGameInterstitalAdvid
+        : iosGameInterstitalAdvid,
+    // adUnitId: InterstitialAd.testAdUnitId,
     request: const AdRequest(),
     adLoadCallback: InterstitialAdLoadCallback(
       onAdLoaded: (InterstitialAd ad) {

@@ -78,6 +78,7 @@ class SkillListModal extends HookWidget {
               'スキルを選択',
               style: TextStyle(
                 fontSize: 20.0,
+                fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.bold,
               ),
             ),

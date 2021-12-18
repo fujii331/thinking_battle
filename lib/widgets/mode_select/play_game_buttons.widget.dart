@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -8,7 +9,7 @@ import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/screens/game_start.screen.dart';
 import 'package:thinking_battle/widgets/mode_select/password_setting.widget.dart';
 
-class PlayGameButtons extends StatelessWidget {
+class PlayGameButtons extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
   final double betweenHeight;
@@ -24,110 +25,49 @@ class PlayGameButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // _playButton(
-        //   context,
-        //   'CPUマッチ',
-        //   Colors.lime.shade800,
-        //   1,
-        // ),
-        // SizedBox(height: betweenHeight),
         _imagePlayButton(
           context,
           'ランダムマッチ',
-          Colors.lightBlue.shade500,
+          Colors.lightBlue,
           2,
         ),
         SizedBox(height: betweenHeight),
         _imagePlayButton(
           context,
           'フレンドマッチ',
-          Colors.deepOrange.shade500,
+          Colors.deepOrange,
           3,
         ),
-      ],
-    );
-  }
-
-  Widget _playButton(
-    BuildContext context,
-    String text,
-    Color color,
-    int buttonNumber,
-  ) {
-    final bool widthOk = MediaQuery.of(context).size.width > 350;
-
-    return SizedBox(
-      width: widthOk ? 210 : 180,
-      height: widthOk ? null : 46,
-      child: ElevatedButton(
-        onPressed: () async {
-          soundEffect.play(
-            'sounds/tap.mp3',
-            isNotification: true,
-            volume: seVolume,
-          );
-
-          if (buttonNumber == 3) {
-            AwesomeDialog(
-              context: context,
-              dialogType: DialogType.NO_HEADER,
-              headerAnimationLoop: false,
-              dismissOnTouchOutside: true,
-              dismissOnBackKeyPress: true,
-              showCloseIcon: true,
-              animType: AnimType.SCALE,
-              width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
-              body: const PasswordSetting(),
-            ).show();
-          } else {
-            context.read(friendMatchWordProvider).state = '';
-            context.read(bgmProvider).state.stop();
-
-            if (buttonNumber == 1) {
-              context.read(trainingStatusProvider).state = 1;
-            } else {
-              context.read(trainingStatusProvider).state = 0;
-            }
-
-            Navigator.of(context).pushNamed(
-              GameStartScreen.routeName,
-            );
-          }
-        },
-        child: Text(
-          text,
+        SizedBox(height: betweenHeight),
+        Text(
+          // '2021/12/28 ~ 2022/01/07\n20:00 ~ 23:00限定',
+          '期間＆時間限定イベント\n近日開催！',
           style: TextStyle(
-            fontSize: widthOk ? 24 : 20,
+            color: Colors.grey.shade200,
+            fontFamily: 'KaiseiOpti',
+            fontSize: 14,
           ),
         ),
-        style: ElevatedButton.styleFrom(
-          primary: color,
-          elevation: 5,
-          shadowColor: Colors.grey,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 9,
-          ),
-          textStyle: Theme.of(context).textTheme.button,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          side: BorderSide(
-            width: 2,
-            color: Colors.grey.shade800,
-          ),
+        const SizedBox(height: 5),
+        _imagePlayButton(
+          context,
+          'イベントマッチ',
+          Colors.lightGreen,
+          1,
         ),
-      ),
+      ],
     );
   }
 
   Widget _imagePlayButton(
     BuildContext context,
     String text,
-    Color color,
+    MaterialColor color,
     int buttonNumber,
   ) {
     final bool widthOk = MediaQuery.of(context).size.width > 350;
+    final bool enableEvent = context.read(enableEventProvider).state;
+    final bool enablePushButton = buttonNumber != 1 || enableEvent;
 
     return Container(
       width: widthOk ? 205 : 180,
@@ -145,41 +85,44 @@ class PlayGameButtons extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
-          onTap: () {
-            soundEffect.play(
-              'sounds/tap.mp3',
-              isNotification: true,
-              volume: seVolume,
-            );
+          onTap: enablePushButton
+              ? () {
+                  soundEffect.play(
+                    'sounds/tap.mp3',
+                    isNotification: true,
+                    volume: seVolume,
+                  );
 
-            if (buttonNumber == 3) {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.NO_HEADER,
-                headerAnimationLoop: false,
-                dismissOnTouchOutside: true,
-                dismissOnBackKeyPress: true,
-                showCloseIcon: true,
-                animType: AnimType.SCALE,
-                width:
-                    MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
-                body: const PasswordSetting(),
-              ).show();
-            } else {
-              context.read(friendMatchWordProvider).state = '';
-              context.read(bgmProvider).state.stop();
+                  if (buttonNumber == 3) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.NO_HEADER,
+                      headerAnimationLoop: false,
+                      dismissOnTouchOutside: true,
+                      dismissOnBackKeyPress: true,
+                      showCloseIcon: true,
+                      animType: AnimType.SCALE,
+                      width: MediaQuery.of(context).size.width * .86 > 550
+                          ? 550
+                          : null,
+                      body: const PasswordSetting(),
+                    ).show();
+                  } else {
+                    context.read(friendMatchWordProvider).state = '';
+                    context.read(bgmProvider).state.stop();
 
-              if (buttonNumber == 1) {
-                context.read(trainingStatusProvider).state = 1;
-              } else {
-                context.read(trainingStatusProvider).state = 0;
-              }
+                    if (buttonNumber == 1) {
+                      context.read(isEventMatchProvider).state = true;
+                    } else {
+                      context.read(isEventMatchProvider).state = false;
+                    }
 
-              Navigator.of(context).pushNamed(
-                GameStartScreen.routeName,
-              );
-            }
-          },
+                    Navigator.of(context).pushNamed(
+                      GameStartScreen.routeName,
+                    );
+                  }
+                }
+              : null,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.blueGrey.shade800.withOpacity(0.4),
@@ -189,7 +132,9 @@ class PlayGameButtons extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: color.withOpacity(0.75),
+                  color: enablePushButton
+                      ? color.shade500.withOpacity(0.75)
+                      : color.shade300.withOpacity(0.85),
                   blurRadius: 2,
                 )
               ],
@@ -198,7 +143,7 @@ class PlayGameButtons extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: enablePushButton ? Colors.white : Colors.grey.shade400,
                   fontFamily: 'KaiseiOpti',
                   fontSize: widthOk ? 24 : 20,
                 ),

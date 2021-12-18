@@ -167,6 +167,7 @@ class MessageGacha extends HookWidget {
               messageSettings[itemNumber - 1].message,
               style: const TextStyle(
                 fontSize: 16,
+                fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.bold,
               ),
             ),

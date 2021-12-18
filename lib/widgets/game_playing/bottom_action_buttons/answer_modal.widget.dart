@@ -17,6 +17,7 @@ class AnswerModal extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
   final bool myTurnFlg;
+  final ValueNotifier<bool> displayUpdateFlgState;
 
   const AnswerModal({
     Key? key,
@@ -27,6 +28,7 @@ class AnswerModal extends HookWidget {
     required this.soundEffect,
     required this.seVolume,
     required this.myTurnFlg,
+    required this.displayUpdateFlgState,
   }) : super(key: key);
 
   @override
@@ -45,6 +47,7 @@ class AnswerModal extends HookWidget {
       myTurnFlg: myTurnFlg,
       inputAnswer: inputAnswer,
       answerCandidate: answerCandidate,
+      displayUpdateFlgState: displayUpdateFlgState,
     );
   }
 }

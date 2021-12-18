@@ -1,9 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:thinking_battle/models/quiz.model.dart';
 import 'package:thinking_battle/widgets/game_play_content/question_modal_content.widget.dart';
 
-class TutorialQuestionModal extends StatelessWidget {
+class TutorialQuestionModal extends HookWidget {
   final int selectQuestionId;
   final List<Question> selectableQuestions;
   final List<int> selectSkillIds;
@@ -52,6 +53,7 @@ class TutorialQuestionModal extends StatelessWidget {
                 selectSkillIds: selectSkillIds,
                 forceQuestionFlg: forceQuestionFlg,
                 changeFlgState: ValueNotifier(false),
+                displayUpdateFlgState: useState(false),
               ),
             ),
           ],

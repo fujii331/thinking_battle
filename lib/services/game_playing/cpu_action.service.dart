@@ -22,6 +22,7 @@ Future cpuAction(
   AudioCache soundEffect,
   double seVolume,
   bool disconnectedActionFlg,
+  ValueNotifier<bool> displayUpdateFlgState,
 ) async {
   final List<Question> allQuestions = [
     ...context.read(allQuestionsProvider).state
@@ -283,6 +284,7 @@ Future cpuAction(
     soundEffect,
     seVolume,
     null,
+    displayUpdateFlgState,
   );
 }
 

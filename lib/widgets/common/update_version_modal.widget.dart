@@ -1,9 +1,16 @@
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:thinking_battle/widgets/common/comment_modal.widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UpdateVersionModal extends StatelessWidget {
-  const UpdateVersionModal({Key? key}) : super(key: key);
+  final BuildContext context;
+
+  const UpdateVersionModal({
+    Key? key,
+    required this.context,
+  }) : super(key: key);
 
   void _launchURL(
     String url,
@@ -11,15 +18,29 @@ class UpdateVersionModal extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw '申し訳ありません。ストア情報が取得できませんでした。直接ストアより更新をお願いします。';
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.NO_HEADER,
+        headerAnimationLoop: false,
+        dismissOnTouchOutside: true,
+        dismissOnBackKeyPress: true,
+        showCloseIcon: true,
+        animType: AnimType.SCALE,
+        width: MediaQuery.of(context).size.width * .86 > 550 ? 550 : null,
+        body: const CommentModal(
+          topText: '読み込み失敗！',
+          secondText: '申し訳ありません。ストア情報が取得できませんでした。直接ストアより更新をお願いします。',
+          closeButtonFlg: true,
+        ),
+      ).show();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    const appStoreUrl = 'https://apps.apple.com/app/id1572443299';
-    const playStoreUrl =
-        'https://play.google.com/store/apps/details?id=io.github.naoto613.lateral_thinking';
+    final String storeUrl = Platform.isAndroid
+        ? 'https://play.google.com/store/apps/details?id=io.github.naoto613.thinking_battle'
+        : 'https://apps.apple.com/app/id1596581901';
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -41,7 +62,7 @@ class UpdateVersionModal extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'SawarabiGothic',
+                  fontFamily: 'NotoSansJP',
                 ),
               ),
             ),
@@ -54,7 +75,7 @@ class UpdateVersionModal extends StatelessWidget {
                 "新しいバージョンのアプリが利用可能です。\nストアより更新版を入手してご利用下さい。",
                 style: TextStyle(
                   fontSize: 18.0,
-                  fontFamily: 'SawarabiGothic',
+                  fontFamily: 'NotoSansJP',
                 ),
               ),
             ),
@@ -67,11 +88,7 @@ class UpdateVersionModal extends StatelessWidget {
                   style: TextButton.styleFrom(
                     primary: Colors.orange.shade800,
                   ),
-                  onPressed: () => {
-                    _launchURL(
-                      Platform.isIOS ? appStoreUrl : playStoreUrl,
-                    ),
-                  },
+                  onPressed: () => _launchURL(storeUrl),
                 ),
               ],
             ),

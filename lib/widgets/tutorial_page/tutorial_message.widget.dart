@@ -107,6 +107,7 @@ class TutorialMessage extends HookWidget {
                                           .message,
                                       style: const TextStyle(
                                         fontSize: 15,
+                                        fontFamily: 'NotoSansJP',
                                       ),
                                     ),
                                   ],
@@ -136,6 +137,7 @@ class TutorialMessage extends HookWidget {
                                           .message,
                                       style: const TextStyle(
                                         fontSize: 15,
+                                        fontFamily: 'NotoSansJP',
                                       ),
                                     ),
                                   ],
@@ -165,6 +167,7 @@ class TutorialMessage extends HookWidget {
                                           .message,
                                       style: const TextStyle(
                                         fontSize: 15,
+                                        fontFamily: 'NotoSansJP',
                                       ),
                                     ),
                                   ],
@@ -194,6 +197,7 @@ class TutorialMessage extends HookWidget {
                                           .message,
                                       style: const TextStyle(
                                         fontSize: 15,
+                                        fontFamily: 'NotoSansJP',
                                       ),
                                     ),
                                   ],

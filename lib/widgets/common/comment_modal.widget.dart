@@ -30,6 +30,7 @@ class CommentModal extends HookWidget {
             topText,
             style: const TextStyle(
               fontSize: 20.0,
+              fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -38,6 +39,7 @@ class CommentModal extends HookWidget {
             secondText,
             style: const TextStyle(
               fontSize: 18.0,
+              fontFamily: 'NotoSansJP',
             ),
           ),
           const SizedBox(height: 30),

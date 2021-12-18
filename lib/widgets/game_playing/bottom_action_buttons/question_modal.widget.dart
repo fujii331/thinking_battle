@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/quiz.model.dart';
 
 import 'package:thinking_battle/providers/game.provider.dart';
@@ -19,6 +20,7 @@ class QuestionModal extends HookWidget {
   final AudioCache soundEffect;
   final double seVolume;
   final bool myTurnFlg;
+  final ValueNotifier<bool> displayUpdateFlgState;
 
   const QuestionModal({
     Key? key,
@@ -29,6 +31,7 @@ class QuestionModal extends HookWidget {
     required this.soundEffect,
     required this.seVolume,
     required this.myTurnFlg,
+    required this.displayUpdateFlgState,
   }) : super(key: key);
 
   @override
@@ -53,6 +56,7 @@ class QuestionModal extends HookWidget {
       selectSkillIds: selectSkillIds,
       forceQuestionFlg: forceQuestionFlg,
       changeFlgState: changeFlgState,
+      displayUpdateFlgState: displayUpdateFlgState,
     );
   }
 }

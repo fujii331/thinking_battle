@@ -64,6 +64,7 @@ class SettingMyMessages extends HookWidget {
               '対戦中に送れる4つのメッセージを選択',
               style: TextStyle(
                 fontSize: 20.0,
+                fontFamily: 'NotoSansJP',
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
@@ -202,6 +203,7 @@ class SettingMyMessages extends HookWidget {
             message.message,
             style: const TextStyle(
               color: Colors.black,
+              fontFamily: 'NotoSansJP',
               fontSize: 17,
             ),
           ),

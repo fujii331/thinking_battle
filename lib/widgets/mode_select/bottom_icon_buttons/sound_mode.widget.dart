@@ -48,6 +48,7 @@ class SoundMode extends HookWidget {
               'スライドして音量調節',
               style: TextStyle(
                 fontSize: 20.0,
+                fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -62,6 +63,7 @@ class SoundMode extends HookWidget {
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.black,
+                fontFamily: 'NotoSansJP',
                 fontSize: 20,
               ),
             ),
@@ -101,6 +103,7 @@ class SoundMode extends HookWidget {
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.black,
+                fontFamily: 'NotoSansJP',
                 fontSize: 20,
               ),
             ),

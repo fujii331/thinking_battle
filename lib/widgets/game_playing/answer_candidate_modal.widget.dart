@@ -24,6 +24,7 @@ class AnswerCandidateModal extends HookWidget {
             answer,
             style: const TextStyle(
               color: Colors.black,
+              fontFamily: 'NotoSansJP',
               fontSize: 17,
             ),
           ),
@@ -45,6 +46,7 @@ class AnswerCandidateModal extends HookWidget {
             '解答候補一覧',
             style: TextStyle(
               fontSize: 20.0,
+              fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.bold,
             ),
           ),

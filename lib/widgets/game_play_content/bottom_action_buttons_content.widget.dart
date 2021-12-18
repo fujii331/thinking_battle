@@ -17,6 +17,7 @@ class BottomActionButtonsContent extends StatelessWidget {
   final bool myTurnFlg;
   final bool forceQuestionFlg;
   final bool answerFailedFlg;
+  final ValueNotifier<bool> displayUpdateFlgState;
 
   const BottomActionButtonsContent({
     Key? key,
@@ -29,6 +30,7 @@ class BottomActionButtonsContent extends StatelessWidget {
     required this.myTurnFlg,
     required this.forceQuestionFlg,
     required this.answerFailedFlg,
+    required this.displayUpdateFlgState,
   }) : super(key: key);
 
   @override
@@ -80,6 +82,7 @@ class BottomActionButtonsContent extends StatelessWidget {
                             soundEffect: soundEffect,
                             seVolume: seVolume,
                             myTurnFlg: myTurnFlg,
+                            displayUpdateFlgState: displayUpdateFlgState,
                           );
                         },
                       );
@@ -129,6 +132,7 @@ class BottomActionButtonsContent extends StatelessWidget {
                             soundEffect: soundEffect,
                             seVolume: seVolume,
                             myTurnFlg: myTurnFlg,
+                            displayUpdateFlgState: displayUpdateFlgState,
                           );
                         },
                       );

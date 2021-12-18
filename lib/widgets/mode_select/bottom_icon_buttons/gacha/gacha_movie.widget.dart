@@ -77,23 +77,16 @@ class _GachaMovie extends State<GachaMovie> with TickerProviderStateMixin {
               Column(
                 children: [
                   const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Row(
-                      children: [
-                        const SizedBox(),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: Text(
-                            'ReneeNakagawa@LottieFiles',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.grey.shade700,
-                                fontSize: heightOk ? 11 : 9),
-                          ),
-                        ),
-                      ],
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 25),
+                      child: Text(
+                        'ReneeNakagawa@LottieFiles',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: heightOk ? 11 : 9),
+                      ),
                     ),
                   ),
                 ],

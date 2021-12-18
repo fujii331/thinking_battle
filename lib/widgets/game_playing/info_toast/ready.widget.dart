@@ -63,6 +63,7 @@ class Ready extends HookWidget {
                       style: TextStyle(
                         fontSize: 26.0,
                         color: Colors.blueGrey.shade100,
+                        fontFamily: 'NotoSansJP',
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -83,7 +84,7 @@ class Ready extends HookWidget {
                           ),
                         ),
                         Text(
-                          precedingFlg ? '先行' : '後攻',
+                          precedingFlg ? '先攻' : '後攻',
                           style: TextStyle(
                             fontSize: 28.0,
                             fontWeight: FontWeight.bold,

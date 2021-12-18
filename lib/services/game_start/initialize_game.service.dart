@@ -23,7 +23,6 @@ void commonInitialAction(
   context.read(afterRivalMessageTimeProvider).state = 0;
   context.read(alreadyseenQuestionsProvider).state = [];
   context.read(selectableQuestionsProvider).state = [];
-  context.read(displayContentListProvider).state = [];
   context.read(answerFailedFlgProvider).state = false;
   context.read(forceQuestionFlgProvider).state = false;
   context.read(spChargeTurnProvider).state = 0;
@@ -40,18 +39,20 @@ Future trainingInitialAction(
 ) async {
   context.read(enemySkillPointProvider).state = 7;
 
-  // 先行・後攻
+  // 先攻・後攻
   final bool precedingFlg = Random().nextInt(2) == 0 ? true : false;
   context.read(precedingFlgProvider).state = precedingFlg;
 
   final String cpuName = cpuNames[Random().nextInt(cpuNames.length)];
 
-  final double cpuRate = ((context.read(rateProvider).state -
+  double cpuRate = ((context.read(rateProvider).state -
                   100 +
                   (Random().nextInt(2000) / 10)) *
               10)
           .round() /
       10;
+
+  cpuRate = cpuRate < 0 ? 0 : cpuRate;
 
   // レートによって対戦回数・コメント・スキルを調整する
   int matchedCount = Random().nextInt(100);

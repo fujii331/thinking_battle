@@ -94,7 +94,13 @@ class MessagePopUpMenu extends HookWidget {
               : const SizedBox(
                   width: 27,
                 ),
-          Text(message.message),
+          Text(
+            message.message,
+            style: const TextStyle(
+              fontSize: 15,
+              fontFamily: 'NotoSansJP',
+            ),
+          ),
         ],
       ),
     );

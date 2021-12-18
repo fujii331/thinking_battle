@@ -73,6 +73,7 @@ class SkillModalContent extends HookWidget {
               '使うスキルを選んでセット',
               style: TextStyle(
                 fontSize: 20.0,
+                fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -238,13 +239,15 @@ class SkillModalContent extends HookWidget {
           ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(
+              padding: EdgeInsets.only(
                 left: 13,
+                bottom: Platform.isAndroid ? 0 : 5,
               ),
               child: Text(
                 'SP ' + skill.skillPoint.toString(),
                 style: const TextStyle(
                   color: Colors.blueGrey,
+                  fontFamily: 'NotoSansJP',
                   fontSize: 17,
                 ),
               ),

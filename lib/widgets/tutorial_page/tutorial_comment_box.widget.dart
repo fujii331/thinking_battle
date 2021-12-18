@@ -30,6 +30,7 @@ class TutoriaCommentBox extends StatelessWidget {
           comment,
           style: TextStyle(
             height: 1.1,
+            fontFamily: 'NotoSansJP',
             fontSize: heightOk ? 16 : 14,
             color: Colors.black,
           ),

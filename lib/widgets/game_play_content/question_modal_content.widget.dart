@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:thinking_battle/models/display_content.model.dart';
 import 'package:thinking_battle/models/quiz.model.dart';
 import 'package:thinking_battle/models/send_content.model.dart';
 
@@ -31,6 +32,7 @@ class QuestionModalContent extends HookWidget {
   final List<int> selectSkillIds;
   final bool forceQuestionFlg;
   final ValueNotifier<bool> changeFlgState;
+  final ValueNotifier<bool> displayUpdateFlgState;
 
   const QuestionModalContent({
     Key? key,
@@ -46,6 +48,7 @@ class QuestionModalContent extends HookWidget {
     required this.selectSkillIds,
     required this.forceQuestionFlg,
     required this.changeFlgState,
+    required this.displayUpdateFlgState,
   }) : super(key: key);
 
   @override
@@ -57,7 +60,7 @@ class QuestionModalContent extends HookWidget {
         : 5;
 
     final bool widthOk = MediaQuery.of(context).size.width > 350;
-    final double fontSize = widthOk ? 20 : 18;
+    final double fontSize = widthOk ? 19.5 : 17.5;
 
     for (int skillId in selectSkillIds) {
       skillList.add(
@@ -260,6 +263,7 @@ class QuestionModalContent extends HookWidget {
                                 soundEffect,
                                 seVolume,
                                 rivalListenSubscription,
+                                displayUpdateFlgState,
                               );
 
                               Navigator.pop(context);
@@ -345,16 +349,16 @@ class QuestionModalContent extends HookWidget {
           targetQuestion.asking,
           style: TextStyle(
             fontSize: fontSize,
-            fontFamily: 'ZenKakuGothicNew',
-            fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
         style: ElevatedButton.styleFrom(
           primary: selectedFlg ? Colors.yellow.shade200 : Colors.white,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 5,
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 3.5,
+            bottom: 6,
           ),
         ),
       ),
@@ -381,14 +385,14 @@ class QuestionModalContent extends HookWidget {
             child: Text(
               '？？？（ナイスな質問）',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: fontSize,
                 color: Colors.orange.shade800,
               ),
             ),
             style: ElevatedButton.styleFrom(
               primary: Colors.yellow.shade200,
-              padding: EdgeInsets.symmetric(
-                horizontal: fontSize,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
                 vertical: 5,
               ),
               textStyle: Theme.of(context).textTheme.button,

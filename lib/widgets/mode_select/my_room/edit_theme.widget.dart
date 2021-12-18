@@ -91,6 +91,7 @@ class EditTheme extends HookWidget {
               'テーマにしたい画像をタップ！',
               style: TextStyle(
                 fontSize: 20.0,
+                fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -58,6 +58,7 @@ class TutorialSkillModalRedFrame extends StatelessWidget {
                     '使うスキルを選んでセット',
                     style: TextStyle(
                       fontSize: 20.0,
+                      fontFamily: 'NotoSansJP',
                       color: Colors.white.withOpacity(0),
                       fontWeight: FontWeight.bold,
                     ),

@@ -58,6 +58,7 @@ class TimeLimit extends HookWidget {
                       style: TextStyle(
                         fontSize: 26.0,
                         color: Colors.blueGrey.shade100,
+                        fontFamily: 'NotoSansJP',
                         fontWeight: FontWeight.bold,
                         shadows: <Shadow>[
                           Shadow(
@@ -78,6 +79,7 @@ class TimeLimit extends HookWidget {
                       style: TextStyle(
                         fontSize: 22.0,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'NotoSansJP',
                         color: Colors.blueGrey.shade100,
                         shadows: <Shadow>[
                           Shadow(

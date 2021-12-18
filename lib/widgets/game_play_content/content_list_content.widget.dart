@@ -197,6 +197,7 @@ class ContentListContent extends StatelessWidget {
                   messageSettings[targetContent.messageId - 1].message,
                   style: const TextStyle(
                     fontSize: 14,
+                    fontFamily: 'NotoSansJP',
                     color: Colors.white,
                   ),
                 ),
@@ -350,10 +351,13 @@ class ContentListContent extends StatelessWidget {
                     ? Colors.yellow.shade200
                     : Colors.white,
         child: Padding(
-          padding: EdgeInsets.only(bottom: Platform.isAndroid ? 2.5 : 0),
+          padding: EdgeInsets.only(bottom: Platform.isAndroid ? 2.5 : 1.5),
           child: Text(
             skillIds.contains(1) && !myTurnFlg ? ' ？？？' : message,
-            style: TextStyle(fontSize: fontSize),
+            style: TextStyle(
+              fontSize: fontSize,
+              fontFamily: 'NotoSansJP',
+            ),
           ),
         ),
       ),
@@ -388,7 +392,7 @@ class ContentListContent extends StatelessWidget {
           left: 6,
           right: 6,
           top: 1.5,
-          bottom: Platform.isAndroid ? 4.5 : 2,
+          bottom: Platform.isAndroid ? 4.5 : 3,
         ),
         child: Text(
           (skillIds.contains(4) && !myTurnFlg) ||
@@ -397,7 +401,10 @@ class ContentListContent extends StatelessWidget {
                   ? 'いいえ'
                   : 'はい'
               : targetContent.reply,
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontFamily: 'NotoSansJP',
+          ),
         ),
       ),
     );

@@ -85,6 +85,7 @@ class EditImage extends HookWidget {
               'アイコンにしたい画像をタップ！',
               style: TextStyle(
                 fontSize: 20.0,
+                fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.bold,
               ),
             ),
