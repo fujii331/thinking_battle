@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
 
 class TopRowStart extends StatelessWidget {
   final bool matchingFlg;

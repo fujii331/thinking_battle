@@ -33,7 +33,12 @@ class Result extends HookWidget {
     final double rate = useProvider(rateProvider).state;
     final String friendMatchWord = useProvider(friendMatchWordProvider).state;
     final bool notRateChangeFlg = trainingStatus == 1 || friendMatchWord != '';
-    final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
+    // final bool isEventMatch = useProvider(isEventMatchProvider).state;
+    final List<int> mySkillIdsList =
+        // isEventMatch
+        //     ? useProvider(randomSkillIdsListProvider).state
+        //     :
+        useProvider(mySkillIdsListProvider).state;
     final bool rivalDisconnectedFlg = trainingStatus == 2;
 
     return Scaffold(

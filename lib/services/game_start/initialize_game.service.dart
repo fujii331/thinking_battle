@@ -11,6 +11,7 @@ import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/data/quiz_data.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
+// import 'package:thinking_battle/services/common/get_random_skills.service.dart';
 import 'package:thinking_battle/services/game_playing/update_rate.service.dart';
 
 void commonInitialAction(
@@ -23,6 +24,7 @@ void commonInitialAction(
   context.read(afterRivalMessageTimeProvider).state = 0;
   context.read(alreadyseenQuestionsProvider).state = [];
   context.read(selectableQuestionsProvider).state = [];
+  context.read(displayContentListProvider).state = [];
   context.read(answerFailedFlgProvider).state = false;
   context.read(forceQuestionFlgProvider).state = false;
   context.read(spChargeTurnProvider).state = 0;
@@ -182,6 +184,11 @@ Future trainingInitialAction(
                     ? [1, 2, 8]
                     : [2, 4, 8];
   }
+
+  // イベントマッチの場合、スキルはランダム
+  // if (context.read(isEventMatchProvider).state) {
+  //   skillList = getRandomSkills();
+  // }
 
   context.read(rivalInfoProvider).state = PlayerInfo(
     name: cpuName,

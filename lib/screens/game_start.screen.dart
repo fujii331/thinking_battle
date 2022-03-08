@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:thinking_battle/services/common/get_random_skills.service.dart';
 import 'package:thinking_battle/services/game_start/matching_flow.service.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/models/player_info.model.dart';
@@ -10,6 +11,7 @@ import 'package:thinking_battle/services/game_start/initialize_game.service.dart
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
+import 'package:thinking_battle/widgets/common/user_profile_random_skills.widget.dart';
 
 import 'package:thinking_battle/widgets/game_start/center_row_start.widget.dart';
 import 'package:thinking_battle/widgets/game_start/top_row_start.widget.dart';
@@ -36,7 +38,7 @@ class GameStartScreen extends HookWidget {
         useProvider(continuousWinCountProvider).state;
     final String playerName = useProvider(playerNameProvider).state;
     final double rate = useProvider(rateProvider).state;
-    final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
+    List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
     final int trainingStatus = context.read(trainingStatusProvider).state;
     final double bgmVolume = useProvider(bgmVolumeProvider).state;
     final bool initialTutorialFlg =
@@ -49,6 +51,9 @@ class GameStartScreen extends HookWidget {
 
     final bool widthOk = MediaQuery.of(context).size.width > 350;
     final double wordMinusSize = widthOk ? 0 : 1.5;
+
+    // イベントマッチ判定
+    // final bool isEventMatch = useProvider(isEventMatchProvider).state;
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
@@ -94,6 +99,13 @@ class GameStartScreen extends HookWidget {
               );
             }
           } else {
+            // イベントマッチの場合、ランダムスキルを設定
+            // if (context.read(isEventMatchProvider).state) {
+            //   final randomSkills = getRandomSkills();
+            //   mySkillIdsList = randomSkills;
+            //   context.read(randomSkillIdsListProvider).state = randomSkills;
+            // }
+
             await matchingFlow(
               context,
               imageNumber,
@@ -130,6 +142,26 @@ class GameStartScreen extends HookWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       // const Stamina(),
+                      // context.read(isEventMatchProvider).state
+                      //     ? Padding(
+                      //         padding: const EdgeInsets.only(top: 15.0),
+                      //         child: Text(
+                      //           'ランダムスキルマッチ',
+                      //           style: TextStyle(
+                      //             fontSize: 24,
+                      //             fontFamily: 'MochiyPopOne',
+                      //             color: Colors.purple.shade100,
+                      //             shadows: const [
+                      //               Shadow(
+                      //                 color: Colors.black,
+                      //                 offset: Offset(1, 1),
+                      //                 blurRadius: 1,
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       )
+                      //     : Container(),
                       // const SizedBox(height: 30),
                       TopRowStart(
                         matchingFlg: rivalInfo.skillList.isNotEmpty,
@@ -139,7 +171,21 @@ class GameStartScreen extends HookWidget {
                           ? AnimatedOpacity(
                               duration: const Duration(milliseconds: 500),
                               opacity: matchingAnimatedFlgState.value ? 1 : 0,
-                              child: UserProfileCommon(
+                              child:
+                                  // isEventMatch
+                                  //     ? UserProfileRandomSkills(
+                                  //         imageNumber: rivalInfo.imageNumber,
+                                  //         cardNumber: rivalInfo.cardNumber,
+                                  //         matchedCount: rivalInfo.matchedCount,
+                                  //         continuousWinCount:
+                                  //             rivalInfo.continuousWinCount,
+                                  //         playerName: rivalInfo.name,
+                                  //         userRate: rivalInfo.rate,
+                                  //         mySkillIdsList: rivalInfo.skillList,
+                                  //         wordMinusSize: wordMinusSize,
+                                  //       )
+                                  //     :
+                                  UserProfileCommon(
                                 imageNumber: rivalInfo.imageNumber,
                                 cardNumber: rivalInfo.cardNumber,
                                 matchedCount: rivalInfo.matchedCount,
@@ -192,6 +238,18 @@ class GameStartScreen extends HookWidget {
                         matchingQuitFlg: matchingQuitFlg,
                         initialTutorialFlg: initialTutorialFlg,
                       ),
+                      // isEventMatch
+                      //     ? UserProfileRandomSkills(
+                      //         imageNumber: imageNumber,
+                      //         cardNumber: cardNumber,
+                      //         matchedCount: matchedCount,
+                      //         continuousWinCount: continuousWinCount,
+                      //         playerName: playerName,
+                      //         userRate: rate,
+                      //         mySkillIdsList: mySkillIdsList,
+                      //         wordMinusSize: wordMinusSize,
+                      //       )
+                      //     :
                       UserProfileCommon(
                         imageNumber: imageNumber,
                         cardNumber: cardNumber,

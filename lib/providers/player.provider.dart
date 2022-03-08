@@ -22,8 +22,11 @@ final loginIdProvider = StateProvider((ref) => '');
 final rateProvider = StateProvider((ref) => 1500.0);
 final maxRateProvider = StateProvider((ref) => 1500.0);
 final mySkillIdsListProvider = StateProvider((ref) => <int>[1, 2, 3]);
+final randomSkillIdsListProvider = StateProvider((ref) => <int>[1, 2, 3]);
 final myMessageIdsListProvider = StateProvider((ref) => <int>[1, 2, 3, 4]);
 final matchedCountProvider = StateProvider((ref) => 0);
 final winCountProvider = StateProvider((ref) => 0);
 final continuousWinCountProvider = StateProvider((ref) => 0);
 final maxContinuousWinCountProvider = StateProvider((ref) => 0);
+
+final eventWinCountProvider = StateProvider((ref) => 0);

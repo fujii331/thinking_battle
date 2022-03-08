@@ -121,4 +121,8 @@ const messageSettings = <Message>[
     id: 30,
     message: 'スキル使うけど許してね',
   ),
+  // Message(
+  //   id: 31,
+  //   message: '第一回イベント上位です',
+  // ),
 ];

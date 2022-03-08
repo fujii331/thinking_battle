@@ -41,6 +41,9 @@ Future updateRate(
     prefs.setDouble('rate', newRate);
   }
 
+  final String friendMatchWord = context.read(friendMatchWordProvider).state;
+  final bool friendMatchFlg = friendMatchWord != '';
+
   // レート更新
   context.read(rivalInfoProvider).state = PlayerInfo(
     name: rivalInfo.name,
@@ -48,7 +51,8 @@ Future updateRate(
     imageNumber: rivalInfo.imageNumber,
     cardNumber: rivalInfo.cardNumber,
     matchedCount: rivalInfo.matchedCount,
-    continuousWinCount: winFlg ? 0 : rivalInfo.continuousWinCount + 1,
+    continuousWinCount:
+        winFlg ? 0 : rivalInfo.continuousWinCount + (friendMatchFlg ? 0 : 1),
     skillList: rivalInfo.skillList,
   );
 

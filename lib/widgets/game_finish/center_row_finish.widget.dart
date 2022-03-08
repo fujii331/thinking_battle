@@ -26,6 +26,11 @@ class CenterRowFinish extends HookWidget {
     final bool friendMatchFlg = friendMatchWord != '';
     final bool initialTutorialFlg =
         context.read(initialTutorialFlgProvider).state;
+    // final bool enableEvent = context.read(enableEventProvider).state;
+
+    // final bool isEventMatch = context.read(isEventMatchProvider).state;
+
+    // final bool disableNextGameButton = isEventMatch && !enableEvent;
 
     return Column(
       children: [
@@ -138,45 +143,57 @@ class CenterRowFinish extends HookWidget {
                         },
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: 120,
-                      height: 40,
-                      child: ElevatedButton(
-                        child: Text(friendMatchFlg ? 'もう一回' : '次のゲーム'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue.shade500,
-                          padding: const EdgeInsets.only(
-                            bottom: 3,
-                          ),
-                          shape: const StadiumBorder(),
-                          side: BorderSide(
-                            width: 2,
-                            color: Colors.blue.shade700,
+                    // !disableNextGameButton
+                    //     ?
+                    Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        SizedBox(
+                          width: 120,
+                          height: 40,
+                          child: ElevatedButton(
+                            child: Text(friendMatchFlg ? 'もう一回' : '次のゲーム'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.blue.shade500,
+                              padding: const EdgeInsets.only(
+                                bottom: 3,
+                              ),
+                              shape: const StadiumBorder(),
+                              side: BorderSide(
+                                width: 2,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                            onPressed:
+                                // !disableNextGameButton
+                                //     ?
+                                () {
+                              context.read(bgmProvider).state.stop();
+                              soundEffect.play(
+                                'sounds/tap.mp3',
+                                isNotification: true,
+                                volume: seVolume,
+                              );
+
+                              if (context.read(trainingStatusProvider).state >=
+                                  2) {
+                                context.read(trainingStatusProvider).state = 0;
+                              }
+
+                              Navigator.popUntil(
+                                context,
+                                ModalRoute.withName(ModeSelectScreen.routeName),
+                              );
+                              Navigator.of(context).pushNamed(
+                                GameStartScreen.routeName,
+                              );
+                            },
+                            // : null,
                           ),
                         ),
-                        onPressed: () {
-                          context.read(bgmProvider).state.stop();
-                          soundEffect.play(
-                            'sounds/tap.mp3',
-                            isNotification: true,
-                            volume: seVolume,
-                          );
-
-                          if (context.read(trainingStatusProvider).state >= 2) {
-                            context.read(trainingStatusProvider).state = 0;
-                          }
-
-                          Navigator.popUntil(
-                            context,
-                            ModalRoute.withName(ModeSelectScreen.routeName),
-                          );
-                          Navigator.of(context).pushNamed(
-                            GameStartScreen.routeName,
-                          );
-                        },
-                      ),
+                      ],
                     ),
+                    // : Container(),
                   ],
                 ),
         ),

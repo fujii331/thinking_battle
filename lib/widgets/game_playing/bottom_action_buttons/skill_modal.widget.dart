@@ -24,7 +24,13 @@ class SkillModal extends HookWidget {
     final List<int> selectSkillIdsList =
         useProvider(selectSkillIdsProvider).state;
 
-    final List<int> mySkillIdsList = useProvider(mySkillIdsListProvider).state;
+    // final bool isEventMatch = useProvider(isEventMatchProvider).state;
+    final List<int> mySkillIdsList =
+        // isEventMatch
+        // ? useProvider(randomSkillIdsListProvider).state
+        // :
+        useProvider(mySkillIdsListProvider).state;
+
     final int currentSkillPoint = useProvider(currentSkillPointProvider).state;
 
     return SkillModalContent(

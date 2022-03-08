@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:thinking_battle/screens/tutorial/tutorial_top.screen.dart';
+import 'package:thinking_battle/services/mode_select/get_event_ranking.service.dart';
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/gacha_select.widget.dart';
 
 import 'package:thinking_battle/widgets/mode_select/bottom_icon_buttons/sound_mode.widget.dart';
@@ -91,6 +92,8 @@ class BottomIconButtons extends HookWidget {
               volume: seVolume,
             );
             if (buttonPuttern == 1) {
+              // イベント結果作成用
+              // createEventRankingData(context);
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.NO_HEADER,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -7,6 +9,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/game.provider.dart';
 import 'package:thinking_battle/screens/game_start.screen.dart';
+import 'package:thinking_battle/widgets/mode_select/event_ranking_modal.widget.dart';
 import 'package:thinking_battle/widgets/mode_select/password_setting.widget.dart';
 
 class PlayGameButtons extends HookWidget {
@@ -23,6 +26,12 @@ class PlayGameButtons extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final DateTime now = DateTime.now();
+    // // 2021/12/28 ~ 2022/1/14の範囲内の場合
+    // final bool isRankingDisplayPeriod =
+    //     now.isBefore(DateTime(2022, 1, 15, 0, 0)) &&
+    //         now.isAfter(DateTime(2021, 12, 29, 0, 0));
+
     return Column(
       children: [
         _imagePlayButton(
@@ -39,22 +48,93 @@ class PlayGameButtons extends HookWidget {
           3,
         ),
         SizedBox(height: betweenHeight),
-        Text(
-          // '2021/12/28 ~ 2022/01/07\n20:00 ~ 23:00限定',
-          '期間＆時間限定イベント\n近日開催！',
-          style: TextStyle(
-            color: Colors.grey.shade200,
-            fontFamily: 'KaiseiOpti',
-            fontSize: 14,
-          ),
-        ),
-        const SizedBox(height: 5),
-        _imagePlayButton(
-          context,
-          'イベントマッチ',
-          Colors.lightGreen,
-          1,
-        ),
+        // Text(
+        //   '2021/12/28 ~ 2022/01/07\n21:00 ~ 23:00限定',
+        //   // '期間＆時間限定イベント\n近日開催！',
+        //   style: TextStyle(
+        //     color: Colors.grey.shade200,
+        //     fontFamily: 'KaiseiOpti',
+        //     fontSize: 14,
+        //   ),
+        // ),
+        // const SizedBox(height: 8),
+        // _imagePlayButton(
+        //   context,
+        //   'イベントマッチ',
+        //   Colors.lightGreen,
+        //   1,
+        // ),
+        // isRankingDisplayPeriod
+        //     ? Column(
+        //         children: [
+        //           const SizedBox(height: 15),
+        //           InkWell(
+        //             onTap: () async {
+        //               soundEffect.play(
+        //                 'sounds/tap.mp3',
+        //                 isNotification: true,
+        //                 volume: seVolume,
+        //               );
+
+        //               AwesomeDialog(
+        //                 context: context,
+        //                 dialogType: DialogType.NO_HEADER,
+        //                 headerAnimationLoop: false,
+        //                 dismissOnTouchOutside: true,
+        //                 dismissOnBackKeyPress: true,
+        //                 showCloseIcon: true,
+        //                 animType: AnimType.SCALE,
+        //                 width: MediaQuery.of(context).size.width > 420
+        //                     ? 380
+        //                     : null,
+        //                 body: const EventRankingModal(),
+        //               ).show();
+        //             },
+        //             child: Container(
+        //               height: 45,
+        //               width: 160,
+        //               decoration: BoxDecoration(
+        //                 gradient: LinearGradient(
+        //                   begin: FractionalOffset.topLeft,
+        //                   end: FractionalOffset.bottomRight,
+        //                   colors: [
+        //                     Colors.yellow.shade100,
+        //                     Colors.yellow.shade300,
+        //                   ],
+        //                   stops: const [
+        //                     0.2,
+        //                     0.7,
+        //                   ],
+        //                 ),
+        //                 border: Border.all(
+        //                   color: Colors.grey,
+        //                   width: 1.5,
+        //                 ),
+        //                 borderRadius: const BorderRadius.all(
+        //                   Radius.circular(10),
+        //                 ),
+        //               ),
+        //               child: Center(
+        //                 child: Padding(
+        //                   padding: EdgeInsets.only(
+        //                     bottom: Platform.isAndroid ? 1 : 0,
+        //                     top: Platform.isAndroid ? 0 : 1,
+        //                   ),
+        //                   child: const Text(
+        //                     'イベントランキング',
+        //                     style: TextStyle(
+        //                       fontSize: 16,
+        //                       fontFamily: 'KaiseiOpti',
+        //                       color: Colors.black,
+        //                     ),
+        //                   ),
+        //                 ),
+        //               ),
+        //             ),
+        //           )
+        //         ],
+        //       )
+        //     : Container(),
       ],
     );
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:thinking_battle/providers/game.provider.dart';
 
 class Ready extends HookWidget {
   final bool precedingFlg;
@@ -55,6 +58,31 @@ class Ready extends HookWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // context.read(isEventMatchProvider).state
+                  //     ? SizedBox(
+                  //         child: Column(
+                  //           children: [
+                  //             Text(
+                  //               '~ランダムスキルマッチ~\n初期装備スキルがランダムに',
+                  //               textAlign: TextAlign.center,
+                  //               style: TextStyle(
+                  //                 fontSize: 20,
+                  //                 color: Colors.purple.shade100,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 shadows: const [
+                  //                   Shadow(
+                  //                     color: Colors.black,
+                  //                     offset: Offset(1, 1),
+                  //                     blurRadius: 1,
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //             const SizedBox(height: 50),
+                  //           ],
+                  //         ),
+                  //       )
+                  //     : Container(),
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
                     opacity: displayFlg1.value ? 1 : 0,

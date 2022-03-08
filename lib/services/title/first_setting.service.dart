@@ -98,6 +98,10 @@ void firstSetting(BuildContext context) async {
   context.read(matchedCountProvider).state = prefs.getInt('matchCount') ?? 0;
   // 勝利数
   context.read(winCountProvider).state = prefs.getInt('winCount') ?? 0;
+  // // イベント勝利数
+  // // イベント開始してから終了するまで
+  // context.read(eventWinCountProvider).state =
+  //     prefs.getInt('eventWinCount') ?? 0;
   // 連続勝利数
   context.read(continuousWinCountProvider).state =
       prefs.getInt('continuousWinCount') ?? 0;

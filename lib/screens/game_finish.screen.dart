@@ -63,6 +63,28 @@ class GameFinishScreen extends HookWidget {
                 'skillUseCount', context.read(skillUseCountProvider).state);
           }
 
+          // イベントマッチで0勝で負けた場合
+          // if (context.read(isEventMatchProvider).state &&
+          //     context.read(eventWinCountProvider).state == 0 &&
+          //     winFlg != true) {
+          //   final DocumentReference<Map<String, dynamic>>? actionDoc =
+          //       FirebaseFirestore.instance
+          //           .collection('event-result')
+          //           .doc(context.read(loginIdProvider).state);
+
+          //   prefs.setBool('event1End', false);
+
+          //   await actionDoc!
+          //       .set({
+          //         'playerName': context.read(playerNameProvider).state,
+          //         'eventWinCount': 0,
+          //       })
+          //       .timeout(const Duration(seconds: 5))
+          //       .onError((error, stackTrace) {
+          //         // 何もしない
+          //       });
+          // }
+
           if (winFlg == true) {
             if (trainingStatus == 0) {
               // 対戦部屋
@@ -80,6 +102,33 @@ class GameFinishScreen extends HookWidget {
               // 勝利数
               context.read(winCountProvider).state += 1;
               prefs.setInt('winCount', context.read(winCountProvider).state);
+
+              // イベントマッチの場合
+              // if (context.read(isEventMatchProvider).state) {
+              //   if (context.read(eventWinCountProvider).state == 0) {
+              //     // 初対戦の場合
+              //     prefs.setBool('event1End', false);
+              //   }
+              //   // イベント勝利数
+              //   context.read(eventWinCountProvider).state += 1;
+              //   final eventWinCount = context.read(eventWinCountProvider).state;
+              //   prefs.setInt('eventWinCount', eventWinCount);
+
+              //   final DocumentReference<Map<String, dynamic>>? actionDoc =
+              //       FirebaseFirestore.instance
+              //           .collection('event-result')
+              //           .doc(context.read(loginIdProvider).state);
+
+              //   await actionDoc!
+              //       .set({
+              //         'playerName': context.read(playerNameProvider).state,
+              //         'eventWinCount': eventWinCount,
+              //       })
+              //       .timeout(const Duration(seconds: 5))
+              //       .onError((error, stackTrace) {
+              //         // 何もしない
+              //       });
+              // }
 
               final int updatedCount =
                   context.read(continuousWinCountProvider).state + 1;

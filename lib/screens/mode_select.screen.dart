@@ -11,7 +11,8 @@ import 'package:thinking_battle/providers/common.provider.dart';
 import 'package:thinking_battle/providers/player.provider.dart';
 import 'package:thinking_battle/services/common/return_card_color_list.service.dart';
 import 'package:thinking_battle/services/mode_select/check_stamp.service.dart';
-import 'package:thinking_battle/services/mode_select/event_timer.service.dart';
+// import 'package:thinking_battle/services/mode_select/event_timer.service.dart';
+// import 'package:thinking_battle/services/mode_select/get_event_ranking.service.dart';
 import 'package:thinking_battle/widgets/common/background.widget.dart';
 import 'package:thinking_battle/widgets/common/stack_word.widget.dart';
 
@@ -79,6 +80,8 @@ class ModeSelectScreen extends HookWidget {
 
     final bool heightOk = MediaQuery.of(context).size.height > 600;
 
+    // final ValueNotifier<bool> eventUpdateState = useState(false);
+
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
         // 日時
@@ -94,10 +97,25 @@ class ModeSelectScreen extends HookWidget {
 
         // イベント開始時間判定
         // final DateTime now = DateTime.now();
-        // // 2021/12/28 ~ 2022/1/10の範囲内の場合
-        // if (now.isBefore(DateTime(2022, 1, 10, 0, 0)) &&
+        // // 2021/12/28 ~ 2022/01/07の範囲内の場合
+        // if (now.isBefore(DateTime(2022, 1, 8, 0, 0)) &&
         //     now.isAfter(DateTime(2021, 12, 28, 0, 0))) {
-        //   eventTimer(context);
+        //   eventTimer(context, eventUpdateState);
+        // }
+        // if (now.isBefore(DateTime(2022, 1, 15, 0, 0)) &&
+        //     now.isAfter(DateTime(2021, 12, 29, 0, 0))) {
+        //   // イベント情報を取得する
+        //   getEventRanking(context);
+        // }
+
+        // // イベントが終わったら報酬ゲット
+        // if (now.isAfter(DateTime(2022, 1, 8, 1, 0)) &&
+        //     prefs.getBool('event1End') == false) {
+        //   getEventReward(
+        //     context,
+        //     soundEffect,
+        //     seVolume,
+        //   );
         // }
 
         // 日時の更新が行われたらgpカウントとログイン日数を更新
@@ -293,9 +311,9 @@ class ModeSelectScreen extends HookWidget {
               child: Column(
                 children: <Widget>[
                   // const Stamina(),
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 110),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height - 100,
+                    height: MediaQuery.of(context).size.height - 110,
                     width: MediaQuery.of(context).size.width,
                     child: Center(
                       child: SingleChildScrollView(
@@ -308,13 +326,13 @@ class ModeSelectScreen extends HookWidget {
                               colorList: colorList,
                               matchedCount: matchedCount,
                             ),
-                            SizedBox(height: heightOk ? 65 : 45),
+                            SizedBox(height: heightOk ? 50 : 40),
                             PlayGameButtons(
                               soundEffect: soundEffect,
                               seVolume: seVolume,
-                              betweenHeight: heightOk ? 30 : 26,
+                              betweenHeight: heightOk ? 28 : 24,
                             ),
-                            SizedBox(height: heightOk ? 65 : 45),
+                            SizedBox(height: heightOk ? 50 : 40),
                             BottomIconButtons(
                               soundEffect: soundEffect,
                               seVolume: seVolume,

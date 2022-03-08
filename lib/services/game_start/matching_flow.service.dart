@@ -241,8 +241,11 @@ Future mainMatchingAction(
 
   if (randomMatchFlg) {
     // ランダムマッチ
-    final matchingRoomRef =
-        FirebaseFirestore.instance.collection('random-matching-room');
+    final matchingRoomRef = FirebaseFirestore.instance.collection(
+        // context.read(isEventMatchProvider).state
+        //     ? 'event-matching-room'
+        //     :
+        'random-matching-room');
 
     await matchingRoomRef
         .where('matchingStatus', isEqualTo: 1)
